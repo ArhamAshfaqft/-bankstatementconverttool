@@ -38,7 +38,7 @@ export default function ChasePage() {
       <SeoHead 
         title="Convert Chase Bank Statement PDF to CSV | Free & Secure"
         description="Instantly convert your Chase bank statement PDFs accurately to CSV format. 100% private, local processing directly in your browser. No data leaves your machine."
-        canonical="https://bankstatementpdftocsv.com/chase-bank-statement-to-csv"
+        canonical="https://bankstatementconverttool.com/chase"
         jsonLd={[schema]}
       />
 

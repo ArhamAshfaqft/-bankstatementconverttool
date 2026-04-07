@@ -40,15 +40,15 @@ export default function HomePage() {
   return (
     <>
       <SeoHead 
-        title="Extract Bank Statement PDF to CSV Free Offline – StatementToCSV"
+        title="Extract Bank Statement PDF to CSV Free Offline – BankStatementConvertTool"
         description="Convert your bank statement PDFs to CSV perfectly. The only 100% private, local browser-based PDF to CSV converter. No uploads, no account required."
-        canonical="https://statementtocsv.com/"
+        canonical="https://bankstatementconverttool.com/"
         jsonLd={[
           {
             "@context": "https://schema.org",
             "@type": "WebApplication",
-            "name": "StatementToCSV",
-            "url": "https://statementtocsv.com/",
+            "name": "BankStatementConvertTool",
+            "url": "https://bankstatementconverttool.com/",
             "applicationCategory": "BusinessApplication",
             "operatingSystem": "All",
             "description": "A privacy-first tool to convert bank statement PDFs into CSV format without uploading to servers.",

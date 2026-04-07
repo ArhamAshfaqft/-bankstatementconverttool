@@ -38,7 +38,7 @@ export default function BofAPage() {
       <SeoHead 
         title="Bank of America Statement PDF to CSV | Convert Offline"
         description="Convert your Bank of America statements to CSV instantly. Zero cloud uploads — 100% private, local processing inside your browser. No registration required."
-        canonical="https://bankstatementpdftocsv.com/bank-of-america-statement-converter"
+        canonical="https://bankstatementconverttool.com/bank-of-america"
         jsonLd={[schema]}
       />
 
