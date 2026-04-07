@@ -546,20 +546,20 @@ function formatOutput(headerRow, transactions) {
       return nonEmpty >= 2;
     });
 
-  // Identify currency columns to standardize them (remove $ and commas)
-  const currencyColIndices = new Set();
-  header.forEach((h, i) => {
-    if (/amount|debit|credit|balance/i.test(h)) {
-      currencyColIndices.add(i);
-    }
-  });
-
+  // Universally clean ALL cells that look like currency values
+  // This catches every $ sign regardless of column header name
   const finalTxns = rawCleanedTxns.map(row => {
-    return row.map((cell, i) => {
-      if (currencyColIndices.has(i)) {
-        const val = parseAmount(cell);
-        // Standardize to 2 decimal places, NO symbols, NO thousands separators
-        return val !== null ? val.toFixed(2) : cell;
+    return row.map(cell => {
+      const trimmed = (cell || '').trim();
+      // If the cell contains a $ sign or looks like a monetary amount, clean it
+      if (/[\$€£¥₹]/.test(trimmed) || /^[(\-+]?\s*[\$€£¥₹]/.test(trimmed)) {
+        const val = parseAmount(trimmed);
+        if (val !== null) return val.toFixed(2);
+      }
+      // Also clean plain comma-separated numbers in known amount columns
+      if (/^-?\d{1,3}(,\d{3})+(\.\d{1,2})?$/.test(trimmed)) {
+        const val = parseAmount(trimmed);
+        if (val !== null) return val.toFixed(2);
       }
       return cell;
     });
