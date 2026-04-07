@@ -504,7 +504,7 @@ function formatOutput(headerRow, transactions) {
   header = header.filter((_, i) => !emptyCols.has(i));
 
   // Clean up each transaction row and remove empty columns
-  const cleanedTxns = transactions
+  const rawCleanedTxns = transactions
     .map(row => padRow(row, maxCols))
     .map(row => row.filter((_, i) => !emptyCols.has(i)))
     .filter(row => {
@@ -512,7 +512,26 @@ function formatOutput(headerRow, transactions) {
       return nonEmpty >= 2;
     });
 
-  return [header, ...cleanedTxns];
+  // Identify currency columns to standardize them (remove $ and commas)
+  const currencyColIndices = new Set();
+  header.forEach((h, i) => {
+    if (/amount|debit|credit|balance/i.test(h)) {
+      currencyColIndices.add(i);
+    }
+  });
+
+  const finalTxns = rawCleanedTxns.map(row => {
+    return row.map((cell, i) => {
+      if (currencyColIndices.has(i)) {
+        const val = parseAmount(cell);
+        // Standardize to 2 decimal places, NO symbols, NO thousands separators
+        return val !== null ? val.toFixed(2) : cell;
+      }
+      return cell;
+    });
+  });
+
+  return [header, ...finalTxns];
 }
 
 function padRow(row, targetLen) {
