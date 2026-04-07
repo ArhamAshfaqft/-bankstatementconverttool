@@ -250,7 +250,10 @@ export default function HomePage() {
                 <li><ShieldCheck size={16} /> Unlimited Data Sizes</li>
                 <li><ShieldCheck size={16} /> Priority Support</li>
               </ul>
-              <button className="btn">Get Desktop Version</button>
+              <div className="coming-soon-wrapper">
+                <button className="btn btn-disabled" disabled>Desktop App Coming Soon</button>
+                <p className="waitlist-text">Stay tuned for the professional release.</p>
+              </div>
             </div>
           </div>
         </div>

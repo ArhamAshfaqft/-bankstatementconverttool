@@ -1135,6 +1135,28 @@ tr:last-child td {
   width: 100%;
 }
 
+.pricing-card .btn-disabled {
+  background: var(--bg-surface-alt);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  cursor: not-allowed;
+  opacity: 0.8;
+  font-weight: 600;
+}
+
+.coming-soon-wrapper {
+  margin-top: auto;
+  text-align: center;
+}
+
+.waitlist-text {
+  margin-top: 0.75rem;
+  font-size: 0.8125rem;
+  color: var(--brand-600);
+  font-weight: 500;
+  letter-spacing: 0.2px;
+}
+
 /* ============================================
    FOOTER
    ============================================ */
