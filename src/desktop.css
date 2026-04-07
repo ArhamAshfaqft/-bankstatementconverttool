@@ -1,0 +1,229 @@
+/* ============================================
+   DESKTOP SOFTWARE DESIGN SYSTEM
+   ============================================ */
+
+:root {
+  --ds-bg-sidebar: #0f172a;
+  --ds-bg-main: #f8fafc;
+  --ds-bg-card: #ffffff;
+  --ds-border: #e2e8f0;
+  --ds-border-dark: #1e293b;
+  
+  --ds-text-primary: #1e293b;
+  --ds-text-secondary: #64748b;
+  --ds-text-muted: #94a3b8;
+  --ds-text-on-dark: #f1f5f9;
+
+  --ds-accent: #0d9488;
+  --ds-accent-hover: #0f766e;
+  --ds-success: #10b981;
+  --ds-danger: #ef4444;
+
+  --ds-sidebar-width: 200px;
+  --ds-status-height: 26px;
+}
+
+/* ── Root container ── */
+.desktop-app {
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  display: flex;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  color: var(--ds-text-primary);
+  background: var(--ds-bg-main);
+  font-size: 14px;
+}
+
+/* ── Sidebar ── */
+.ds-sidebar {
+  width: var(--ds-sidebar-width);
+  background: var(--ds-bg-sidebar);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  color: var(--ds-text-on-dark);
+  user-select: none;
+}
+
+.ds-sidebar-logo {
+  height: 52px;
+  padding: 0 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-weight: 700;
+  font-size: 0.85rem;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  letter-spacing: -0.01em;
+}
+
+/* ── Nav ── */
+.ds-nav {
+  padding: 0.75rem 0.5rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ds-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.55rem 0.75rem;
+  color: var(--ds-text-muted);
+  text-decoration: none;
+  border-radius: 5px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  transition: all 0.15s;
+  border: none;
+  background: transparent;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.ds-nav-item:hover {
+  color: white;
+  background: rgba(255,255,255,0.06);
+}
+
+.ds-nav-item.active {
+  color: white;
+  background: var(--ds-accent);
+}
+
+/* ── Workspace ── */
+.ds-workspace {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.ds-content {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Status Bar ── */
+.ds-statusbar {
+  height: var(--ds-status-height);
+  background: #1e293b;
+  color: #94a3b8;
+  display: flex;
+  align-items: center;
+  padding: 0 0.75rem;
+  font-size: 0.65rem;
+  font-weight: 500;
+  gap: 1rem;
+  flex-shrink: 0;
+}
+
+/* ── Data Table ── */
+.ds-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.ds-table th {
+  background: #f8fafc;
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+  font-weight: 600;
+  color: var(--ds-text-secondary);
+  border-bottom: 1px solid var(--ds-border);
+  position: sticky;
+  top: 0;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  z-index: 1;
+}
+
+.ds-table td {
+  padding: 0.45rem 0.75rem;
+  border-bottom: 1px solid #f1f5f9;
+  white-space: nowrap;
+}
+
+.ds-table tr:hover td {
+  background: #f8fafc;
+}
+
+/* ── Buttons ── */
+.ds-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.4rem 0.75rem;
+  border-radius: 5px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.15s;
+  font-family: inherit;
+  white-space: nowrap;
+}
+
+.ds-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.ds-btn-primary {
+  background: var(--ds-accent);
+  color: white;
+}
+
+.ds-btn-primary:hover:not(:disabled) {
+  background: var(--ds-accent-hover);
+}
+
+.ds-btn-outline {
+  background: white;
+  border-color: var(--ds-border);
+  color: var(--ds-text-primary);
+}
+
+.ds-btn-outline:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+/* ── Empty State ── */
+.ds-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--ds-text-muted);
+  text-align: center;
+  padding: 2rem;
+}
+
+.ds-empty-state h2 {
+  color: var(--ds-text-primary);
+  font-size: 1.1rem;
+}
+
+.ds-empty-state p {
+  max-width: 400px;
+  line-height: 1.6;
+  font-size: 0.85rem;
+}
+
+/* ── Spinner animation ── */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+.animate-spin {
+  animation: spin 0.7s linear infinite;
+}
