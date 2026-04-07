@@ -109,25 +109,59 @@ function isAmount(text) {
 
 function parseAmount(text) {
   if (!text) return null;
+  
+  // 1. Pre-clean: strip all currency symbols and identifiers everywhere
   let cleaned = text.trim()
-    .replace(CURRENCY_SYMBOLS, '')
+    .replace(/[\$€£¥₹₱₩₫₴₽R]/g, '')
     .replace(CURRENCY_SUFFIXES, '')
     .trim();
   
-  // Handle negative
-  cleaned = cleaned.replace(/^-\s*/, '-').replace(/^\+\s*/, '');
+  // 2. Handle accounting negative notation: (1,234.56) -> -1,234.56
   if (/^\(.+\)$/.test(cleaned)) {
     cleaned = '-' + cleaned.replace(/[()]/g, '');
   }
 
-  // Detect European format (dot as thousands, comma as decimal)
-  if (/^\d{1,3}(\.\d{3})+(,\d{1,2})?$/.test(cleaned.replace(/^-/, ''))) {
-    cleaned = cleaned.replace(/\./g, '').replace(',', '.');
-  } else {
-    cleaned = cleaned.replace(/,/g, '');
+  // 3. Normalize signs (handle cases like " - 100" or "+ 100")
+  cleaned = cleaned.replace(/^[\s\+]+/, ''); // Remove leading plus/space
+  if (cleaned.startsWith('-')) {
+    cleaned = '-' + cleaned.substring(1).replace(/[-\s\+]+/g, '');
   }
 
-  // Handle CR/DR suffix (credit/debit indicators)
+  // 4. Detect format: US/UK (1,234.56) vs European (1.234,56)
+  // If there's a comma AND a dot, and the comma comes first, it's US
+  // If there's a dot AND a comma, and the dot comes first, it's European
+  const firstComma = cleaned.indexOf(',');
+  const lastComma = cleaned.lastIndexOf(',');
+  const firstDot = cleaned.indexOf('.');
+  const lastDot = cleaned.lastIndexOf('.');
+
+  if (firstComma !== -1 && firstDot !== -1) {
+    if (firstComma < firstDot) {
+      // US Format: 1,234.56 -> strip commas
+      cleaned = cleaned.replace(/,/g, '');
+    } else {
+      // European Format: 1.234,56 -> strip dots, swap comma to dot
+      cleaned = cleaned.replace(/\./g, '').replace(',', '.');
+    }
+  } else if (firstComma !== -1 && firstDot === -1) {
+    // Only commas: could be 1,234 (US) or 1234,56 (Euro)
+    // If comma is 3 digits from end, it's likely European decimal
+    if (cleaned.length - firstComma <= 3) {
+      cleaned = cleaned.replace(',', '.');
+    } else {
+      cleaned = cleaned.replace(/,/g, '');
+    }
+  } else if (firstDot !== -1) {
+    // Only dots: could be 1.234 (Euro thousands) or 1234.56 (US decimal)
+    // If multiple dots, or one dot that isn't a decimal... 
+    const dotCount = (cleaned.match(/\./g) || []).length;
+    if (dotCount > 1) {
+      cleaned = cleaned.replace(/\./g, '');
+    }
+    // Single dot at end is decimal, else could be thousands. Let standard parse try.
+  }
+
+  // 5. CR/DR suffix (credit/debit indicators)
   if (/CR$/i.test(text.trim())) cleaned = cleaned.replace(/CR$/i, '').trim();
   if (/DR$/i.test(text.trim())) cleaned = '-' + cleaned.replace(/DR$/i, '').replace(/^-/, '').trim();
 
