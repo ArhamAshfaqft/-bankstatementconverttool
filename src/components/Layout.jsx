@@ -60,6 +60,9 @@ export default function Layout() {
                 <li><Link to="/?format=csv#converter" style={{ color: '#4B5563', textDecoration: 'none', fontSize: '0.9rem', transition: 'color 0.2s' }}>Bank Statement PDF to CSV</Link></li>
                 <li><Link to="/bank-of-america?format=csv#converter" style={{ color: '#4B5563', textDecoration: 'none', fontSize: '0.9rem', transition: 'color 0.2s' }}>BofA Statement to CSV</Link></li>
                 <li><Link to="/chase?format=csv#converter" style={{ color: '#4B5563', textDecoration: 'none', fontSize: '0.9rem', transition: 'color 0.2s' }}>Chase Statement to CSV</Link></li>
+                <li><Link to="/wells-fargo?format=csv#converter" style={{ color: '#4B5563', textDecoration: 'none', fontSize: '0.9rem', transition: 'color 0.2s' }}>Wells Fargo Statement to CSV</Link></li>
+                <li><Link to="/citibank?format=csv#converter" style={{ color: '#4B5563', textDecoration: 'none', fontSize: '0.9rem', transition: 'color 0.2s' }}>Citibank Statement to CSV</Link></li>
+                <li><Link to="/capital-one?format=csv#converter" style={{ color: '#4B5563', textDecoration: 'none', fontSize: '0.9rem', transition: 'color 0.2s' }}>Capital One Statement to CSV</Link></li>
               </ul>
             </div>
 

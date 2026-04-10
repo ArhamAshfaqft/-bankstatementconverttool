@@ -6,6 +6,9 @@ import Layout from './components/Layout';
 import HomePage from './pages/HomePage';
 import ChasePage from './pages/ChasePage';
 import BofAPage from './pages/BofAPage';
+import WellsFargoPage from './pages/WellsFargoPage';
+import CitiPage from './pages/CitiPage';
+import CapitalOnePage from './pages/CapitalOnePage';
 import './desktop.css';
 
 export default function App() {
@@ -67,6 +70,9 @@ export default function App() {
         <Route index element={<HomePage />} />
         <Route path="chase" element={<ChasePage />} />
         <Route path="bank-of-america" element={<BofAPage />} />
+        <Route path="wells-fargo" element={<WellsFargoPage />} />
+        <Route path="citibank" element={<CitiPage />} />
+        <Route path="capital-one" element={<CapitalOnePage />} />
         <Route path="*" element={<HomePage />} />
       </Route>
     </Routes>
