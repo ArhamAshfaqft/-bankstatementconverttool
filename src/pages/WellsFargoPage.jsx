@@ -1,153 +1,85 @@
-import React, { useState } from 'react';
-import { ChevronDown, ArrowRight, ShieldCheck, DownloadCloud, FileText } from 'lucide-react';
+import React from 'react';
 import SeoHead from '../components/SeoHead';
 import ConverterTool from '../components/ConverterTool';
+import { ShieldCheck, CheckCircle2 } from 'lucide-react';
 
 export default function WellsFargoPage() {
-  const [openFaq, setOpenFaq] = useState(null);
-
-  const scrollToConverter = () => {
-    document.getElementById('converter')?.scrollIntoView({ behavior: 'smooth' });
-  };
-
   const schema = {
     "@context": "https://schema.org",
-    "@type": "HowTo",
-    "name": "How to Convert Wells Fargo Bank Statement to CSV",
-    "step": [
-      {
-        "@type": "HowToStep",
-        "name": "Download PDF from Wells Fargo",
-        "text": "Log into Wells Fargo online banking, go to Statements & Documents, and download your eStatement PDF."
-      },
-      {
-        "@type": "HowToStep",
-        "name": "Upload to Converter",
-        "text": "Drag and drop your Wells Fargo PDF into our secure local converter tool."
-      },
-      {
-        "@type": "HowToStep",
-        "name": "Export CSV",
-        "text": "Click download to instantly receive a CSV formatted perfectly for Excel, QuickBooks, or Xero."
-      }
-    ]
+    "@type": "SoftwareApplication",
+    "name": "Wells Fargo Statement to CSV Converter",
+    "applicationCategory": "FinanceApplication",
+    "operatingSystem": "WebBrowser",
+    "offers": {
+      "@type": "Offer",
+      "price": "0.00",
+      "priceCurrency": "USD"
+    }
   };
 
   return (
-    <div className="wells-fargo-page">
+    <div className="wf-split-layout">
       <SeoHead 
-        title="Convert Wells Fargo Statement PDF to CSV | Secure & Free"
-        description="Instantly convert your Wells Fargo bank statement PDFs to CSV format. 100% private, local processing directly in your browser. Perfect for checking and savings."
+        title="Wells Fargo Bank Statement PDF to CSV | Instant Converter"
+        description="A specialized, browser-based CSV converter built exclusively to handle Wells Fargo's unique statement layouts. 100% free and locally processed."
         canonical="https://bankstatementconverttool.com/wells-fargo"
         jsonLd={[schema]}
       />
 
-      <header className="hero" style={{ background: '#FFFDF9' }}>
-        <div className="container">
-          <div className="hero-badge" style={{ color: '#D71E28', background: '#FDE101', borderColor: '#FDE101' }}>
-            <ShieldCheck size={14} />
-            Optimized for Wells Fargo Checking & Savings
+      <div className="wf-container">
+        {/* Left Side: The Interactive Tool */}
+        <aside className="wf-tool-panel">
+          <div className="wf-header-branding">
+            <span className="wf-tag">V 2.1 Engine</span>
+            <h1>Extract <span>Wells Fargo</span> Data</h1>
+            <p>Upload your PDF eStatement to generate Excel-ready data blocks.</p>
           </div>
-          <h1>Convert <span>Wells Fargo</span> Statements to CSV</h1>
-          <p className="hero-subtitle">
-            Securely extract transaction data from your Wells Fargo PDFs. Our tool perfectly parses Wells Fargo's unique table layout entirely offline in your browser.
-          </p>
           
-          <div className="mt-4" style={{ marginTop: '2rem' }}>
+          <div className="wf-converter-wrap" id="converter">
             <ConverterTool />
           </div>
-        </div>
-      </header>
-
-      {/* Format Explainer Section */}
-      <section className="section">
-         <div className="container">
-          <div className="format-explainer-card" style={{ background: '#D71E28' }}>
-            <div className="explainer-content">
-              <h2>Wells Fargo PDF Parsing Technology</h2>
-              <p>Wells Fargo statements often group checks and electronic transactions into separate tables. Manually copying this data into Excel ruins the formatting. Our smart algorithm identifies these distinct data blocks and merges them into a clean, unified CSV timeline.</p>
-              <ul>
-                <li><FileText size={16}/> Merges "Deposits/Additions" and "Withdrawals/Subtractions" cleanly</li>
-                <li><DownloadCloud size={16}/> Standardizes dates to easily sort in Excel</li>
-                <li><ShieldCheck size={16}/> Ignores the overdraft fee warning boxes and summary graphics</li>
-              </ul>
-            </div>
-          </div>
-         </div>
-      </section>
-
-      {/* Guide Section */}
-      <section className="section bg-surface-alt" id="guide">
-        <div className="container">
-          <div className="section-header">
-            <span className="section-label" style={{ color: '#D71E28' }}>Tutorial</span>
-            <h2>How to Export Your Wells Fargo Statement</h2>
-            <p>Need past data for taxes? Wells Fargo provides up to 7 years of statements in PDF format.</p>
-          </div>
           
-          <div className="steps-grid">
-            <div className="step-card">
-              <div className="step-number" style={{ background: '#D71E28', color: 'white', borderColor: '#D71E28' }}>1</div>
-              <h3>Log In</h3>
-              <p>Sign in to wellsfargo.com and select your primary account.</p>
-            </div>
-            <div className="step-card">
-              <div className="step-number" style={{ background: '#D71E28', color: 'white', borderColor: '#D71E28' }}>2</div>
-              <h3>Get Statements</h3>
-              <p>Navigate to "Statements & Documents" and choose the exact month you need.</p>
-            </div>
-            <div className="step-card">
-              <div className="step-number" style={{ background: '#D71E28', color: 'white', borderColor: '#D71E28' }}>3</div>
-              <h3>Convert Offline</h3>
-              <p>Drop the downloaded PDF into our tool above to instantly generate a clean CSV.</p>
+          <div className="wf-privacy-seal">
+            <ShieldCheck size={24} color="#D71E28" />
+            <div>
+              <strong>Client-Side Processing</strong>
+              <p>Your PDFs never touch an external server.</p>
             </div>
           </div>
-        </div>
-      </section>
+        </aside>
 
-      {/* Wells Fargo Specific FAQ */}
-      <section className="section">
-        <div className="container">
-          <div className="section-header">
-            <h2>Wells Fargo Converter FAQ</h2>
-          </div>
-          <div className="faq-list">
-            {[
-              {
-                q: "Does Wells Fargo let you download CSVs directly?",
-                a: "Yes, via Quicken/QuickBooks download options, but often only for recent transactions (usually 90 to 180 days). If you need an older month, you have to use the official PDF statement. Our tool unlocks that PDF data."
-              },
-              {
-                q: "Will this work on Wells Fargo business accounts?",
-                a: "Yes, Wells Fargo business checking statements follow a similar tabular structure which our engine detects and parses perfectly."
-              },
-              {
-                q: "Is it safe to upload my Wells Fargo statement?",
-                a: "Because this is a zero-upload converter, your PDF never actually leaves your computer. The conversion happens entirely locally inside your Chrome/Safari/Edge browser. We can never see your balances or account numbers."
-              }
-            ].map((faq, i) => (
-              <div key={i} className={`faq-item ${openFaq === i ? 'open' : ''}`}>
-                <button className="faq-question" onClick={() => setOpenFaq(openFaq === i ? null : i)}>
-                  {faq.q}
-                  <ChevronDown size={18} className="faq-chevron" />
-                </button>
-                <div className="faq-answer">
-                  <p>{faq.a}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+        {/* Right Side: Editorial Context */}
+        <main className="wf-context-panel">
+          <section className="wf-article-section">
+            <h2 className="wf-heading">Why Wells Fargo PDFs are Difficult to Parse</h2>
+            <p className="wf-body">
+              Unlike standard statements that use a single chronological ledger, Wells Fargo separates checking activity into <strong>Deposits/Additions</strong> and <strong>Withdrawals/Subtractions</strong> tables.
+            </p>
+            <p className="wf-body">
+              If you try to copy and paste this into Excel, the dates and amounts will shatter. Our extraction script targets the exact coordinate space of Wells Fargo's tables to rebuild a single chronological feed automatically.
+            </p>
+          </section>
 
-      <section className="cta-section" style={{ background: '#D71E28' }}>
-        <div className="container">
-          <h2>Ready to extract your Wells Fargo data?</h2>
-          <button className="btn" onClick={scrollToConverter} style={{ color: '#D71E28', background: 'white' }}>
-            Convert PDF Now <ArrowRight size={16} />
-          </button>
-        </div>
-      </section>
+          <section className="wf-checklist">
+            <h3>Our Processing Pipeline Ensures:</h3>
+            <ul>
+              <li><CheckCircle2 size={18}/> <strong>Overdraft Warnings Ignored:</strong> Wells Fargo inserts text boxes warning about overdrafts. We strip these automatically.</li>
+              <li><CheckCircle2 size={18}/> <strong>Date Normalization:</strong> Dates are converted strictly to standard numeric values for QuickBooks importing.</li>
+              <li><CheckCircle2 size={18}/> <strong>Check Image By-pass:</strong> If your PDF includes check scans at the bottom, our parser halts cleanly and ignores the image layers.</li>
+            </ul>
+          </section>
+
+          <div className="wf-help-box">
+            <h4>How to get your legacy PDFs</h4>
+            <ol>
+              <li>Login via wellsfargo.com from a Desktop computer.</li>
+              <li>Hover over your checking account and click "Statements".</li>
+              <li>You can scroll back up to 7 years. Download the red PDF icon.</li>
+              <li>Do not open the file in another viewer before converting.</li>
+            </ol>
+          </div>
+        </main>
+      </div>
     </div>
   );
 }

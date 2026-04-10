@@ -1242,9 +1242,89 @@ tr:last-child td {
 }
 
 /* ============================================
+   WELLS FARGO: SPLIT LAYOUT
+   ============================================ */
+.wf-split-layout { background: #FAFBFC; min-height: 100vh; padding-top: 64px; }
+.wf-container { display: flex; max-width: 1300px; margin: 0 auto; gap: 4rem; padding: 4rem 2rem; }
+.wf-tool-panel { flex: 1; min-width: 0; }
+.wf-context-panel { flex: 1; display: flex; flex-direction: column; gap: 3rem; }
+.wf-header-branding h1 { font-size: 2.5rem; line-height: 1.1; margin: 1rem 0; color: #111827; }
+.wf-header-branding h1 span { color: #D71E28; }
+.wf-tag { background: #FDE101; color: #D71E28; padding: 0.25rem 0.75rem; border-radius: 4px; font-weight: bold; font-size: 0.8rem; }
+.wf-converter-wrap { margin: 2rem 0; }
+.wf-privacy-seal { display: flex; gap: 1rem; align-items: center; background: white; padding: 1.5rem; border-radius: var(--radius-md); border: 1px solid var(--border); }
+.wf-article-section h2 { font-size: 1.75rem; color: #111827; margin-bottom: 1rem; }
+.wf-body { color: #4B5563; font-size: 1.1rem; margin-bottom: 1rem; line-height: 1.7; }
+.wf-checklist { background: white; border-radius: var(--radius-lg); padding: 2rem; box-shadow: var(--shadow-sm); }
+.wf-checklist h3 { margin-bottom: 1.5rem; font-size: 1.25rem; }
+.wf-checklist ul { list-style: none; display: flex; flex-direction: column; gap: 1.25rem; }
+.wf-checklist li { display: flex; gap: 1rem; align-items: flex-start; color: #4B5563; line-height: 1.5; }
+.wf-checklist li svg { color: #D71E28; flex-shrink: 0; margin-top: 2px; }
+.wf-help-box { background: #111827; color: white; padding: 2rem; border-radius: var(--radius-lg); }
+.wf-help-box h4 { margin-bottom: 1rem; color: #FDE101; font-size: 1.25rem; }
+.wf-help-box ol { padding-left: 1.5rem; display: flex; flex-direction: column; gap: 0.75rem; color: #D1D5DB; }
+
+/* ============================================
+   CITI: EDITORIAL LAYOUT
+   ============================================ */
+.citi-editorial-layout { background: white; }
+.ce-hero { background: #F8FAFC; border-bottom: 1px solid var(--border); padding: 5rem 0; text-align: center; }
+.ce-title { font-size: 3rem; max-width: 800px; margin: 0 auto 1.5rem; color: #003B70; line-height: 1.2; letter-spacing: -1px; font-weight: 800; }
+.ce-lead { font-size: 1.25rem; color: #4B5563; max-width: 700px; margin: 0 auto 2rem; line-height: 1.6; }
+.ce-meta { font-size: 0.9rem; color: #9CA3AF; text-transform: uppercase; letter-spacing: 1px; }
+.ce-content-body { max-width: 800px; margin: 0 auto; padding: 4rem 1.5rem; }
+.ce-prose h2 { font-size: 2rem; color: #111827; margin: 3rem 0 1rem; }
+.ce-prose p { font-size: 1.15rem; color: #374151; line-height: 1.8; margin-bottom: 1.5rem; }
+.ce-tool-injection { margin: 4rem 0; padding: 3rem; background: #003B70; border-radius: var(--radius-xl); box-shadow: var(--shadow-xl); }
+.ce-tool-header { color: white; margin-bottom: 2rem; text-align: center; }
+.ce-tool-header h3 { display: flex; align-items: center; justify-content: center; gap: 0.5rem; font-size: 1.5rem; margin-bottom: 0.5rem; }
+.ce-tool-header p { color: #B3D4FF; font-size: 1.1rem; }
+.ce-infographic { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin: 3rem 0; }
+.ce-info-box { background: #F8FAFC; padding: 2rem; border-radius: var(--radius-lg); border: 1px solid var(--border); }
+.ce-info-box h4 { margin: 1rem 0 0.5rem; font-size: 1.25rem; color: #111827; }
+.ce-info-box p { font-size: 1rem !important; margin: 0 !important; color: #6b7280 !important; }
+
+/* ============================================
+   CAPITAL ONE: MATRIX LAYOUT
+   ============================================ */
+.cap1-matrix-layout { background: #FAFBFC; min-height: 100vh; }
+.cap1-heading-band { background: #003A6F; color: white; padding: 6rem 0 8rem; }
+.cap1-heading-band h1 { font-size: 3rem; margin-bottom: 1rem; }
+.cap1-heading-band span { color: #D22E1E; }
+.cap1-heading-band p { font-size: 1.25rem; color: #B3D4FF; max-width: 600px; margin: 0 auto; }
+.cap1-core-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; margin-top: -4rem; padding-bottom: 5rem; }
+.cap1-interactive-zone { position: relative; z-index: 10; }
+.cap1-zone-label { background: #D22E1E; color: white; display: inline-block; padding: 0.5rem 1rem; border-radius: 8px 8px 0 0; font-weight: bold; position: absolute; top: -36px; left: 24px; box-shadow: var(--shadow-sm); z-index: -1; padding-bottom: 2rem;}
+.cap1-matrix-table { width: 100%; border-collapse: separate; border-spacing: 0; background: white; border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-md); margin-bottom: 3rem; }
+.cap1-matrix-table th { background: #F3F4F6; padding: 1.25rem 1rem; text-align: left; font-weight: 600; color: #374151; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.5px; }
+.cap1-matrix-table td { padding: 1.25rem 1rem; border-top: 1px solid var(--border); color: #4B5563; }
+.cap1-matrix-table th.highlight { background: #D22E1E; color: white; }
+.cap1-matrix-table td.highlight { background: #FFF5F5; color: #D22E1E; font-weight: 600; }
+.cap1-tech-specs h3 { font-size: 1.5rem; color: #111827; margin-bottom: 1.5rem; }
+.spec-row { display: flex; gap: 1.25rem; margin-bottom: 1.5rem; }
+.spec-row svg { color: #003A6F; flex-shrink: 0; margin-top: 4px; }
+.spec-row strong { display: block; color: #111827; margin-bottom: 0.25rem; font-size: 1.1rem; }
+.spec-row p { color: #4B5563; font-size: 0.95rem; line-height: 1.5; }
+
+/* ============================================
    RESPONSIVE
    ============================================ */
 @media (max-width: 768px) {
+  .wf-container {
+    flex-direction: column;
+    padding: 2rem 1rem;
+    gap: 2rem;
+  }
+
+  .ce-infographic {
+    grid-template-columns: 1fr;
+  }
+
+  .cap1-core-grid {
+    grid-template-columns: 1fr;
+    padding: 0 1rem 3rem;
+  }
+
   .steps-grid,
   .features-grid,
   .problem-solution-grid {
