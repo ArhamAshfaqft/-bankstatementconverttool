@@ -51,7 +51,7 @@ export default function Layout() {
           <div className="footer-columns" style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: '2rem', width: '100%', marginBottom: '2rem' }}>
             <div className="footer-col" style={{ flex: '1 1 300px' }}>
               <h3 style={{ fontSize: '1.25rem', marginBottom: '1rem', color: '#111827' }}><FileSpreadsheet size={16} style={{ display: 'inline', marginRight: '0.5rem', position: 'relative', top: '2px' }}/>StatementToCSV</h3>
-              <p style={{ color: '#4B5563', fontSize: '0.9rem', lineHeight: '1.6' }}>The world's most private and accurate bank statement parsing engine. 100% local browser processing.</p>
+              <p style={{ color: '#4B5563', fontSize: '0.9rem', lineHeight: '1.6' }}>A private and accurate bank statement parsing engine. 100% local browser processing.</p>
             </div>
             
             <div className="footer-col" style={{ flex: '1 1 200px' }}>

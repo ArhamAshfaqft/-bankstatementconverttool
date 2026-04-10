@@ -1,13 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import SeoHead from '../components/SeoHead';
 import ConverterTool from '../components/ConverterTool';
-import { ShieldCheck, CheckCircle2 } from 'lucide-react';
+import { ShieldCheck, ChevronDown, CheckCircle2, SplitSquareHorizontal, Layers, Lock, FileLineChart } from 'lucide-react';
 
 export default function WellsFargoPage() {
+  const [openFaq, setOpenFaq] = useState(null);
+
   const schema = {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
-    "name": "Wells Fargo Statement to CSV Converter",
+    "name": "Wells Fargo PDF Export Engine",
     "applicationCategory": "FinanceApplication",
     "operatingSystem": "WebBrowser",
     "offers": {
@@ -18,68 +20,122 @@ export default function WellsFargoPage() {
   };
 
   return (
-    <div className="wf-split-layout">
+    <div className="wf-page-wrapper">
       <SeoHead 
-        title="Wells Fargo Bank Statement PDF to CSV | Instant Converter"
-        description="A specialized, browser-based CSV converter built exclusively to handle Wells Fargo's unique statement layouts. 100% free and locally processed."
+        title="Wells Fargo Bank Statement PDF to CSV | Free & Secure"
+        description="Extract transaction data from your Wells Fargo PDFs instantly. Our local parser merges Additions and Subtractions tables into one clean spreadsheet."
         canonical="https://bankstatementconverttool.com/wells-fargo"
         jsonLd={[schema]}
       />
 
-      <div className="wf-container">
-        {/* Left Side: The Interactive Tool */}
-        <aside className="wf-tool-panel">
-          <div className="wf-header-branding">
-            <span className="wf-tag">V 2.1 Engine</span>
-            <h1>Extract <span>Wells Fargo</span> Data</h1>
-            <p>Upload your PDF eStatement to generate Excel-ready data blocks.</p>
+      {/* PREMIUM DARK HERO */}
+      <header className="wf-hero">
+        <div className="container" style={{ position: 'relative', zIndex: 2 }}>
+          <div className="wf-hero-badge">
+            <ShieldCheck size={16} /> Secure Local Environment
           </div>
-          
-          <div className="wf-converter-wrap" id="converter">
-            <ConverterTool />
-          </div>
-          
-          <div className="wf-privacy-seal">
-            <ShieldCheck size={24} color="#D71E28" />
-            <div>
-              <strong>Client-Side Processing</strong>
-              <p>Your PDFs never touch an external server.</p>
-            </div>
-          </div>
-        </aside>
+          <h1>Convert <span>Wells Fargo</span> to CSV</h1>
+          <p>
+            Drop your eStatement PDF below to instantly merge dispersed Additions and Subtractions tables into a single chronological spreadsheet.
+          </p>
+        </div>
+      </header>
 
-        {/* Right Side: Editorial Context */}
-        <main className="wf-context-panel">
-          <section className="wf-article-section">
-            <h2 className="wf-heading">Why Wells Fargo PDFs are Difficult to Parse</h2>
-            <p className="wf-body">
-              Unlike standard statements that use a single chronological ledger, Wells Fargo separates checking activity into <strong>Deposits/Additions</strong> and <strong>Withdrawals/Subtractions</strong> tables.
-            </p>
-            <p className="wf-body">
-              If you try to copy and paste this into Excel, the dates and amounts will shatter. Our extraction script targets the exact coordinate space of Wells Fargo's tables to rebuild a single chronological feed automatically.
-            </p>
-          </section>
-
-          <section className="wf-checklist">
-            <h3>Our Processing Pipeline Ensures:</h3>
-            <ul>
-              <li><CheckCircle2 size={18}/> <strong>Overdraft Warnings Ignored:</strong> Wells Fargo inserts text boxes warning about overdrafts. We strip these automatically.</li>
-              <li><CheckCircle2 size={18}/> <strong>Date Normalization:</strong> Dates are converted strictly to standard numeric values for QuickBooks importing.</li>
-              <li><CheckCircle2 size={18}/> <strong>Check Image By-pass:</strong> If your PDF includes check scans at the bottom, our parser halts cleanly and ignores the image layers.</li>
-            </ul>
-          </section>
-
-          <div className="wf-help-box">
-            <h4>How to get your legacy PDFs</h4>
-            <ol>
-              <li>Login via wellsfargo.com from a Desktop computer.</li>
-              <li>Hover over your checking account and click "Statements".</li>
-              <li>You can scroll back up to 7 years. Download the red PDF icon.</li>
-              <li>Do not open the file in another viewer before converting.</li>
-            </ol>
-          </div>
-        </main>
+      {/* OVERLAPPING CONVERTER TOOL */}
+      <div className="wf-overlap-zone">
+        <ConverterTool />
       </div>
+
+      {/* APPLE-STYLE BENTO BOX FEATURES (UNIQUE DOM) */}
+      <section className="bg-surface">
+        <div className="wf-bento-grid">
+          
+          <div className="wf-bento-card wf-bento-large">
+            <div className="wf-bento-icon icon-red">
+              <SplitSquareHorizontal size={24} />
+            </div>
+            <h3>The Additions & Subtractions Dilemma</h3>
+            <p>
+              Unlike most financial institutions, Wells Fargo does not provide a single chronological ledger in their checking account PDFs. Instead, they separate your activity into multiple distinct tables: <strong>Deposits/Additions</strong> and <strong>Withdrawals/Subtractions</strong>. 
+            </p>
+            <p style={{ marginTop: '1rem' }}>
+              Attempting to copy and paste these separate tables directly into Excel typically results in garbled data and merged columns (e.g., the date and description combining into one cell). Our extraction heuristic parses the native text-layer coordinates within the document, extracts the raw vectors, and merges them back into a single, functional timeline automatically.
+            </p>
+          </div>
+
+          <div className="wf-bento-card">
+            <div className="wf-bento-icon icon-gold">
+              <Layers size={24} />
+            </div>
+            <h3>Check Image & Layout Parsing</h3>
+            <p>Wells Fargo statements often include multi-page headers and check image scans at the footer. Generic converters fail here. Our engine halts parsing accurately before hitting non-tabular noise.</p>
+          </div>
+
+          <div className="wf-bento-card">
+            <div className="wf-bento-icon icon-dark">
+              <Lock size={24} />
+            </div>
+            <h3>Zero-Retention Security</h3>
+            <p>Bookkeepers absolutely cannot upload client financials to random servers. The conversion script runs entirely within your browser's local memory to ensure absolute zero-retention privacy.</p>
+          </div>
+
+        </div>
+      </section>
+
+      {/* ASYMMETRIC CONTENT BLOCK */}
+      <section className="bg-surface-alt">
+        <div className="wf-asymmetric-section">
+          <div className="wf-asymmetric-visual">
+            <FileLineChart size={80} color="#D71E28" style={{ margin: '0 auto 1.5rem', opacity: 0.8 }}/>
+            <h4 style={{ fontSize: '1.25rem', color: '#111827', marginBottom: '0.5rem' }}>QuickBooks & Xero Ready</h4>
+            <p style={{ color: '#6B7280', fontSize: '0.95rem' }}>Raw integers. No dollar signs. No comma separators.</p>
+          </div>
+          
+          <div className="wf-asymmetric-content">
+            <h2>Accounting Software Standardization</h2>
+            <p>
+              Importing unformatted data into QuickBooks Online (QBO) or Quicken often triggers validation errors, forcing accountants to manually clean the CSV file using tedious Find & Replace functions.
+            </p>
+            <p style={{ fontWeight: 'bold', color: '#111827' }}>
+              Our tool automatically normalizes negative/positive valences and purges all visual currency styling during extraction. It returns raw float decimals (e.g., 5000.00) that import cleanly on the first try.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* FLOATING FAQ ACCORDION */}
+      <section className="bg-surface" style={{ paddingBottom: '4rem' }}>
+        <div className="wf-faq-container">
+          <h2 style={{ textAlign: 'center', fontSize: '2rem', marginBottom: '3rem', color: '#111827', fontWeight: '800' }}>Extraction FAQ</h2>
+          
+          {[
+            {
+              q: "Will this handle Wells Fargo business accounts?",
+              a: "Yes. Wells Fargo business checking statements follow a similar tabular structure to personal accounts, which our engine detects and parses accurately."
+            },
+            {
+              q: "Does Wells Fargo let you download CSVs directly?",
+              a: "Yes, via the 'Account Activity' tool. However, it is heavily restricted to recent transactions. If you are doing catch-up bookkeeping for a prior tax year, pulling from legacy PDFs is required."
+            },
+            {
+              q: "What if there are check scans on the PDF?",
+              a: "Our parser detects the end of the transaction ledger and halts. It completely ignores the check image layers at the bottom of the statement, keeping your CSV clean."
+            }
+          ].map((faq, i) => (
+            <div key={i} className={`wf-faq-card ${openFaq === i ? 'open' : ''}`}>
+              <button className="wf-faq-q" onClick={() => setOpenFaq(openFaq === i ? null : i)}>
+                {faq.q}
+                <ChevronDown size={20} style={{ transform: openFaq === i ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s', color: '#9CA3AF' }} />
+              </button>
+              <div className="wf-faq-a">
+                {faq.a}
+              </div>
+            </div>
+          ))}
+          
+        </div>
+      </section>
+
     </div>
   );
 }

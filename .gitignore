@@ -30,3 +30,8 @@ release
 *.msi
 *.dmg
 *.zip
+
+# Tests & Mocks
+sample_*.pdf
+generate_*_mock.js
+test_parser.js

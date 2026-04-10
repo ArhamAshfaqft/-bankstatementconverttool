@@ -172,7 +172,9 @@ function padRow(row, targetLen) {
 // ═══════════════════════════════════════════════════════════════════════════════
 
 async function run() {
-  const data = new Uint8Array(fs.readFileSync('sample_bank_statement.pdf'));
+  console.log("Reading test PDF...");
+  const dataBuffer = fs.readFileSync('sample_wf_statement.pdf');
+  const data = new Uint8Array(dataBuffer);
   const pdf = await pdfjsLib.getDocument(data).promise;
   const numPages = pdf.numPages;
   console.log(`\n📄 Pages: ${numPages}`);

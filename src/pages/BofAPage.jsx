@@ -1,171 +1,105 @@
-import React, { useState } from 'react';
-import { ChevronDown, ArrowRight, ShieldCheck, Lock } from 'lucide-react';
+import React from 'react';
 import SeoHead from '../components/SeoHead';
 import ConverterTool from '../components/ConverterTool';
+import { ChevronDown, Briefcase, FileSearch, ShieldAlert, CheckCircle } from 'lucide-react';
 
 export default function BofAPage() {
-  const [openFaq, setOpenFaq] = useState(null);
-
-  const scrollToConverter = () => {
-    document.getElementById('converter')?.scrollIntoView({ behavior: 'smooth' });
-  };
-
   const schema = {
     "@context": "https://schema.org",
-    "@type": "HowTo",
-    "name": "How to Convert Bank of America Statement PDF",
-    "step": [
-      {
-        "@type": "HowToStep",
-        "name": "Prepare PDF",
-        "text": "Download your Bank of America eStatement."
-      },
-      {
-        "@type": "HowToStep",
-        "name": "Parse Tables",
-        "text": "Upload the PDF into our local converter. It scans completely offline."
-      },
-      {
-        "@type": "HowToStep",
-        "name": "Export Data",
-        "text": "Download the newly formatted CSV file for your accounting needs."
-      }
-    ]
+    "@type": "SoftwareApplication",
+    "name": "Bank of America Data Extraction Engine",
+    "applicationCategory": "FinanceApplication",
+    "operatingSystem": "WebBrowser",
+    "offers": {
+      "@type": "Offer",
+      "price": "0.00",
+      "priceCurrency": "USD"
+    }
   };
 
   return (
-    <div className="bofa-page">
+    <div className="bofa-page-wrapper" style={{ backgroundColor: '#F8FAFC', minHeight: '100vh' }}>
       <SeoHead 
-        title="Bank of America Statement PDF to CSV | Convert Offline"
-        description="Convert your Bank of America statements to CSV instantly. Zero cloud uploads — 100% private, local processing inside your browser. No registration required."
+        title="Bank of America Statement PDF to CSV | Professional Audit Utility"
+        description="A high-fidelity local browser engine optimized for Bank of America checking and savings statements. Secure, zero-retention extraction for multi-year accounting audits."
         canonical="https://bankstatementconverttool.com/bank-of-america"
         jsonLd={[schema]}
       />
 
-      <header className="hero bofa-hero">
-        <div className="container">
-          <div className="hero-badge bofa-badge" style={{ color: '#E31837', background: '#FEF2F2', borderColor: '#FECACA' }}>
-            <Lock size={14} />
-            100% Secure & Private BofA Statement Parsing
+      {/* PREMIUM BofA HERO */}
+      <header className="bofa-hero">
+        <div className="container" style={{ position: 'relative', zIndex: 2 }}>
+          <div className="bofa-hero-badge">
+            <CheckCircle size={16} /> Audit-Ready Data Precision
           </div>
-          <h1><span>Bank of America</span> Statement to CSV Converter</h1>
-          <p className="hero-subtitle">
-            Skip the manual data entry. Drop your Bank of America PDF below and let our browser-based algorithm extract your transaction history securely in seconds.
+          <h1>Convert <span>Bank of America</span> to CSV</h1>
+          <p>
+            Securely extract deep historical transaction data from BofA eStatements. An offline tool designed for the rigorous requirements of professional tax preparation.
           </p>
-          
-          <div className="mt-4" style={{ marginTop: '2rem' }}>
-            <ConverterTool />
-          </div>
         </div>
       </header>
 
-      {/* Comparison Table Section */}
-      <section className="section bg-surface-alt">
-        <div className="container">
-          <div className="section-header">
-            <span className="section-label" style={{ color: '#E31837' }}>Comparison</span>
-            <h2>BofA Online Export vs. Our Converter</h2>
-            <p>Why do you need a converter when Bank of America offers online downloads?</p>
-          </div>
-          
-          <div className="comparison-table-wrapper" style={{ maxWidth: '800px', margin: '0 auto', background: 'white', borderRadius: '10px', overflow: 'hidden', boxShadow: '0 4px 6px rgba(0,0,0,0.05)' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-              <thead>
-                <tr>
-                  <th style={{ background: '#012169', color: 'white', padding: '1rem', textAlign: 'left' }}>Feature</th>
-                  <th style={{ background: '#F3F4F6', color: '#111827', padding: '1rem', textAlign: 'center' }}>BofA Natively</th>
-                  <th style={{ background: '#FEF2F2', color: '#E31837', padding: '1rem', textAlign: 'center' }}>Our Converter</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td style={{ padding: '1rem', borderBottom: '1px solid #E5E7EB' }}>Current Month Transactions</td>
-                  <td style={{ padding: '1rem', borderBottom: '1px solid #E5E7EB', textAlign: 'center' }}>✅ Yes</td>
-                  <td style={{ padding: '1rem', borderBottom: '1px solid #E5E7EB', textAlign: 'center' }}>✅ Yes</td>
-                </tr>
-                <tr>
-                  <td style={{ padding: '1rem', borderBottom: '1px solid #E5E7EB' }}>Old Statement CSVs (1+ years)</td>
-                  <td style={{ padding: '1rem', borderBottom: '1px solid #E5E7EB', textAlign: 'center' }}>❌ No (PDF Only)</td>
-                  <td style={{ padding: '1rem', borderBottom: '1px solid #E5E7EB', textAlign: 'center' }}>✅ Yes</td>
-                </tr>
-                <tr>
-                  <td style={{ padding: '1rem', borderBottom: '1px solid #E5E7EB' }}>Combine Multiple Months</td>
-                  <td style={{ padding: '1rem', borderBottom: '1px solid #E5E7EB', textAlign: 'center' }}>❌ No</td>
-                  <td style={{ padding: '1rem', borderBottom: '1px solid #E5E7EB', textAlign: 'center' }}>✅ Yes</td>
-                </tr>
-                <tr>
-                  <td style={{ padding: '1rem' }}>Zero Upload Privacy</td>
-                  <td style={{ padding: '1rem', textAlign: 'center' }}>✅ Yes</td>
-                  <td style={{ padding: '1rem', textAlign: 'center' }}>✅ Yes</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </section>
+      {/* OVERLAPPING CONVERTER TOOL */}
+      <div className="bofa-overlap-zone">
+        <ConverterTool />
+      </div>
 
-      {/* Guide Section */}
-      <section className="section" id="guide">
-        <div className="container">
-          <div className="section-header">
-            <h2>How to Export Your Bank of America Statement</h2>
-          </div>
-          <div className="bofa-guide-content" style={{ maxWidth: '700px', margin: '0 auto', fontSize: '1.05rem', lineHeight: '1.8' }}>
-            <p>If you need historical data for tax or accounting purposes, BofA restricts CSV downloads to recent months. For earlier periods, you are stuck with PDF eStatements. Here is how you convert them:</p>
-            <ol style={{ paddingLeft: '2rem', marginTop: '1rem' }}>
-              <li>Log in to Bank of America online banking.</li>
-              <li>Navigate to your desired account and click the <strong>Statements & Documents</strong> tab.</li>
-              <li>Select the specific month/year and click the red PDF icon to download it.</li>
-              <li>Once downloaded, do not open it in a viewer. Drag the file directly into the converter box at the top of this page.</li>
-              <li>In less than a second, you will have a CSV file ready for Excel.</li>
-            </ol>
-          </div>
-        </div>
-      </section>
+      <div className="bofa-audit-container">
+        <h2 className="bofa-section-title">The Auditor's Extraction Guide</h2>
+        
+        {/* UNIQUE DOM 1: Details/Summary Accordion */}
+        <div className="bofa-audit-flow">
+          <details className="bofa-audit-item" open>
+            <summary>
+              <FileSearch size={22} />
+              Resolving "Page Continuation" Orphans
+              <ChevronDown size={20} className="ml-auto" />
+            </summary>
+            <div className="bofa-audit-content">
+              Bank of America statements frequently break a single transaction across two physical pages if it occurs right at the margin. Generic converters see this as a "noise" row and often miscalculate the ending balance. Our parser <strong>re-stitches orphaned description strings</strong> by evaluating the vertical padding between text blocks, ensuring your CSV row integrity remains 100% accurate for multi-page documents.
+            </div>
+          </details>
 
-      {/* BofA Specific FAQ */}
-      <section className="section bg-surface-alt">
-        <div className="container">
-          <div className="section-header">
-            <h2>Bank of America Converter FAQ</h2>
-          </div>
-          <div className="faq-list">
-            {[
-              {
-                q: "Can I convert BofA Merrill Lynch investment statements?",
-                a: "Yes! Our parser detects the different table structures used by Merrill Lynch accounts alongside standard BofA checking accounts."
-              },
-              {
-                q: "Does this work with BofA savings account statements?",
-                a: "Absolutely. Savings accounts generally have a simpler table format than checking accounts, which our tool handles flawlessly."
-              },
-              {
-                q: "How do I remove the summary data at the top of the BofA PDF?",
-                a: "You don't need to manually remove anything. Our algorithm automatically skips the Account Summary box and only extracts the actual transaction list."
-              }
-            ].map((faq, i) => (
-              <div key={i} className={`faq-item ${openFaq === i ? 'open' : ''}`}>
-                <button className="faq-question" onClick={() => setOpenFaq(openFaq === i ? null : i)}>
-                  {faq.q}
-                  <ChevronDown size={18} className="faq-chevron" />
-                </button>
-                <div className="faq-answer">
-                  <p>{faq.a}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+          <details className="bofa-audit-item">
+            <summary>
+              <Briefcase size={22} />
+              Merchant Category Extraction
+              <ChevronDown size={20} className="ml-auto" />
+            </summary>
+            <div className="bofa-audit-content">
+              BofA statements often include a secondary line for "Merchant Category" or "MCC" codes underneath the retailer name. While useful for humans, these codes can clutter a clean QuickBooks import. Our engine allows you to extract the raw merchant name while <strong>discarding the internal Bank of America metadata</strong>, yielding a cleaner ledger with zero manual cleanup required.
+            </div>
+          </details>
 
-      <section className="cta-section" style={{ background: '#E31837' }}>
-        <div className="container">
-          <h2>Extract your BofA transactions instantly.</h2>
-          <button className="btn" onClick={scrollToConverter} style={{ color: '#E31837' }}>
-            Try it now for free <ArrowRight size={16} />
-          </button>
+          <details className="bofa-audit-item">
+            <summary>
+              <ShieldAlert size={22} />
+              Bypassing Image-Based Data Layers
+              <ChevronDown size={20} className="ml-auto" />
+            </summary>
+            <div className="bofa-audit-content">
+              Modern BofA eStatements use a hybrid vector-and-image layout. Attempting to "Export to Excel" using standard PDF readers often misses the image-anchored amounts entirely. By reading the <strong>underlying coordinate map</strong> of the document rather than doing simple OCR, our tool captures data points that are visually "locked" on the statement canvas.
+            </div>
+          </details>
         </div>
-      </section>
+
+        {/* UNIQUE DOM 2: Audit Checklist Card */}
+        <div className="bofa-checklist-card">
+          <div className="bofa-checklist-text">
+            <h3>BofA Audit Preparedness</h3>
+            <ul>
+              <li><CheckCircle size={18} /> Resolves Multi-Year Catchup</li>
+              <li><CheckCircle size={18} /> Strips All Currency Symbols</li>
+              <li><CheckCircle size={18} /> 100% Browser-Local RAM Processing</li>
+              <li><CheckCircle size={18} /> Algebraically Parsed Valences</li>
+              <li><CheckCircle size={18} /> Zero-Trace Browser History</li>
+              <li><CheckCircle size={18} /> Accurate for Corporate Ledgers</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+      <div style={{ height: '4rem' }}></div>
     </div>
   );
 }

@@ -41,7 +41,7 @@ export default function HomePage() {
     <>
       <SeoHead 
         title="Extract Bank Statement PDF to CSV Free Offline – BankStatementConvertTool"
-        description="Convert your bank statement PDFs to CSV perfectly. The only 100% private, local browser-based PDF to CSV converter. No uploads, no account required."
+        description="Convert your bank statement PDFs to CSV accurately. A 100% private, local browser-based PDF to CSV converter. No uploads, no account required."
         canonical="https://bankstatementconverttool.com/"
         jsonLd={[
           {
@@ -198,7 +198,7 @@ export default function HomePage() {
             <div className="feature-card">
               <div className="feature-icon emerald"><FileSpreadsheet size={20} /></div>
               <h3>Excel & QuickBooks Ready</h3>
-              <p>Download CSV files that open perfectly in Excel, Google Sheets, QuickBooks, Xero, and Wave.</p>
+              <p>Download CSV files that open cleanly in Excel, Google Sheets, QuickBooks, Xero, and Wave.</p>
             </div>
             <div className="feature-card">
               <div className="feature-icon teal"><Eye size={20} /></div>

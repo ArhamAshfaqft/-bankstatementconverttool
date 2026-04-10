@@ -1,156 +1,115 @@
-import React, { useState } from 'react';
-import { ChevronDown, ArrowRight, ShieldCheck, DownloadCloud, FileText } from 'lucide-react';
+import React from 'react';
 import SeoHead from '../components/SeoHead';
 import ConverterTool from '../components/ConverterTool';
+import { ArrowRight, ShieldCheck, Zap, History, FileCheck } from 'lucide-react';
 
 export default function ChasePage() {
-  const [openFaq, setOpenFaq] = useState(null);
-
-  const scrollToConverter = () => {
-    document.getElementById('converter')?.scrollIntoView({ behavior: 'smooth' });
-  };
-
   const schema = {
     "@context": "https://schema.org",
-    "@type": "HowTo",
-    "name": "How to Convert Chase Bank Statement to CSV",
-    "step": [
-      {
-        "@type": "HowToStep",
-        "name": "Download PDF from Chase",
-        "text": "Log into your Chase account, navigate to 'Statements & Documents' and download your PDF statement."
-      },
-      {
-        "@type": "HowToStep",
-        "name": "Upload to Converter",
-        "text": "Drag and drop your Chase PDF into our secure local converter tool."
-      },
-      {
-        "@type": "HowToStep",
-        "name": "Download CSV",
-        "text": "Click download to instantly receive a CSV formatted for Excel or QuickBooks."
-      }
-    ]
+    "@type": "SoftwareApplication",
+    "name": "Chase Statement Extraction Engine",
+    "applicationCategory": "FinanceApplication",
+    "operatingSystem": "WebBrowser",
+    "offers": {
+      "@type": "Offer",
+      "price": "0.00",
+      "priceCurrency": "USD"
+    }
   };
 
   return (
-    <div className="chase-page">
+    <div className="chase-page-wrapper" style={{ backgroundColor: '#F8FAFC', minHeight: '100vh' }}>
       <SeoHead 
-        title="Convert Chase Bank Statement PDF to CSV | Free & Secure"
-        description="Instantly convert your Chase bank statement PDFs accurately to CSV format. 100% private, local processing directly in your browser. No data leaves your machine."
+        title="Convert Chase Bank Statement PDF to CSV | Professional Precision"
+        description="A robust local browser engine optimized for Chase Personal and Business statements. High-fidelity extraction that cleans messy merchant strings for QuickBooks."
         canonical="https://bankstatementconverttool.com/chase"
         jsonLd={[schema]}
       />
 
-      <header className="hero chase-hero">
-        <div className="container">
-          <div className="hero-badge chase-badge">
-            <ShieldCheck size={14} />
-            Optimized for Chase Personal & Business Accounts
+      {/* PREMIUM CHASE HERO */}
+      <header className="chase-hero">
+        <div className="container" style={{ position: 'relative', zIndex: 2 }}>
+          <div className="chase-hero-badge">
+            <ShieldCheck size={16} /> Verified Chase Logic Engine
           </div>
-          <h1>Convert <span>Chase Bank Statement</span> PDF to CSV</h1>
-          <p className="hero-subtitle">
-            Securely extract transaction data from your Chase statements. Our tool understands Chase's layout perfectly and runs completely offline in your browser for absolute privacy.
+          <h1>Extract <span>Chase Statements</span> to CSV</h1>
+          <p>
+            Process Chase Personal and Spark Business eStatements into clean data streams. A secure, zero-upload tool for professional accountants and bookkeepers.
           </p>
         </div>
       </header>
 
-      {/* Guide First Section */}
-      <section className="section chase-guide-section" id="guide">
-        <div className="container">
-          <div className="section-header">
-            <span className="section-label" style={{ color: '#003087' }}>Step-by-Step Guide</span>
-            <h2>How to Download Your Chase Statement PDF</h2>
-            <p>Before converting, make sure you have the official PDF document from Chase.</p>
+      {/* OVERLAPPING CONVERTER TOOL */}
+      <div className="chase-overlap-zone">
+        <ConverterTool />
+      </div>
+
+      <div className="chase-content-container">
+        <h2 className="chase-section-title">The Merchant Clarity Tunnel</h2>
+        
+        {/* UNIQUE DOM 1: Comparison Tunnel */}
+        <div className="chase-tunnel">
+          <div className="chase-tunnel-row">
+            <div>
+              <div className="chase-tunnel-label">Raw Chase Description</div>
+              <div className="chase-raw-side">AMZN MKTP US*MK8TB21V0 AMZN.COM/BILL</div>
+            </div>
+            <div className="chase-arrow-side">
+              <ArrowRight size={32} />
+            </div>
+            <div>
+              <div className="chase-tunnel-label">Clean Accountant View</div>
+              <div className="chase-clean-side">Amazon Marketplace</div>
+            </div>
           </div>
-          
-          <div class="steps-grid">
-            <div className="step-card">
-              <div className="step-number" style={{ background: '#003087', color: 'white', borderColor: '#003087' }}>1</div>
-              <h3>Log Into Chase</h3>
-              <p>Sign in to your online banking portal at Chase.com.</p>
+
+          <div className="chase-tunnel-row">
+            <div>
+              <div className="chase-tunnel-label">Raw Chase Description</div>
+              <div className="chase-raw-side">STARBUCKS STORE 01234 SEATTLE WA</div>
             </div>
-            <div className="step-card">
-              <div className="step-number" style={{ background: '#003087', color: 'white', borderColor: '#003087' }}>2</div>
-              <h3>Find Statements</h3>
-              <p>Click on 'Statements & Documents' under the account you want to export.</p>
+            <div className="chase-arrow-side">
+              <ArrowRight size={32} />
             </div>
-            <div className="step-card">
-              <div className="step-number" style={{ background: '#003087', color: 'white', borderColor: '#003087' }}>3</div>
-              <h3>Save PDF</h3>
-              <p>Click the download icon next to the statement date to save the PDF to your device.</p>
+            <div>
+              <div className="chase-tunnel-label">Clean Accountant View</div>
+              <div className="chase-clean-side">Starbucks</div>
             </div>
           </div>
         </div>
-      </section>
 
-      {/* Tool Section */}
-      <section className="section bg-surface-alt">
-        <div className="container">
-          <ConverterTool />
-        </div>
-      </section>
-
-      {/* Format Explainer Section */}
-      <section className="section">
-         <div className="container">
-          <div className="format-explainer-card">
-            <div className="explainer-content">
-              <h2>Understanding Your Chase PDF Format</h2>
-              <p>Chase bank statements usually contain a "Transaction Date" and "Posting Date". They also condense the description and amount together depending on whether it's a Business or Personal checking account. Our tool uses smart heuristics to parse these rows perfectly without shifting your debits and credits.</p>
-              <ul>
-                <li><FileText size={16}/> Automatically aligns multi-line Chase descriptions</li>
-                <li><DownloadCloud size={16}/> Prepares columns for easy accounting software import</li>
-                <li><ShieldCheck size={16}/> Completely ignores non-transaction summary tables</li>
-              </ul>
-            </div>
+        {/* UNIQUE DOM 2: Expertise Grid */}
+        <div className="chase-expertise-grid">
+          <div className="chase-expert-card">
+            <h3><Zap size={24} /> Row-Level Heuristics</h3>
+            <p>
+              Chase statements often condense the merchant description and the internal bank transaction code into a single visual block. Manual copy-pasting frequently splits these into two rows, throwing off your entire Excel ledger. Our engine uses row-level heuristics to isolate the merchant name and purge the transaction metadata automatically.
+            </p>
           </div>
-         </div>
-      </section>
 
-      {/* Chase Specific FAQ */}
-      <section className="section bg-surface-alt">
-        <div className="container">
-          <div className="section-header">
-            <h2>Chase Converter FAQ</h2>
+          <div className="chase-expert-card">
+            <h3><History size={24} /> Dual-Date Resolution</h3>
+            <p>
+              Chase PDFs display both a <strong>Transaction Date</strong> and a <strong>Posting Date</strong>. For accurate tax-year reconciliation, it is critical to use the Transaction Date. Our parser targets the correct vector coordinate for Transaction Dates, ensuring your bookkeeping remains IRS-compliant even for end-of-month purchases.
+            </p>
           </div>
-          <div className="faq-list">
-            {[
-              {
-                q: "Does Chase provide CSV exports natively?",
-                a: "Chase allows downloading a CSV of recent activity, but they do NOT provide a way to download past monthly statements directly as CSV. If you only have older PDF statements, you must use a converter."
-              },
-              {
-                q: "Will this work with Chase Business account statements?",
-                a: "Yes. Chase Business statements have a slightly different tabular structure compared to personal checking accounts. Our algorithm detects this layout dynamically and parses it correctly."
-              },
-              {
-                q: "How far back can I get Chase statements?",
-                a: "Chase typically provides access to up to 7 years of statements through their online portal. You can download any of those historical PDFs and run them through our tool immediately."
-              }
-            ].map((faq, i) => (
-              <div key={i} className={`faq-item ${openFaq === i ? 'open' : ''}`}>
-                <button className="faq-question" onClick={() => setOpenFaq(openFaq === i ? null : i)}>
-                  {faq.q}
-                  <ChevronDown size={18} className="faq-chevron" />
-                </button>
-                <div className="faq-answer">
-                  <p>{faq.a}</p>
-                </div>
-              </div>
-            ))}
+
+          <div className="chase-expert-card">
+            <h3><FileCheck size={24} /> Business Account Ledgering</h3>
+            <p>
+              Chase Business and Commercial accounts use a wider table format with additional columns for internal tracking. Generic converters often shift these columns, placing the amount in the description cell. We have mapped the specific coordinate grids for Chase Business checking to ensure column integrity every time.
+            </p>
+          </div>
+
+          <div className="chase-expert-card">
+            <h3><ShieldCheck size={24} /> 100% Local Privacy</h3>
+            <p>
+              As a professional handling sensitive financial documents, you cannot risk cloud-based OCR services. This tool downloads the entire extraction logic to your browser's RAM. Your Chase PDFs are processed locally on your machine, with zero bytes uploaded to an external server.
+            </p>
           </div>
         </div>
-      </section>
 
-      <section className="cta-section" style={{ background: '#003087' }}>
-        <div className="container">
-          <h2>Ready to extract your Chase statement?</h2>
-          <button className="btn" onClick={scrollToConverter} style={{ color: '#003087' }}>
-            Convert Chase PDF Now <ArrowRight size={16} />
-          </button>
-        </div>
-      </section>
+      </div>
     </div>
   );
 }
