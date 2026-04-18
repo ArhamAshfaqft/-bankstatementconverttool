@@ -11,6 +11,7 @@ import PricingPage from './pages/PricingPage';
 import MergePage from './pages/MergePage';
 import QboPage from './pages/QboPage';
 import CreditCardPage from './pages/CreditCardPage';
+import SplitPage from './pages/SplitPage';
 import RedactPage from './pages/RedactPage';
 import ReceiptPage from './pages/ReceiptPage';
 import LoginPage from './pages/LoginPage';
@@ -33,7 +34,7 @@ export default function App() {
         <Route path="pricing" element={<PricingPage />} />
         <Route path="login" element={<LoginPage />} />
         <Route path="merge" element={<MergePage />} />
-        <Route path="split" element={<MergePage />} />
+        <Route path="split" element={<SplitPage />} />
         <Route path="redact" element={<RedactPage />} />
         <Route path="receipt-scanner" element={<ReceiptPage />} />
         <Route path="success" element={<SuccessPage />} />
