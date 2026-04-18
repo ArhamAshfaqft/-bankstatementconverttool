@@ -66,6 +66,13 @@ export default function Layout() {
                         <span className="mega-item-desc">Direct .qbo import for bookkeepers</span>
                       </div>
                     </Link>
+                    <Link to="/ofx-converter" className="mega-item" onClick={closeMega}>
+                      <div className="mega-item-icon converter"><FileText size={16} /></div>
+                      <div>
+                        <span className="mega-item-title">PDF to OFX / QFX</span>
+                        <span className="mega-item-desc">Ideal for Quicken and Xero imports</span>
+                      </div>
+                    </Link>
                     <Link to="/credit-card-parser" className="mega-item" onClick={closeMega}>
                       <div className="mega-item-icon converter"><CreditCard size={16} /></div>
                       <div>
@@ -78,6 +85,13 @@ export default function Layout() {
                       <div>
                         <span className="mega-item-title">Receipt Scanner (OCR)</span>
                         <span className="mega-item-desc">Extract data from photos & scans</span>
+                      </div>
+                    </Link>
+                    <Link to="/visualizer" className="mega-item" onClick={closeMega}>
+                      <div className="mega-item-icon converter"><Zap size={16} /></div>
+                      <div>
+                        <span className="mega-item-title">Statement visualizer</span>
+                        <span className="mega-item-desc">Interactive spending analytics</span>
                       </div>
                     </Link>
                   </div>
@@ -200,6 +214,9 @@ export default function Layout() {
               <div className="footer-col">
                 <h6>Product</h6>
                 <Link to="/">PDF to CSV Converter</Link>
+                <Link to="/quickbooks-qbo-converter">PDF to QuickBooks</Link>
+                <Link to="/ofx-converter">PDF to OFX / QFX</Link>
+                <Link to="/visualizer">Statement visualizer</Link>
                 <Link to="/pricing">Pricing Plans</Link>
                 <Link to="/merge">Merge Tool</Link>
                 <Link to="/split">Split Tool</Link>

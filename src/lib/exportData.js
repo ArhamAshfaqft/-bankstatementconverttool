@@ -21,9 +21,10 @@ export function generateFileBlob(csvData, format) {
     return new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
   }
 
-  if (format === 'qbo') {
-    const qboContent = generateQboFile(csvData);
-    return new Blob([qboContent], { type: 'application/vnd.intu.qbo;charset=utf-8' });
+  if (format === 'qbo' || format === 'ofx') {
+    const ofxContent = generateOfxFile(csvData);
+    const mime = format === 'qbo' ? 'application/vnd.intu.qbo' : 'application/x-ofx';
+    return new Blob([ofxContent], { type: `${mime};charset=utf-8` });
   }
 
   return null;
@@ -51,10 +52,11 @@ export function downloadFile(csvData, exportName, format) {
     triggerDownload(excelUrl, `${sanitizedName}.xlsx`);
   }
 
-  else if (format === 'qbo') {
-    const qboContent = generateQboFile(csvData);
-    const qboUrl = 'data:application/vnd.intu.qbo;charset=utf-8,' + encodeURIComponent(qboContent);
-    triggerDownload(qboUrl, `${sanitizedName}.qbo`);
+  else if (format === 'qbo' || format === 'ofx') {
+    const ofxContent = generateOfxFile(csvData);
+    const mime = format === 'qbo' ? 'application/vnd.intu.qbo' : 'application/x-ofx';
+    const ofxUrl = `data:${mime};charset=utf-8,` + encodeURIComponent(ofxContent);
+    triggerDownload(ofxUrl, `${sanitizedName}.${format}`);
   }
 }
 
@@ -69,7 +71,7 @@ function triggerDownload(url, filename) {
 }
 
 // Basic OFX/QBO Generator
-function generateQboFile(dataRows) {
+function generateOfxFile(dataRows) {
   // Assuming dataRows is roughly Date, Description, Amount, maybe Balance
   // This is a naive OFX wrapper - production would need more rigid column mapping
   let org = "STATEMENT_CONVERTER";

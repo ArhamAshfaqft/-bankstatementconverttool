@@ -7,7 +7,7 @@ import JSZip from 'jszip';
 import { useAuth } from '../contexts/AuthContext';
 
 const COLUMN_PRESETS = ['Date', 'Post Date', 'Description', 'Details', 'Reference', 'Check No.', 'Amount', 'Debit', 'Credit', 'Balance', 'Type', 'Category'];
-const FORMAT_EXT = { csv: '.csv', excel: '.xlsx', qbo: '.qbo' };
+const FORMAT_EXT = { csv: '.csv', excel: '.xlsx', qbo: '.qbo', ofx: '.ofx' };
 
 export default function ConverterTool() {
   // ── Core State ──
@@ -461,6 +461,7 @@ export default function ConverterTool() {
                   <option value="csv">CSV (Universal)</option>
                   <option value="excel">Excel (.xlsx)</option>
                   <option value="qbo">QuickBooks (.qbo)</option>
+                  <option value="ofx">OFX (.ofx)</option>
                 </select>
                 <button className="btn btn-primary export-btn" onClick={handleDownload}>
                   {bulkMode === 'separate' && processedFiles.length > 1 ? (

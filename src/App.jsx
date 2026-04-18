@@ -10,6 +10,8 @@ import CapitalOnePage from './pages/CapitalOnePage';
 import PricingPage from './pages/PricingPage';
 import MergePage from './pages/MergePage';
 import QboPage from './pages/QboPage';
+import OfxPage from './pages/OfxPage';
+import VisualizerPage from './pages/VisualizerPage';
 import CreditCardPage from './pages/CreditCardPage';
 import SplitPage from './pages/SplitPage';
 import RedactPage from './pages/RedactPage';
@@ -30,6 +32,8 @@ export default function App() {
         <Route path="citibank" element={<CitiPage />} />
         <Route path="capital-one" element={<CapitalOnePage />} />
         <Route path="quickbooks-qbo-converter" element={<QboPage />} />
+        <Route path="ofx-converter" element={<OfxPage />} />
+        <Route path="visualizer" element={<VisualizerPage />} />
         <Route path="credit-card-parser" element={<CreditCardPage />} />
         <Route path="pricing" element={<PricingPage />} />
         <Route path="login" element={<LoginPage />} />

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ShieldCheck, Lock, Zap, Globe, MonitorSmartphone, Eye, ChevronDown, ArrowRight, FileSpreadsheet, BookOpen, CreditCard, Camera, Shield, Scissors, GitMerge, CheckCircle, Clock, Users } from 'lucide-react';
+import { ShieldCheck, Lock, Zap, Globe, FileText, MonitorSmartphone, Eye, ChevronDown, ArrowRight, FileSpreadsheet, BookOpen, CreditCard, Camera, Shield, Scissors, GitMerge, CheckCircle, Clock, Users } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import ConverterTool from '../components/ConverterTool';
 import SeoHead from '../components/SeoHead';
@@ -41,6 +41,8 @@ export default function HomePage() {
   const suiteTools = [
     { icon: <FileSpreadsheet size={22} />, title: 'PDF to CSV / Excel', desc: 'Extract bank transactions with 100% accuracy', link: '/', color: '#0d9488' },
     { icon: <BookOpen size={22} />, title: 'PDF to QuickBooks', desc: 'Native .QBO export — no mapping errors', link: '/quickbooks-qbo-converter', color: '#059669' },
+    { icon: <FileText size={22} />, title: 'PDF to OFX / QFX', desc: 'Ideal for Quicken and Xero imports', link: '/ofx-converter', color: '#0284c7' },
+    { icon: <Zap size={22} />, title: 'Statement Visualizer', desc: 'Interactive spending analytics dashboard', link: '/visualizer', color: '#10b981' },
     { icon: <CreditCard size={22} />, title: 'Credit Card Parser', desc: 'Handles Visa, Mastercard & Amex statements', link: '/credit-card-parser', color: '#0891b2' },
     { icon: <Camera size={22} />, title: 'Receipt OCR Scanner', desc: 'Extract data from photos & scanned invoices', link: '/receipt-scanner', color: '#7c3aed' },
     { icon: <Shield size={22} />, title: 'Financial Anonymizer', desc: 'Black out account numbers & SSNs locally', link: '/redact', color: '#dc2626' },
