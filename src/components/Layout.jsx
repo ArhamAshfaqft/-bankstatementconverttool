@@ -210,6 +210,7 @@ export default function Layout() {
                 <Link to="/bank-of-america">Bank of America</Link>
                 <Link to="/wells-fargo">Wells Fargo</Link>
                 <Link to="/citibank">Citibank</Link>
+                <Link to="/capital-one">Capital One</Link>
               </div>
               <div className="footer-col">
                 <h6>Company</h6>
