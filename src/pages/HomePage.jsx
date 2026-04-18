@@ -301,30 +301,30 @@ export default function HomePage() {
 
           <div className="pricing-grid">
             <div className="pricing-card free">
-              <h3>Free</h3>
+              <h3>Basic</h3>
               <p className="price">$0</p>
-              <p className="desc">Perfect for individuals and one-off statement tasks.</p>
+              <p className="desc">Perfect for individuals and one-off personal tasks.</p>
               <ul className="pricing-features">
-                <li><ShieldCheck size={16} /> PDF to CSV & Excel Conversion</li>
-                <li><ShieldCheck size={16} /> Advanced Table Detection</li>
+                <li><ShieldCheck size={16} /> <span><strong>Unlimited</strong> single-file conversions</span></li>
+                <li><ShieldCheck size={16} /> PDF to CSV Conversion</li>
                 <li><ShieldCheck size={16} /> 100% Local Privacy</li>
-                <li className="missing"><span className="cross">×</span> Single file processing only</li>
                 <li className="missing"><span className="cross">×</span> No QuickBooks export</li>
+                <li className="missing"><span className="cross">×</span> No Bulk processing</li>
               </ul>
-              <button className="btn btn-outline" style={{width: '100%'}} onClick={scrollToConverter}>Start Converting</button>
+              <button className="btn btn-outline" style={{width: '100%'}} onClick={scrollToConverter}>Start Free</button>
             </div>
 
-            <div className="pricing-card pro">
+            <div className="pricing-card pro active">
               <div className="most-popular">Most Popular</div>
-              <h3>Pro Suite</h3>
+              <h3>Pro Accountant</h3>
               <p className="price">$19 <span>/ month</span></p>
-              <p className="desc">The full 7-tool accounting automation suite.</p>
+              <p className="desc">For bookkeepers and accounting professionals.</p>
               <ul className="pricing-features">
-                <li><ShieldCheck size={16} /> <span><strong>Everything in Free</strong></span></li>
-                <li><ShieldCheck size={16} /> <span><strong>Bulk Mode</strong> — Process years of data at once</span></li>
-                <li><ShieldCheck size={16} /> <span><strong>QuickBooks (.QBO)</strong> native export</span></li>
-                <li><ShieldCheck size={16} /> <span><strong>Receipt OCR</strong> local scanner</span></li>
-                <li><ShieldCheck size={16} /> <span><strong>Financial Anonymizer</strong> tool</span></li>
+                <li><ShieldCheck size={16} /> <span><strong>Everything in Basic</strong></span></li>
+                <li><ShieldCheck size={16} /> <span><strong>Bulk Multi-file</strong> processing</span></li>
+                <li><ShieldCheck size={16} /> <span><strong>QuickBooks (.QBO)</strong> export</span></li>
+                <li><ShieldCheck size={16} /> <span><strong>Excel (.xlsx)</strong> export</span></li>
+                <li><ShieldCheck size={16} /> <span><strong>Merged annual reports</strong></span></li>
                 <li><ShieldCheck size={16} /> <span>Priority email support</span></li>
               </ul>
               <Link to="/pricing" className="btn btn-primary" style={{width: '100%'}}>Upgrade to Pro</Link>
