@@ -18,11 +18,11 @@ export default function ChasePage() {
   };
 
   return (
-    <div className="chase-page-wrapper" style={{ backgroundColor: '#F8FAFC', minHeight: '100vh' }}>
+    <>
       <SeoHead 
         title="Convert Chase Bank Statement PDF to CSV | Professional Precision"
         description="A robust local browser engine optimized for Chase Personal and Business statements. High-fidelity extraction that cleans messy merchant strings for QuickBooks."
-        canonical="https://bankstatementconverttool.com/chase"
+        canonical="https://www.bankstatementconverttool.com/chase"
         jsonLd={[schema]}
       />
 
@@ -34,13 +34,14 @@ export default function ChasePage() {
           </div>
           <h1>Extract <span>Chase Statements</span> to CSV</h1>
           <p>
-            Process Chase Personal and Spark Business eStatements into clean data streams. A secure, zero-upload tool for professional accountants and bookkeepers.
+            Process Chase Personal and Spark Business eStatements into clean data streams. <br/>
+            A secure, zero-upload tool for professional accountants and bookkeepers.
           </p>
         </div>
       </header>
 
       {/* OVERLAPPING CONVERTER TOOL */}
-      <div className="chase-overlap-zone">
+      <div className="chase-overlap-zone" id="converter">
         <ConverterTool />
       </div>
 
@@ -55,7 +56,7 @@ export default function ChasePage() {
               <div className="chase-raw-side">AMZN MKTP US*MK8TB21V0 AMZN.COM/BILL</div>
             </div>
             <div className="chase-arrow-side">
-              <ArrowRight size={32} />
+              <ArrowRight size={24} />
             </div>
             <div>
               <div className="chase-tunnel-label">Clean Accountant View</div>
@@ -69,7 +70,7 @@ export default function ChasePage() {
               <div className="chase-raw-side">STARBUCKS STORE 01234 SEATTLE WA</div>
             </div>
             <div className="chase-arrow-side">
-              <ArrowRight size={32} />
+              <ArrowRight size={24} />
             </div>
             <div>
               <div className="chase-tunnel-label">Clean Accountant View</div>
@@ -83,33 +84,47 @@ export default function ChasePage() {
           <div className="chase-expert-card">
             <h3><Zap size={24} /> Row-Level Heuristics</h3>
             <p>
-              Chase statements often condense the merchant description and the internal bank transaction code into a single visual block. Manual copy-pasting frequently splits these into two rows, throwing off your entire Excel ledger. Our engine uses row-level heuristics to isolate the merchant name and purge the transaction metadata automatically.
+              Chase statements often condense the merchant description and the internal bank transaction code into a single visual block. Our engine uses row-level heuristics to isolate the merchant name and purge the transaction metadata automatically.
             </p>
           </div>
 
           <div className="chase-expert-card">
             <h3><History size={24} /> Dual-Date Resolution</h3>
             <p>
-              Chase PDFs display both a <strong>Transaction Date</strong> and a <strong>Posting Date</strong>. For accurate tax-year reconciliation, it is critical to use the Transaction Date. Our parser targets the correct vector coordinate for Transaction Dates, ensuring your bookkeeping remains IRS-compliant even for end-of-month purchases.
+              Chase PDFs display both a <strong>Transaction Date</strong> and a <strong>Posting Date</strong>. For accurate tax-year reconciliation, it is critical to use the Transaction Date. Our parser targets the correct vector coordinate for Transaction Dates.
             </p>
           </div>
 
           <div className="chase-expert-card">
             <h3><FileCheck size={24} /> Business Account Ledgering</h3>
             <p>
-              Chase Business and Commercial accounts use a wider table format with additional columns for internal tracking. Generic converters often shift these columns, placing the amount in the description cell. We have mapped the specific coordinate grids for Chase Business checking to ensure column integrity every time.
+              Chase Business and Commercial accounts use a wider table format with additional columns for internal tracking. We have mapped the specific coordinate grids for Chase Business checking to ensure column integrity every time.
             </p>
           </div>
 
           <div className="chase-expert-card">
             <h3><ShieldCheck size={24} /> 100% Local Privacy</h3>
             <p>
-              As a professional handling sensitive financial documents, you cannot risk cloud-based OCR services. This tool downloads the entire extraction logic to your browser's RAM. Your Chase PDFs are processed locally on your machine, with zero bytes uploaded to an external server.
+              As a professional handling sensitive financial documents, you cannot risk cloud-based OCR services. This tool downloads the entire extraction logic to your browser's RAM. Your Chase PDFs are processed locally on your machine.
             </p>
           </div>
         </div>
 
       </div>
-    </div>
+
+      {/* CTA SECTION */}
+      <section className="cta-section">
+        <div className="container">
+          <h2>Ready to Parse Your Chase Statements?</h2>
+          <p>Join thousands of bookkeepers who have ditched manual data entry for Chase accounts.</p>
+          <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2rem' }}>
+            <button className="btn btn-primary" onClick={() => document.getElementById('converter').scrollIntoView({ behavior: 'smooth' })}>
+              Start Fast Extraction <Zap size={16} />
+            </button>
+          </div>
+        </div>
+      </section>
+    </>
   );
 }
+

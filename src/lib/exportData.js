@@ -1,6 +1,34 @@
 import Papa from 'papaparse';
 import * as XLSX from 'xlsx';
 
+/**
+ * Generate a Blob for a given dataset without triggering download.
+ * Used by ZIP packaging for separate-file bulk exports.
+ */
+export function generateFileBlob(csvData, format) {
+  if (!csvData || csvData.length === 0) return null;
+
+  if (format === 'csv') {
+    const csv = Papa.unparse(csvData);
+    return new Blob([csv], { type: 'text/csv;charset=utf-8' });
+  }
+
+  if (format === 'excel') {
+    const worksheet = XLSX.utils.aoa_to_sheet(csvData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Transactions");
+    const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    return new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+  }
+
+  if (format === 'qbo') {
+    const qboContent = generateQboFile(csvData);
+    return new Blob([qboContent], { type: 'application/vnd.intu.qbo;charset=utf-8' });
+  }
+
+  return null;
+}
+
 export function downloadFile(csvData, exportName, format) {
   if (!csvData || csvData.length === 0) return;
 

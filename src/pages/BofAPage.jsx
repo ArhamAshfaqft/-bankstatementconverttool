@@ -1,7 +1,7 @@
 import React from 'react';
 import SeoHead from '../components/SeoHead';
 import ConverterTool from '../components/ConverterTool';
-import { ChevronDown, Briefcase, FileSearch, ShieldAlert, CheckCircle } from 'lucide-react';
+import { ChevronDown, Briefcase, FileSearch, ShieldAlert, CheckCircle, Zap } from 'lucide-react';
 
 export default function BofAPage() {
   const schema = {
@@ -18,11 +18,11 @@ export default function BofAPage() {
   };
 
   return (
-    <div className="bofa-page-wrapper" style={{ backgroundColor: '#F8FAFC', minHeight: '100vh' }}>
+    <>
       <SeoHead 
         title="Bank of America Statement PDF to CSV | Professional Audit Utility"
         description="A high-fidelity local browser engine optimized for Bank of America checking and savings statements. Secure, zero-retention extraction for multi-year accounting audits."
-        canonical="https://bankstatementconverttool.com/bank-of-america"
+        canonical="https://www.bankstatementconverttool.com/bank-of-america"
         jsonLd={[schema]}
       />
 
@@ -34,53 +34,48 @@ export default function BofAPage() {
           </div>
           <h1>Convert <span>Bank of America</span> to CSV</h1>
           <p>
-            Securely extract deep historical transaction data from BofA eStatements. An offline tool designed for the rigorous requirements of professional tax preparation.
+            Securely extract deep historical transaction data from BofA eStatements. <br/>
+            An offline tool designed for the rigorous requirements of professional tax preparation.
           </p>
         </div>
       </header>
 
       {/* OVERLAPPING CONVERTER TOOL */}
-      <div className="bofa-overlap-zone">
+      <div className="bofa-overlap-zone" id="converter">
         <ConverterTool />
       </div>
 
       <div className="bofa-audit-container">
         <h2 className="bofa-section-title">The Auditor's Extraction Guide</h2>
         
-        {/* UNIQUE DOM 1: Details/Summary Accordion */}
-        <div className="bofa-audit-flow">
-          <details className="bofa-audit-item" open>
-            <summary>
-              <FileSearch size={22} />
+        {/* UNIQUE DOM 1: FAQ Accordion Style */}
+        <div className="faq-list" style={{ maxWidth: '900px', margin: '0 auto' }}>
+          <div className="faq-item open">
+            <div className="faq-question" style={{ cursor: 'default' }}>
               Resolving "Page Continuation" Orphans
-              <ChevronDown size={20} className="ml-auto" />
-            </summary>
-            <div className="bofa-audit-content">
-              Bank of America statements frequently break a single transaction across two physical pages if it occurs right at the margin. Generic converters see this as a "noise" row and often miscalculate the ending balance. Our parser <strong>re-stitches orphaned description strings</strong> by evaluating the vertical padding between text blocks, ensuring your CSV row integrity remains 100% accurate for multi-page documents.
             </div>
-          </details>
+            <div className="faq-answer" style={{ maxHeight: 'none', opacity: 1, paddingBottom: '1.5rem' }}>
+              <p>Bank of America statements frequently break a single transaction across two physical pages. Our parser <strong>re-stitches orphaned description strings</strong> by evaluating the vertical padding between text blocks, ensuring your CSV row integrity remains 100% accurate.</p>
+            </div>
+          </div>
 
-          <details className="bofa-audit-item">
-            <summary>
-              <Briefcase size={22} />
+          <div className="faq-item open">
+            <div className="faq-question" style={{ cursor: 'default' }}>
               Merchant Category Extraction
-              <ChevronDown size={20} className="ml-auto" />
-            </summary>
-            <div className="bofa-audit-content">
-              BofA statements often include a secondary line for "Merchant Category" or "MCC" codes underneath the retailer name. While useful for humans, these codes can clutter a clean QuickBooks import. Our engine allows you to extract the raw merchant name while <strong>discarding the internal Bank of America metadata</strong>, yielding a cleaner ledger with zero manual cleanup required.
             </div>
-          </details>
+            <div className="faq-answer" style={{ maxHeight: 'none', opacity: 1, paddingBottom: '1.5rem' }}>
+              <p>BofA statements often include a secondary line for merchant category codes. Our engine allows you to extract the raw merchant name while <strong>discarding the internal Bank of America metadata</strong>, yielding a cleaner ledger with zero manual cleanup.</p>
+            </div>
+          </div>
 
-          <details className="bofa-audit-item">
-            <summary>
-              <ShieldAlert size={22} />
+          <div className="faq-item open">
+            <div className="faq-question" style={{ cursor: 'default' }}>
               Bypassing Image-Based Data Layers
-              <ChevronDown size={20} className="ml-auto" />
-            </summary>
-            <div className="bofa-audit-content">
-              Modern BofA eStatements use a hybrid vector-and-image layout. Attempting to "Export to Excel" using standard PDF readers often misses the image-anchored amounts entirely. By reading the <strong>underlying coordinate map</strong> of the document rather than doing simple OCR, our tool captures data points that are visually "locked" on the statement canvas.
             </div>
-          </details>
+            <div className="faq-answer" style={{ maxHeight: 'none', opacity: 1, paddingBottom: '1.5rem' }}>
+              <p>Modern BofA eStatements use a hybrid vector-and-image layout. By reading the <strong>underlying coordinate map</strong> of the document rather than doing simple OCR, our tool captures data points that are visually "locked" on the statement canvas.</p>
+            </div>
+          </div>
         </div>
 
         {/* UNIQUE DOM 2: Audit Checklist Card */}
@@ -97,9 +92,21 @@ export default function BofAPage() {
             </ul>
           </div>
         </div>
-
       </div>
-      <div style={{ height: '4rem' }}></div>
-    </div>
+
+      {/* CTA SECTION */}
+      <section className="cta-section">
+        <div className="container">
+          <h2>Trust Your Forensic Accounting to Experts</h2>
+          <p>Join thousands of auditors who trust our private Bank of America conversion engine.</p>
+          <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2rem' }}>
+            <button className="btn btn-primary" onClick={() => document.getElementById('converter').scrollIntoView({ behavior: 'smooth' })}>
+              Start BofA Extraction <Zap size={16} />
+            </button>
+          </div>
+        </div>
+      </section>
+    </>
   );
 }
+

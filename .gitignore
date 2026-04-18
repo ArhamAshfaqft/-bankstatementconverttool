@@ -11,6 +11,9 @@ node_modules
 dist
 dist-ssr
 *.local
+.env
+.env.*
+!.env.example
 
 # Editor directories and files
 .vscode/*
@@ -33,5 +36,7 @@ release
 
 # Tests & Mocks
 sample_*.pdf
-generate_*_mock.js
+generate_*.js
 test_parser.js
+supabase_setup.sql
+[diff_block_end]
