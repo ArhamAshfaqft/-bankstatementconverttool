@@ -614,7 +614,7 @@ export default function ConverterTool() {
         </div>
       )}
       {/* SaaS Footer Info */}
-      <div className="tool-footer" style={{ marginTop: '2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.85rem', color: 'var(--slate-500)' }}>
+      <div className="tool-footer" style={{ marginTop: '2rem', display: 'flex', justifyContent: 'center', alignItems: 'center', fontSize: '0.85rem', color: 'var(--slate-500)', position: 'relative' }}>
         <div className="security-badge" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <Shield size={14} /> 
           <span>100% Client-side processing. Your financial data never leaves this browser.</span>
@@ -622,7 +622,7 @@ export default function ConverterTool() {
         
         {/* Dev Toggle for Testing */}
         {import.meta.env.DEV && (
-          <div className="dev-tools" style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '11px', color: '#94a3b8', background: '#f8fafc', padding: '4px 8px', borderRadius: '6px', border: '1px solid #e2e8f0' }}>
+          <div className="dev-tools" style={{ position: 'absolute', right: 0, display: 'flex', alignItems: 'center', gap: '8px', fontSize: '11px', color: '#94a3b8', background: '#f8fafc', padding: '4px 8px', borderRadius: '6px', border: '1px solid #e2e8f0' }}>
             <span>Dev Toggle:</span>
             <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
               <input 

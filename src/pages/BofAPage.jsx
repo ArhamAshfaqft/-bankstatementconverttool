@@ -27,23 +27,21 @@ export default function BofAPage() {
       />
 
       {/* PREMIUM BofA HERO */}
-      <header className="bofa-hero">
-        <div className="container" style={{ position: 'relative', zIndex: 2 }}>
-          <div className="bofa-hero-badge">
+      <header className="layout-standard-hero" style={{ background: 'linear-gradient(135deg, #012169 0%, #004a99 100%)' }}>
+        <div className="container">
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', padding: '0.5rem 1rem', borderRadius: '100px', fontWeight: '600', fontSize: '0.85rem', marginBottom: '2rem', color: '#ffffff' }}>
             <CheckCircle size={16} /> Audit-Ready Data Precision
           </div>
           <h1>Convert <span>Bank of America</span> to CSV</h1>
-          <p>
-            Securely extract deep historical transaction data from BofA eStatements. <br/>
-            An offline tool designed for the rigorous requirements of professional tax preparation.
-          </p>
+          <p>Securely extract deep historical transaction data from BofA eStatements. An offline tool designed for the rigorous requirements of professional tax preparation.</p>
         </div>
       </header>
 
-      {/* OVERLAPPING CONVERTER TOOL */}
-      <div className="bofa-overlap-zone" id="converter">
-        <ConverterTool />
-      </div>
+      <section className="layout-tool-container">
+        <div className="container">
+          <ConverterTool />
+        </div>
+      </section>
 
       <div className="bofa-audit-container">
         <h2 className="bofa-section-title">The Auditor's Extraction Guide</h2>

@@ -1,93 +1,58 @@
 import React from 'react';
-import SeoHead from '../components/SeoHead';
+import { Scissors, ShieldCheck, FileText, Zap } from 'lucide-react';
 import SplitterTool from '../components/SplitterTool';
-import { ShieldCheck, Zap, Lock, Database } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import SeoHead from '../components/SeoHead';
 
 export default function SplitPage() {
-  const schema = {
-    "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    "name": "Local PDF Splitter for Financial Documents",
-    "applicationCategory": "BusinessApplication",
-    "operatingSystem": "WebBrowser",
-    "offers": {
-      "@type": "Offer",
-      "price": "0.00",
-      "priceCurrency": "USD"
-    }
-  };
-
   return (
     <>
       <SeoHead 
-        title="Split PDF Statements | High-Security Client-Side Extractor"
-        description="Split consolidated bank statements and tax PDFs into individual files completely locally. Your financial documents never leave your browser."
+        title="Split PDF Bank Statements | Extract Pages Locally"
+        description="Extract specific pages from your bank statements or financial documents. 100% private, local processing ensures total security. No uploads required."
         canonical="https://www.bankstatementconverttool.com/split"
-        jsonLd={[schema]}
       />
-
-      <header className="hero">
+      
+      <header className="layout-standard-hero" style={{ background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)' }}>
         <div className="container">
-          <div className="hero-content-stacked">
-            <div className="hero-badge" style={{ borderColor: 'var(--brand-200)', background: 'var(--brand-50)', color: 'var(--brand-600)' }}>
-              <Lock size={14} /> 100% Client-Side Processing
-            </div>
-            
-            <h1>
-              Extract Pages from <span>Financial PDFs</span>
-            </h1>
-            
-            <p className="hero-subtitle">
-              Got a massive 150-page year-end document? Safely extract exactly the statements you need without uploading the master file to an external server.
-            </p>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', padding: '0.5rem 1rem', borderRadius: '100px', fontWeight: '600', fontSize: '0.85rem', marginBottom: '2rem', color: '#ffffff' }}>
+            <Scissors size={16} /> Precise Document Extraction
           </div>
-
-          {/* OVERLAPPING TOOL */}
-          <div className="hero-converter-fullwidth" id="splitter-tool">
-            <SplitterTool />
-          </div>
+          <h1>Extract Specific <span>Pages</span> from Your PDF</h1>
+          <p>Need only the transaction pages from a 20-page document? Split your statements locally in seconds without compromising your privacy.</p>
         </div>
       </header>
 
-      {/* PAIN/SOLUTION INFO */}
-      <section className="section" style={{ paddingTop: '2rem' }}>
+      <section className="layout-tool-container">
         <div className="container">
-          <div className="section-header">
-            <span className="section-label">Enterprise Standard</span>
-            <h2>Why Accountants Prefer Local Splitting</h2>
-            <p>Don't risk uploading consolidated client files just to isolate three pages.</p>
-          </div>
-
-          <div className="features-grid">
-            <div className="feature-card">
-              <div className="feature-icon teal"><Lock size={20} /></div>
-              <h3>Zero-Upload Engine</h3>
-              <p>Unlike generic cloud tools, this extractor utilizes your device's RAM via JavaScript to cut and split files. It works even if you disconnect from Wi-Fi.</p>
-            </div>
-            <div className="feature-card">
-              <div className="feature-icon amber"><Zap size={20} /></div>
-              <h3>Instantaneous</h3>
-              <p>No waiting in queues or dealing with file size upload limits. Large 50MB tax documents are processed in milliseconds.</p>
-            </div>
-            <div className="feature-card">
-              <div className="feature-icon blue"><Database size={20} /></div>
-              <h3>Vector Preservation</h3>
-              <p>We do not rasterize your documents. Text remains searchable and metadata is preserved so it can be passed into our <Link to="/">PDF to CSV Converter</Link>.</p>
-            </div>
-          </div>
+          <SplitterTool />
         </div>
       </section>
 
-      {/* CTA SECTION */}
-      <section className="cta-section" style={{ background: 'var(--slate-50)', borderTop: '1px solid var(--border)' }}>
+      {/* VALUE PROPS */}
+      <section className="section section-alt">
         <div className="container">
-          <h2>Ready to extract your pages?</h2>
-          <p>No account required to use the local splitter.</p>
-          <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2rem' }}>
-            <button className="btn btn-primary" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-              Start Splitting <Zap size={16} />
-            </button>
+          <div className="section-header">
+            <span className="section-label">Safe & Simple</span>
+            <h2>Why Use Our Splitter</h2>
+            <p>Built for users who need to cherry-pick data from large financial reports.</p>
+          </div>
+
+          <div className="features-grid" style={{ marginTop: '4rem' }}>
+            <div className="feature-card">
+              <div className="feature-icon blue"><ShieldCheck size={20} /></div>
+              <h3>100% Local Privacy</h3>
+              <p>Your document is split entirely within your browser's memory. Your file NEVER touches our servers.</p>
+            </div>
+            <div className="feature-card">
+              <div className="feature-icon amber"><FileText size={20} /></div>
+              <h3>Flexible Ranges</h3>
+              <p>Extract single pages, multiple specific pages (1, 4, 9), or entire ranges (5-12) with one click.</p>
+            </div>
+            <div className="feature-card">
+              <div className="feature-icon teal"><Zap size={20} /></div>
+              <h3>Zero Quality Loss</h3>
+              <p>Our splitter maintains the original resolution and vector quality of your bank statement PDFs.</p>
+            </div>
           </div>
         </div>
       </section>

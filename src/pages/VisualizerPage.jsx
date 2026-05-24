@@ -1,5 +1,5 @@
 import React from 'react';
-import { Zap, ShieldCheck, Lock, TrendingUp } from 'lucide-react';
+import { Zap, ShieldCheck, Lock, TrendingUp, ArrowRight } from 'lucide-react';
 import VisualizerTool from '../components/VisualizerTool';
 import SeoHead from '../components/SeoHead';
 
@@ -26,27 +26,21 @@ export default function VisualizerPage() {
         jsonLd={[schema]}
       />
 
-      <header className="hero" style={{ paddingBottom: '4rem' }}>
+      <header className="layout-standard-hero" style={{ background: 'linear-gradient(135deg, #10b981 0%, #064E3B 100%)' }}>
         <div className="container">
-          <div className="hero-content-stacked">
-            <div className="hero-badge" style={{ borderColor: '#4ade80', background: '#f0fdf4', color: '#166534' }}>
-              <Zap size={14} /> NEW: Spending Intelligence
-            </div>
-            
-            <h1>
-              Visualize Your <span>Financial Health</span>
-            </h1>
-            
-            <p className="hero-subtitle">
-              Drop any bank statement PDF to generate an instant, interactive dashboard of your income and expenses. 100% private — we never see your data.
-            </p>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.2)', padding: '0.5rem 1rem', borderRadius: '100px', fontWeight: '600', fontSize: '0.85rem', marginBottom: '2rem', color: '#ffffff' }}>
+            <TrendingUp size={16} /> Instant Wealth Intelligence
           </div>
-
-          <div className="hero-converter-fullwidth" id="visualizer-tool" style={{ marginTop: '2rem' }}>
-            <VisualizerTool />
-          </div>
+          <h1>Visualize Your <span>Financial Health</span></h1>
+          <p>Drop any bank statement PDF to generate an instant, interactive dashboard of your income and expenses. 100% private — we never see your data.</p>
         </div>
       </header>
+
+      <section className="layout-tool-container">
+        <div className="container">
+          <VisualizerTool />
+        </div>
+      </section>
 
       {/* WHY USE THE VISUALIZER */}
       <section className="section section-alt">

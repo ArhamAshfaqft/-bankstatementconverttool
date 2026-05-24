@@ -13,22 +13,17 @@ export default function OfxPage() {
       />
       
       {/* HERO SECTION */}
-      <section className="bank-hero" style={{ background: 'linear-gradient(135deg, #0284c7 0%, #0c4a6e 100%)', color: 'white', padding: '6rem 0 8rem', textAlign: 'center', position: 'relative' }}>
+      <header className="layout-standard-hero" style={{ background: 'linear-gradient(135deg, #0284c7 0%, #0c4a6e 100%)' }}>
         <div className="container">
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.2)', padding: '0.5rem 1rem', borderRadius: '100px', fontWeight: '600', fontSize: '0.85rem', marginBottom: '2rem', color: '#ffffff' }}>
             <FileCode size={16} /> Quicken & Xero Compatible
           </div>
-          <h1 style={{ fontSize: '3.5rem', fontWeight: '800', letterSpacing: '-1px', marginBottom: '1.5rem', color: '#ffffff' }}>
-            Convert Bank Statements to <span style={{ color: '#bae6fd' }}>OFX / QFX</span>
-          </h1>
-          <p style={{ fontSize: '1.25rem', opacity: '0.9', maxWidth: '750px', margin: '0 auto', color: 'rgba(255,255,255,0.95)' }}>
-            Stop wasting hours mapping raw CSV files. Automatically convert your PDF bank statements directly into native OFX or QFX files for immediate import into your favorite financial software.
-          </p>
+          <h1>Convert Bank Statements to <span>OFX / QFX</span></h1>
+          <p>Stop wasting hours mapping raw CSV files. Automatically convert your PDF bank statements directly into native OFX or QFX files for immediate import into your favorite financial software.</p>
         </div>
-      </section>
+      </header>
 
-      {/* CONVERTER TOOL OVERLAP */}
-      <section style={{ marginTop: '-5rem', position: 'relative', zIndex: 10 }}>
+      <section className="layout-tool-container">
         <div className="container">
           <ConverterTool /> 
         </div>

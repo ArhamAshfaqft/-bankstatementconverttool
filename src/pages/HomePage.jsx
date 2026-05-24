@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ShieldCheck, Lock, Zap, Globe, FileText, MonitorSmartphone, Eye, ChevronDown, ArrowRight, FileSpreadsheet, BookOpen, CreditCard, Camera, Shield, Scissors, GitMerge, CheckCircle, Clock, Users } from 'lucide-react';
+import { ShieldCheck, Lock, Zap, Globe, FileText, MonitorSmartphone, Eye, ChevronDown, ArrowRight, FileSpreadsheet, BookOpen, CreditCard, Camera, Shield, Scissors, GitMerge, CheckCircle, Clock, Users, Key, ShieldAlert } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import ConverterTool from '../components/ConverterTool';
 import SeoHead from '../components/SeoHead';
@@ -44,10 +44,16 @@ export default function HomePage() {
     { icon: <FileText size={22} />, title: 'PDF to OFX / QFX', desc: 'Ideal for Quicken and Xero imports', link: '/ofx-converter', color: '#0284c7' },
     { icon: <Zap size={22} />, title: 'Statement Visualizer', desc: 'Interactive spending analytics dashboard', link: '/visualizer', color: '#10b981' },
     { icon: <CreditCard size={22} />, title: 'Credit Card Parser', desc: 'Handles Visa, Mastercard & Amex statements', link: '/credit-card-parser', color: '#0891b2' },
+    { icon: <FileSpreadsheet size={22} />, title: 'QuickBooks (.QBO) to CSV', desc: 'Translate .qbo statements back to spreadsheet rows', link: '/qbo-to-csv-converter', color: '#0d9488' },
+    { icon: <BookOpen size={22} />, title: 'CSV to QuickBooks (.QBO)', desc: 'Map transaction spreadsheet rows into QBO files', link: '/csv-to-qbo-converter', color: '#059669' },
+    { icon: <Zap size={22} />, title: 'Quicken (.QIF) to QuickBooks', desc: 'Convert and bridge Quicken transactions into QBO', link: '/qif-to-qbo-converter', color: '#6366f1' },
     { icon: <Camera size={22} />, title: 'Receipt OCR Scanner', desc: 'Extract data from photos & scanned invoices', link: '/receipt-scanner', color: '#7c3aed' },
+    { icon: <Key size={22} />, title: 'PDF Password Remover', desc: 'Unlock protected bank statements locally', link: '/unlock-pdf', color: '#6366f1' },
+    { icon: <ShieldCheck size={22} />, title: 'PDF Statement Protector', desc: 'Lock sensitive files before sharing or emailing', link: '/protect-pdf', color: '#4f46e5' },
     { icon: <Shield size={22} />, title: 'Financial Anonymizer', desc: 'Black out account numbers & SSNs locally', link: '/redact', color: '#dc2626' },
     { icon: <GitMerge size={22} />, title: 'Merge PDFs', desc: 'Combine multiple statements into one', link: '/merge', color: '#2563eb' },
     { icon: <Scissors size={22} />, title: 'Split PDF', desc: 'Extract specific pages from large files', link: '/split', color: '#d97706' },
+    { icon: <ShieldAlert size={22} />, title: 'Forgery & Fraud Detector', desc: 'Audit statements for tampering & math errors', link: '/audit-statement', color: '#020617' },
   ];
 
   return (
@@ -78,18 +84,13 @@ export default function HomePage() {
         <div className="container">
           
           <div className="hero-content-stacked">
-            <div className="hero-badge">
-              <Lock size={14} />
-              100% Private — Your files never leave your browser
-            </div>
-            
             <h1>
               Stop Manually Copying <span>Bank Statements</span>
             </h1>
             
             <p className="hero-subtitle">
-              Extract transactions from any bank statement PDF in seconds — not hours. <br/>
-              Built for accountants who process 100+ statements monthly.
+              Extract transactions from any bank statement PDF in seconds — not hours.
+              Built for accounting professionals who process multiple statements daily.
             </p>
 
             {/* Pain-point pills */}
@@ -168,7 +169,7 @@ export default function HomePage() {
       <section className="section section-alt" id="suite">
         <div className="container">
           <div className="section-header">
-            <span className="section-label">7 Tools, Zero Uploads</span>
+            <span className="section-label">12 Tools, Zero Uploads</span>
             <h2>The Complete Financial Document Suite</h2>
             <p>Everything an accountant needs to process, convert, and protect financial documents — all running locally in your browser.</p>
           </div>
@@ -177,7 +178,7 @@ export default function HomePage() {
             display: 'grid', 
             gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', 
             gap: '1.25rem', 
-            maxWidth: '1000px', 
+            maxWidth: '1300px', 
             margin: '0 auto' 
           }}>
             {suiteTools.map((tool, i) => (

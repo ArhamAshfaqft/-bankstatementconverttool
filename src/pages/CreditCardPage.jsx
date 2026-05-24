@@ -13,22 +13,17 @@ export default function CreditCardPage() {
       />
       
       {/* HERO SECTION */}
-      <section className="bank-hero" style={{ background: 'linear-gradient(135deg, #1e293b 0%, #0f172a 100%)', color: 'white', padding: '6rem 0 8rem', textAlign: 'center', position: 'relative' }}>
+      <header className="layout-standard-hero" style={{ background: 'linear-gradient(135deg, #1e293b 0%, #0f172a 100%)' }}>
         <div className="container">
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', padding: '0.5rem 1rem', borderRadius: '100px', fontWeight: '600', fontSize: '0.85rem', marginBottom: '2rem', color: '#ffffff' }}>
             <CreditCard size={16} /> Credit Card Parsing Engine
           </div>
-          <h1 style={{ fontSize: '3.5rem', fontWeight: '800', letterSpacing: '-1px', marginBottom: '1.5rem', color: '#ffffff' }}>
-            Convert Credit Card Statements to CSV
-          </h1>
-          <p style={{ fontSize: '1.25rem', opacity: '0.9', maxWidth: '750px', margin: '0 auto', color: 'rgba(255,255,255,0.95)' }}>
-            Corporate credit cards have notoriously complex tables. Our specialized engine identifies Merchant Categories, foreign transaction fees, and standardizes debits perfectly.
-          </p>
+          <h1>Convert Credit Card Statements to CSV</h1>
+          <p>Corporate credit cards have notoriously complex tables. Our specialized engine identifies Merchant Categories, foreign transaction fees, and standardizes debits perfectly.</p>
         </div>
-      </section>
+      </header>
 
-      {/* CONVERTER TOOL OVERLAP */}
-      <section style={{ marginTop: '-5rem', position: 'relative', zIndex: 10 }}>
+      <section className="layout-tool-container">
         <div className="container">
           <ConverterTool /> 
         </div>

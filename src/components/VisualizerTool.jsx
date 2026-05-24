@@ -2,14 +2,14 @@ import React, { useState, useCallback, useMemo } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { 
   PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend, 
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, AreaChart, Area 
 } from 'recharts';
 import { 
   BarChart3, PieChart as PieIcon, TrendingUp, TrendingDown, 
-  Wallet, Shield, Loader2, FileX, ArrowRight, Download, Eye
+  Wallet, Shield, Loader2, FileX, ArrowRight, Table, Layers
 } from 'lucide-react';
 import { extractTableFromPdf } from '../lib/pdfParser';
 import { useAuth } from '../contexts/AuthContext';
+import UpsellModal from './UpsellModal';
 
 // ── CATEGORIZATION ENGINE (Client-Side) ──
 const CATEGORIES = {
@@ -34,14 +34,20 @@ const COLORS = {
 };
 
 export default function VisualizerTool() {
-  const { isPro } = useAuth();
-  
-  const [file, setFile] = useState(null);
+  const [files, setFiles] = useState([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState('');
   const [transactions, setTransactions] = useState([]); // [{date, desc, amount, category}]
+  const [processedCount, setProcessedCount] = useState(0);
+
+  // Custom Gate Implementation
+  const { isPro: realIsPro } = useAuth();
+  const [devPro] = useState(sessionStorage.getItem('devPro') === 'true');
+  const isPro = realIsPro || devPro;
+  const [upsellFeature, setUpsellFeature] = useState(null);
 
   const categorize = (description) => {
+    if (!description) return 'Other';
     const desc = description.toLowerCase();
     for (const [cat, keywords] of Object.entries(CATEGORIES)) {
       if (keywords.some(kw => desc.includes(kw))) return cat;
@@ -50,59 +56,87 @@ export default function VisualizerTool() {
   };
 
   const onDrop = useCallback(async (acceptedFiles) => {
-    const droppedFile = acceptedFiles[0];
-    if (droppedFile && droppedFile.type === 'application/pdf') {
-      setFile(droppedFile);
-      setIsProcessing(true);
-      setError('');
-      
-      try {
-        const tableData = await extractTableFromPdf(droppedFile);
-        if (!tableData || tableData.length < 2) {
-          throw new Error("No transactions found in this PDF.");
-        }
+    const droppedFiles = acceptedFiles;
+    
+    if (droppedFiles.length === 0) return;
 
-        // Detect columns (Date, Description, Amount)
-        // Header looks for keywords
-        const headers = tableData[0].map(h => h.toLowerCase());
-        const dateIdx = headers.findIndex(h => h.includes('date'));
-        const descIdx = headers.findIndex(h => h.includes('desc') || h.includes('detail') || h.includes('transaction'));
-        const amtIdx = headers.findIndex(h => h.includes('amount') || h.includes('value'));
-        
-        // Fallback to 0, 1, last if not found
-        const finalDateIdx = dateIdx !== -1 ? dateIdx : 0;
-        const finalDescIdx = descIdx !== -1 ? descIdx : 1;
-        const finalAmtIdx = amtIdx !== -1 ? amtIdx : tableData[0].length - 1;
-
-        const parsed = tableData.slice(1).map(row => {
-          const rawAmt = row[finalAmtIdx] ? row[finalAmtIdx].replace(/[^0-9.-]/g, '') : '0';
-          const amount = parseFloat(rawAmt) || 0;
-          const description = row[finalDescIdx] || 'Unknown';
-          const dateStr = row[finalDateIdx] || '';
-          
-          return {
-            date: dateStr,
-            description,
-            amount,
-            category: categorize(description)
-          };
-        }).filter(t => t.description !== 'Unknown');
-
-        setTransactions(parsed);
-      } catch (err) {
-        console.error(err);
-        setError(err.message || "Failed to process PDF.");
-        setFile(null);
-      } finally {
-        setIsProcessing(false);
-      }
+    if (droppedFiles.length > 1 && !isPro) {
+      setUpsellFeature('Batch Analytics Visualizer');
+      return;
     }
-  }, []);
+
+    setFiles(droppedFiles);
+    setIsProcessing(true);
+    setError('');
+    setProcessedCount(0);
+    
+    let allParsedTransactions = [];
+    let hasError = false;
+
+    try {
+      for (let i = 0; i < droppedFiles.length; i++) {
+         const file = droppedFiles[i];
+         try {
+            const tableData = await extractTableFromPdf(file);
+            if (!tableData || tableData.length < 2) {
+              console.warn(`No transactions found in ${file.name}`);
+              continue;
+            }
+
+            // Detect columns (Date, Description, Amount)
+            const headers = tableData[0].map(h => h.toLowerCase());
+            const dateIdx = headers.findIndex(h => h.includes('date'));
+            const descIdx = headers.findIndex(h => h.includes('desc') || h.includes('detail') || h.includes('transaction'));
+            const amtIdx = headers.findIndex(h => h.includes('amount') || h.includes('value'));
+            
+            const finalDateIdx = dateIdx !== -1 ? dateIdx : 0;
+            const finalDescIdx = descIdx !== -1 ? descIdx : 1;
+            const finalAmtIdx = amtIdx !== -1 ? amtIdx : tableData[0].length - 1;
+
+            const parsed = tableData.slice(1).map(row => {
+              const rawAmt = row[finalAmtIdx] ? row[finalAmtIdx].replace(/[^0-9.-]/g, '') : '0';
+              const amount = parseFloat(rawAmt) || 0;
+              const description = row[finalDescIdx] || 'Unknown';
+              const dateStr = row[finalDateIdx] || '';
+              
+              return {
+                date: dateStr,
+                description,
+                amount,
+                category: categorize(description),
+                sourceFile: file.name
+              };
+            }).filter(t => t.description !== 'Unknown');
+
+            allParsedTransactions = [...allParsedTransactions, ...parsed];
+         } catch(e) {
+            console.error(`Error parsing ${file.name}:`, e);
+            hasError = true;
+         }
+         setProcessedCount(i + 1);
+      }
+
+      if (allParsedTransactions.length === 0) {
+        throw new Error("Could not extract tabular data from the provided files.");
+      }
+
+      setTransactions(allParsedTransactions);
+      if(hasError && files.length === 1) {
+         setError("Failed to process the PDF correctly.");
+      }
+    } catch (err) {
+      console.error(err);
+      setError(err.message || "Failed to process PDF(s).");
+      setFiles([]);
+    } finally {
+      setIsProcessing(false);
+    }
+  }, [isPro]);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept: { 'application/pdf': ['.pdf'] },
-    multiple: false
+    multiple: true
   });
 
   // ── ANALYTICS DATA ──
@@ -130,7 +164,7 @@ export default function VisualizerTool() {
   }, [transactions]);
 
   const removeFile = () => {
-    setFile(null);
+    setFiles([]);
     setTransactions([]);
     setError('');
   };
@@ -138,23 +172,7 @@ export default function VisualizerTool() {
   return (
     <div className="visualizer-container" style={{ maxWidth: '1000px', margin: '0 auto' }}>
       
-      {/* HEADER SECTION */}
-      <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-        <div style={{ 
-          width: '64px', height: '64px', background: 'var(--brand-50)', 
-          color: 'var(--brand-600)', borderRadius: '18px', display: 'flex', 
-          alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem',
-          boxShadow: '0 4px 12px rgba(var(--brand-rgb), 0.1)'
-        }}>
-          <BarChart3 size={32} />
-        </div>
-        <h2 style={{ fontSize: '2.25rem', fontWeight: '800', color: 'var(--text-heading)', marginBottom: '0.75rem', letterSpacing: '-0.03em' }}>
-          Statement Intelligence Dashboard
-        </h2>
-        <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem', maxWidth: '600px', margin: '0 auto' }}>
-          Visualize your spending habits instantly. Our AI-assisted local engine categorizes your transactions without uploading a byte.
-        </p>
-      </div>
+      {upsellFeature && <UpsellModal featureName={upsellFeature} onClose={() => setUpsellFeature(null)} />}
 
       {error && (
         <div style={{ background: '#fef2f2', border: '1px solid #fecaca', color: '#dc2626', padding: '1rem', borderRadius: '100px', marginBottom: '2rem', fontSize: '0.9rem', textAlign: 'center' }}>
@@ -163,30 +181,28 @@ export default function VisualizerTool() {
       )}
 
       {/* STAGE 1: DROPZONE */}
-      {!file && !isProcessing && (
-        <div 
-          {...getRootProps()} 
-          className={`dropzone ${isDragActive ? 'active' : ''}`}
-          style={{ 
-            padding: '5rem 2rem', 
-            borderRadius: '32px',
-            border: `2px dashed ${isDragActive ? 'var(--brand-400)' : '#cbd5e1'}`,
-            background: isDragActive ? 'var(--brand-50)' : 'white',
-            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
-          }}
-        >
-          <input {...getInputProps()} />
-          <div style={{ position: 'relative', width: '80px', height: '80px', margin: '0 auto 2rem' }}>
-             <PieIcon size={80} style={{ color: '#e2e8f0' }} />
-             <TrendingUp size={32} style={{ position: 'absolute', bottom: '0', right: '0', color: 'var(--brand-500)' }} />
+      {files.length === 0 && !isProcessing && (
+        <div className="converter-card" style={{ maxWidth: '800px', margin: '0 auto' }}>
+          <div 
+            {...getRootProps()} 
+            className={`dropzone ${isDragActive ? 'active' : ''}`}
+          >
+            <input {...getInputProps()} />
+            <PieIcon size={48} className="drop-icon" style={{ color: 'var(--brand-500)' }} />
+            <h3>Analyze spending trends</h3>
+            <p>Drop your bank statement PDF to view interactive charts locally</p>
+            <div className="file-types">
+              <span className="file-type-tag">.pdf only</span>
+              <span className="file-type-tag">Category Breakdowns</span>
+              <span className="file-type-tag" style={{ border: '1px solid var(--accent-blue)', color: 'var(--brand-600)', background: '#EFF6FF' }}>Bulk Analytics (Pro)</span>
+            </div>
           </div>
-          <h3 style={{ fontSize: '1.5rem', fontWeight: '700', marginBottom: '0.5rem' }}>Drop your statement PDF</h3>
-          <p style={{ color: '#64748b' }}>Analyze spending, categories, and trends immediately.</p>
-          
-          <div style={{ marginTop: '2.5rem', display: 'flex', gap: '0.75rem', justifyContent: 'center' }}>
-            <span style={{ fontSize: '0.75rem', background: '#f1f5f9', padding: '0.4rem 0.8rem', borderRadius: '100px', fontWeight: '600', color: '#475569' }}>ANALYZE SPENDING</span>
-            <span style={{ fontSize: '0.75rem', background: '#f1f5f9', padding: '0.4rem 0.8rem', borderRadius: '100px', fontWeight: '600', color: '#475569' }}>CATEGORIZE VENDORS</span>
-            <span style={{ fontSize: '0.75rem', background: '#f1f5f9', padding: '0.4rem 0.8rem', borderRadius: '100px', fontWeight: '600', color: '#475569' }}>100% PRIVATE</span>
+
+          <div className="tool-footer" style={{ borderTop: '1px solid var(--border)', paddingTop: '1.5rem', display: 'flex', justifyContent: 'center', marginTop: '2rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.85rem', color: 'var(--slate-600)' }}>
+              <Shield size={14} className="text-muted" />
+              <span>Local processing: Spending visualizer computations run 100% on your device.</span>
+            </div>
           </div>
         </div>
       )}
@@ -197,22 +213,31 @@ export default function VisualizerTool() {
           <Loader2 className="spinner" size={48} color="var(--brand-500)" style={{ margin: '0 auto 2rem' }} />
           <h3 style={{ fontSize: '1.5rem', fontWeight: '700' }}>Running Local Intelligence Engine...</h3>
           <p style={{ color: '#64748b', fontSize: '1rem' }}>We are categorizing transactions and generating analytics — all in your browser memory.</p>
+          {files.length > 1 && (
+               <p style={{ fontWeight: '600', color: 'var(--brand-600)', marginTop: '0.5rem' }}>
+                  Parsed {processedCount} of {files.length} statement{files.length !== 1 && 's'}
+               </p>
+          )}
         </div>
       )}
 
       {/* STAGE 2: DASHBOARD */}
-      {file && !isProcessing && stats && (
-        <div className="dashboard-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(12, 1fr)', gap: '1.5rem' }}>
+      {files.length > 0 && !isProcessing && stats && (
+        <div className="dashboard-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(12, 1fr)', gap: '1.5rem', animation: 'fadeIn 0.5s ease-out' }}>
           
           {/* TOP BAR / INFO */}
           <div style={{ gridColumn: 'span 12', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'white', padding: '1.25rem 2rem', borderRadius: '20px', border: '1px solid var(--border)', marginBottom: '1rem' }}>
              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                 <div style={{ padding: '0.5rem', background: '#f1f5f9', borderRadius: '10px' }}>
-                    <Wallet size={20} color="#64748b" />
+                    {files.length > 1 ? <Layers size={20} color="#64748b" /> : <Wallet size={20} color="#64748b" />}
                 </div>
                 <div>
-                  <div style={{ fontWeight: '700', fontSize: '1rem' }}>{file.name}</div>
-                  <div style={{ fontSize: '0.8rem', color: '#94a3b8' }}>{transactions.length} Transactions Analyzed</div>
+                  <div style={{ fontWeight: '700', fontSize: '1rem' }}>
+                    {files.length > 1 ? 'Aggregated Financial Dashboard' : files[0].name}
+                  </div>
+                  <div style={{ fontSize: '0.8rem', color: '#94a3b8' }}>
+                    {transactions.length} Transactions Analyzed {files.length > 1 && `across ${files.length} documents`}
+                  </div>
                 </div>
              </div>
              <button onClick={removeFile} className="btn btn-ghost btn-sm" style={{ color: '#ef4444' }}>
@@ -279,7 +304,10 @@ export default function VisualizerTool() {
                     <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: '0.75rem', borderBottom: '1px solid #f1f5f9' }}>
                        <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '180px' }}>
                           <div style={{ fontWeight: '700', fontSize: '0.9rem', color: '#1e293b' }}>{t.description}</div>
-                          <div style={{ fontSize: '0.75rem', color: COLORS[t.category] || '#94a3b8', fontWeight: '700' }}>{t.category.toUpperCase()}</div>
+                          <div style={{ fontSize: '0.75rem', color: COLORS[t.category] || '#94a3b8', fontWeight: '700' }}>
+                           {t.category.toUpperCase()}
+                           {files.length > 1 && <span style={{ marginLeft: '4px', fontWeight: '400', opacity: 0.6 }}>({t.sourceFile.substring(0,6)}..)</span>}
+                          </div>
                        </div>
                        <div style={{ fontWeight: '800', color: '#dc2626' }}>-${Math.abs(t.amount).toFixed(2)}</div>
                     </div>

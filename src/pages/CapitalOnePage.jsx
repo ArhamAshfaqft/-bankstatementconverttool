@@ -27,23 +27,21 @@ export default function CapitalOnePage() {
       />
 
       {/* SEGMENTED USE-CASE HERO */}
-      <header className="cap1-hero">
-        <div className="container" style={{ position: 'relative', zIndex: 2 }}>
-          <div className="cap1-hero-badge">
+      <header className="layout-standard-hero" style={{ background: 'linear-gradient(135deg, #001a3e 0%, #d10034 100%)' }}>
+        <div className="container">
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', padding: '0.5rem 1rem', borderRadius: '100px', fontWeight: '600', fontSize: '0.85rem', marginBottom: '2rem', color: '#ffffff' }}>
             <CheckCircle size={16} /> Verified Format Standard
           </div>
           <h1>Convert <span>Capital One</span> PDFs to CSV</h1>
-          <p>
-            An offline, zero-retention extraction protocol engineered specifically <br/>
-            for Capital One 360 Personal and Spark Business statements.
-          </p>
+          <p>An offline, zero-retention extraction protocol engineered specifically for Capital One 360 Personal and Spark Business statements.</p>
         </div>
       </header>
 
-      {/* OVERLAPPING CONVERTER TOOL */}
-      <div className="cap1-overlap-zone" id="converter">
-        <ConverterTool />
-      </div>
+      <section className="layout-tool-container">
+        <div className="container">
+          <ConverterTool />
+        </div>
+      </section>
 
       {/* DUAL-COLUMN SEGMENTED LAYOUT */}
       <section className="section section-alt">

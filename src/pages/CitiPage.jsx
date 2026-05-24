@@ -27,23 +27,21 @@ export default function CitiPage() {
       />
 
       {/* DATA INTELLIGENCE HERO */}
-      <header className="citi-hero">
-        <div className="container" style={{ position: 'relative', zIndex: 2 }}>
-          <div className="citi-hero-badge">
+      <header className="layout-standard-hero" style={{ background: 'linear-gradient(135deg, #00457c 0%, #056dae 100%)' }}>
+        <div className="container">
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', padding: '0.5rem 1rem', borderRadius: '100px', fontWeight: '600', fontSize: '0.85rem', marginBottom: '2rem', color: '#ffffff' }}>
             <Cpu size={16} /> Enterprise-Grade Parsing Engine
           </div>
           <h1>Map <span>Citibank Data</span> to CSV</h1>
-          <p>
-            Process complex Citibank checking and credit card layouts into raw data streams. <br/>
-            A secure, zero-upload tool for accountants and data scientists.
-          </p>
+          <p>Process complex Citibank checking and credit card layouts into raw data streams. A secure, zero-upload tool for accountants and data scientists.</p>
         </div>
       </header>
 
-      {/* OVERLAPPING CONVERTER TOOL */}
-      <div className="citi-overlap-zone" id="converter">
-        <ConverterTool />
-      </div>
+      <section className="layout-tool-container">
+        <div className="container">
+          <ConverterTool />
+        </div>
+      </section>
 
       <div className="citi-content-wrapper">
         <h2 className="citi-section-title">The Citibank Ledger Protocol</h2>

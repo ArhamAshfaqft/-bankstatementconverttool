@@ -71,7 +71,7 @@ function triggerDownload(url, filename) {
 }
 
 // Basic OFX/QBO Generator
-function generateOfxFile(dataRows) {
+export function generateOfxFile(dataRows) {
   // Assuming dataRows is roughly Date, Description, Amount, maybe Balance
   // This is a naive OFX wrapper - production would need more rigid column mapping
   let org = "STATEMENT_CONVERTER";

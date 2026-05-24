@@ -1,254 +1,286 @@
-import React, { useState, useCallback } from 'react';
-import { useDropzone } from 'react-dropzone';
+import React, { useState, useRef } from 'react';
+import { UploadCloud, FileText, CheckCircle, Scissors, X, Shield, ArrowRight, Loader2, Download } from 'lucide-react';
 import { PDFDocument } from 'pdf-lib';
-import { Scissors, FileX, Download, Settings, Loader2, CheckCircle2 } from 'lucide-react';
+import JSZip from 'jszip';
 import { useAuth } from '../contexts/AuthContext';
+import UpsellModal from './UpsellModal';
 
 export default function SplitterTool() {
-  const { isPro } = useAuth();
-  
-  const [file, setFile] = useState(null);
-  const [totalPages, setTotalPages] = useState(0);
+  const [files, setFiles] = useState([]);
   const [pageRange, setPageRange] = useState('');
-  
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [error, setError] = useState('');
+  const [isSplitting, setIsSplitting] = useState(false);
+  const [processedUrl, setProcessedUrl] = useState(null);
+  const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
+  const [processedCount, setProcessedCount] = useState(0);
+  const [stats, setStats] = useState({ success: 0, failed: 0 });
+  const fileInputRef = useRef(null);
 
-  const onDrop = useCallback(async (acceptedFiles) => {
-    const droppedFile = acceptedFiles[0];
-    if (droppedFile && droppedFile.type === 'application/pdf') {
-      setFile(droppedFile);
-      setError('');
-      setSuccess(false);
-      
-      // Calculate total pages quickly to show the user
-      setIsProcessing(true);
-      try {
-        const arrayBuffer = await droppedFile.arrayBuffer();
-        const pdfDoc = await PDFDocument.load(arrayBuffer);
-        const pages = pdfDoc.getPageCount();
-        setTotalPages(pages);
-        setPageRange(`1-${pages}`);
-      } catch (err) {
-        setError("Could not read PDF. It might be corrupted or heavily encrypted.");
-        setFile(null);
-      } finally {
-        setIsProcessing(false);
-      }
-    } else {
-      setError("Please drop a valid PDF file.");
+  // Custom Gate Implementation
+  const { isPro: realIsPro } = useAuth();
+  const [devPro] = useState(sessionStorage.getItem('devPro') === 'true');
+  const isPro = realIsPro || devPro;
+  const [upsellFeature, setUpsellFeature] = useState(null);
+
+  const onDrop = (e) => {
+    e.preventDefault();
+    const droppedFiles = Array.from(e.dataTransfer ? e.dataTransfer.files : e.target.files)
+      .filter(f => f.type === 'application/pdf' || f.name.toLowerCase().endsWith('.pdf'));
+    
+    if (droppedFiles.length === 0) {
+      setError("Please upload valid PDF files.");
+      return;
     }
-  }, []);
+    
+    // Bulk Auth Gate
+    if (droppedFiles.length > 1 && !isPro) {
+      setUpsellFeature('Bulk PDF Splitting');
+      return;
+    }
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    onDrop,
-    accept: { 'application/pdf': ['.pdf'] },
-    multiple: false
-  });
-
-  const removeFile = () => {
-    setFile(null);
-    setTotalPages(0);
-    setPageRange('');
+    setFiles(droppedFiles);
+    setError(null);
     setSuccess(false);
-    setError('');
+    setProcessedUrl(null);
+    setProcessedCount(0);
+  };
+
+  const parsePageRange = (range, totalPages) => {
+    const pages = new Set();
+    const parts = range.split(',').map(p => p.trim());
+    
+    for (const part of parts) {
+      if (part.includes('-')) {
+        const [start, end] = part.split('-').map(n => parseInt(n));
+        if (isNaN(start) || isNaN(end)) return null;
+        for (let i = Math.max(1, start); i <= Math.min(totalPages, end); i++) {
+          pages.add(i - 1); // 0-indexed
+        }
+      } else {
+        const page = parseInt(part);
+        if (isNaN(page)) return null;
+        if (page >= 1 && page <= totalPages) {
+          pages.add(page - 1);
+        }
+      }
+    }
+    return Array.from(pages).sort((a, b) => a - b);
   };
 
   const handleSplit = async () => {
-    if (!file) return;
-    
-    setIsProcessing(true);
-    setError('');
-    setSuccess(false);
+    if (files.length === 0 || !pageRange) {
+      setError("Please select file(s) and enter page numbers.");
+      return;
+    }
+
+    setIsSplitting(true);
+    setError(null);
+    setProcessedCount(0);
+    let sCount = 0;
+    let fCount = 0;
 
     try {
-      // 1. Parse Range String
-      const pagesToKeep = new Set();
-      const parts = pageRange.split(',').map(p => p.trim()).filter(Boolean);
-      
-      for (const part of parts) {
-        if (part.includes('-')) {
-          const [startStr, endStr] = part.split('-');
-          const start = parseInt(startStr, 10);
-          const end = parseInt(endStr, 10);
-          
-          if (isNaN(start) || isNaN(end) || start < 1 || end > totalPages || start > end) {
-            throw new Error(`Invalid range: ${part}. Pages must be between 1 and ${totalPages}.`);
-          }
-          
-          for (let i = start; i <= end; i++) {
-            pagesToKeep.add(i);
-          }
-        } else {
-          const num = parseInt(part, 10);
-          if (isNaN(num) || num < 1 || num > totalPages) {
-            throw new Error(`Invalid page: ${part}. Pages must be between 1 and ${totalPages}.`);
-          }
-          pagesToKeep.add(num);
+      if (files.length === 1) {
+        const arrayBuffer = await files[0].arrayBuffer();
+        const pdf = await PDFDocument.load(arrayBuffer);
+        const totalPages = pdf.getPageCount();
+        
+        const targetPages = parsePageRange(pageRange, totalPages);
+        if (!targetPages || targetPages.length === 0) {
+          throw new Error("Invalid page range, or pages don't exist in PDF.");
         }
+
+        const splitPdf = await PDFDocument.create();
+        const copiedPages = await splitPdf.copyPages(pdf, targetPages);
+        copiedPages.forEach((page) => splitPdf.addPage(page));
+
+        const splitPdfBytes = await splitPdf.save();
+        const blob = new Blob([splitPdfBytes], { type: 'application/pdf' });
+        setProcessedUrl(URL.createObjectURL(blob));
+        sCount = 1;
+      } else {
+        // Bulk Mode
+        const zip = new JSZip();
+        for (let i = 0; i < files.length; i++) {
+           const file = files[i];
+           try {
+              const arrayBuffer = await file.arrayBuffer();
+              const pdf = await PDFDocument.load(arrayBuffer);
+              const totalPages = pdf.getPageCount();
+              
+              const targetPages = parsePageRange(pageRange, totalPages);
+              if (!targetPages || targetPages.length === 0) {
+                 throw new Error("Invalid page range for " + file.name);
+              }
+
+              const splitPdf = await PDFDocument.create();
+              const copiedPages = await splitPdf.copyPages(pdf, targetPages);
+              copiedPages.forEach((page) => splitPdf.addPage(page));
+
+              const splitPdfBytes = await splitPdf.save();
+              zip.file(file.name.replace('.pdf', '_split.pdf'), splitPdfBytes);
+              sCount++;
+           } catch(e) {
+              console.error(`Error splitting ${file.name}:`, e);
+              fCount++;
+           }
+           setProcessedCount(i + 1);
+        }
+        const zipBlob = await zip.generateAsync({ type: 'blob' });
+        setProcessedUrl(URL.createObjectURL(zipBlob));
       }
-
-      if (pagesToKeep.size === 0) {
-        throw new Error("No pages selected to extract.");
+      
+      setStats({ success: sCount, failed: fCount });
+      if (files.length === 1 && sCount === 0) {
+         return; // Error already caught/thrown
       }
-
-      // Convert from 1-indexed to 0-indexed and sort
-      const extractedIndices = Array.from(pagesToKeep).sort((a,b) => a-b).map(p => p - 1);
-
-      // 2. Load PDF and Build New One
-      const arrayBuffer = await file.arrayBuffer();
-      const sourcePdf = await PDFDocument.load(arrayBuffer);
-      
-      const newPdf = await PDFDocument.create();
-      
-      const copiedPages = await newPdf.copyPages(sourcePdf, extractedIndices);
-      copiedPages.forEach((page) => {
-        newPdf.addPage(page);
-      });
-      
-      const pdfBytes = await newPdf.save();
-
-      // 3. Trigger Download
-      const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = `Extracted_${file.name}`;
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-      URL.revokeObjectURL(url);
       
       setSuccess(true);
     } catch (err) {
       console.error(err);
-      setError(err.message || 'Failed to split the PDF. Make sure it isn\'t heavily encrypted.');
+      setError(err.message || "Failed to split PDF.");
     } finally {
-      setIsProcessing(false);
+      setIsSplitting(false);
     }
   };
 
+  const downloadProcessed = () => {
+    if (!processedUrl) return;
+    const link = document.createElement('a');
+    link.href = processedUrl;
+    link.download = files.length === 1 ? files[0].name.replace('.pdf', '_split.pdf') : 'split_pdfs.zip';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const reset = () => {
+    setFiles([]);
+    setPageRange('');
+    setProcessedUrl(null);
+    setSuccess(false);
+    setError(null);
+  };
+
   return (
-    <div className="converter-card" style={{ maxWidth: '800px', margin: '2rem auto' }}>
+    <div className="converter-card" style={{ maxWidth: '780px', margin: '0 auto' }}>
       
-      {/* HEADER */}
-      <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
-        <div style={{ 
-          width: '56px', height: '56px', background: 'var(--brand-50)', 
-          color: 'var(--brand-600)', borderRadius: '16px', display: 'flex', 
-          alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.25rem' 
-        }}>
-          <Scissors size={28} />
-        </div>
-        <h2 style={{ fontSize: '1.75rem', fontWeight: '800', color: 'var(--text-heading)', marginBottom: '0.5rem', letterSpacing: '-0.02em' }}>
-          Split Financial Documents Locally
-        </h2>
-        <p style={{ color: 'var(--text-muted)', fontSize: '1.05rem' }}>
-          Extract specific pages from massive consolidated statements. Zero file uploads.
-        </p>
-      </div>
+      {upsellFeature && <UpsellModal featureName={upsellFeature} onClose={() => setUpsellFeature(null)} />}
 
-      {error && (
-        <div style={{ background: '#fef2f2', border: '1px solid #fecaca', color: '#dc2626', padding: '1rem', borderRadius: '8px', marginBottom: '1.5rem', fontSize: '0.9rem' }}>
-          {error}
-        </div>
-      )}
-      
-      {success && (
-        <div style={{ background: '#ecfdf5', border: '1px solid #a7f3d0', color: '#059669', padding: '1rem', borderRadius: '8px', marginBottom: '1.5rem', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          <CheckCircle2 size={18} /> Successfully split and downloaded the PDF.
-        </div>
-      )}
-
-      {/* STAGE 1: UPLOAD */}
-      {!file && !isProcessing && (
-        <div 
-          {...getRootProps()} 
-          className={`dropzone ${isDragActive ? 'active' : ''}`}
-          style={{ 
-            padding: '4rem 2rem', 
-            background: isDragActive ? 'var(--brand-50)' : '#f8fafc',
-            borderColor: isDragActive ? 'var(--brand-500)' : '#cbd5e1'
-          }}
-        >
-          <input {...getInputProps()} />
-          <Scissors size={40} className="drop-icon" style={{ color: isDragActive ? 'var(--brand-500)' : '#94a3b8' }} />
-          <h3>Select a PDF file</h3>
-          <p>or drag and drop it here</p>
-          <div className="file-types" style={{ marginTop: '1.5rem' }}>
-            <span className="file-type-tag">.pdf</span>
-          </div>
-        </div>
-      )}
-
-      {/* PROCESSING STATE */}
-      {isProcessing && (
-        <div className="loader">
-          <Loader2 className="spinner" size={40} color="var(--brand-500)" />
-          <h3>Processing File Locally</h3>
-          <p>Analyzing document structure without uploading to any server...</p>
-        </div>
-      )}
-
-      {/* STAGE 2: CONFIGURE & SPLIT */}
-      {file && !isProcessing && (
-        <div style={{ background: '#f8fafc', border: '1px solid var(--border)', borderRadius: '12px', padding: '2rem' }}>
-          
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem', paddingBottom: '1.5rem', borderBottom: '1px solid var(--border)' }}>
-            <div>
-              <div style={{ fontWeight: '600', color: 'var(--text-heading)', fontSize: '1.1rem' }}>{file.name}</div>
-              <div style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginTop: '0.2rem' }}>
-                {(file.size / 1024 / 1024).toFixed(2)} MB • {totalPages} Pages total
-              </div>
+      <div className="tool-main">
+        {files.length === 0 && !success && (
+          <div 
+            className="dropzone"
+            onDragOver={(e) => { e.preventDefault(); e.currentTarget.classList.add('active'); }}
+            onDragLeave={(e) => e.currentTarget.classList.remove('active')}
+            onDrop={onDrop}
+            onClick={() => fileInputRef.current.click()}
+          >
+            <UploadCloud size={48} className="drop-icon" />
+            <h3>Split PDF Document</h3>
+            <p>Extract specific pages from your bank statement</p>
+            <div className="file-types">
+              <span className="file-type-tag">.pdf</span>
+              <span className="file-type-tag" style={{ border: '1px solid var(--accent-blue)', color: 'var(--brand-600)', background: '#EFF6FF' }}>Bulk Support (Pro)</span>
             </div>
-            <button onClick={removeFile} className="btn btn-ghost" style={{ color: '#dc2626' }}>
-              <FileX size={18} /> Replace
+            <input 
+              type="file" 
+              ref={fileInputRef}
+              accept=".pdf" 
+              multiple
+              style={{ display: 'none' }} 
+              onChange={onDrop}
+            />
+          </div>
+        )}
+
+        {files.length > 0 && !success && !isSplitting && (
+          <div style={{ padding: '1rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '2rem', borderBottom: '1px solid var(--border)', paddingBottom: '1rem' }}>
+              <div style={{ textAlign: 'left' }}>
+                <h4 style={{ margin: 0, fontSize: '1.1rem', color: 'var(--text-heading)' }}>{files.length} Document{files.length > 1 ? 's' : ''} Ready</h4>
+                {files.length === 1 && <span className="file-name" style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>{files[0].name}</span>}
+              </div>
+              <button className="btn btn-ghost" onClick={reset} style={{ fontSize: '0.85rem' }}>Clear All</button>
+            </div>
+
+            <div style={{ marginBottom: '1.5rem', textAlign: 'left' }}>
+              <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: '600', marginBottom: '0.5rem' }}>
+                Pages to Extract (Applies to all files)
+              </label>
+              <input 
+                type="text" 
+                placeholder="e.g. 1, 3, 5-10" 
+                className="export-select"
+                style={{ width: '100%', padding: '0.75rem' }}
+                value={pageRange}
+                onChange={(e) => setPageRange(e.target.value)}
+              />
+              <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.5rem' }}>
+                Separate pages with commas, and use hyphens for ranges.
+              </p>
+            </div>
+
+            <button 
+              className="btn btn-primary" 
+              style={{ width: '100%' }}
+              onClick={handleSplit}
+              disabled={isSplitting}
+            >
+              <Scissors size={18} />
+              {files.length > 1 ? `Extract Pages from ${files.length} PDFs` : "Extract Selected Pages"}
             </button>
           </div>
+        )}
 
-          <div style={{ marginBottom: '2rem' }}>
-            <label style={{ display: 'block', fontWeight: '600', color: 'var(--text-heading)', marginBottom: '0.5rem' }}>
-              Pages to Extract
-            </label>
-            <input 
-              type="text" 
-              value={pageRange}
-              onChange={(e) => setPageRange(e.target.value)}
-              placeholder="e.g., 1-5, 8, 11-13" 
-              style={{
-                width: '100%',
-                padding: '0.875rem 1rem',
-                borderRadius: '8px',
-                border: '1px solid var(--border)',
-                background: 'white',
-                fontSize: '1rem',
-                outline: 'none',
-                transition: 'border-color 0.2s'
-              }}
-              onFocus={(e) => e.target.style.borderColor = 'var(--brand-500)'}
-              onBlur={(e) => e.target.style.borderColor = 'var(--border)'}
-            />
-            <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '0.5rem' }}>
-              Separate page numbers or ranges with commas. Example: 1-3, 5, 8-10
-            </p>
+        {isSplitting && (
+          <div className="loader" style={{ padding: '4rem 2rem' }}>
+            <Loader2 className="spinner" size={40} />
+            <h3>Extracting Pages...</h3>
+            <p>Splitting document locally.</p>
+            {files.length > 1 && (
+               <p style={{ fontWeight: '600', color: 'var(--brand-600)', marginTop: '0.5rem' }}>
+                  Processed {processedCount} of {files.length}
+               </p>
+            )}
           </div>
+        )}
 
-          <button 
-            className="btn btn-primary" 
-            style={{ width: '100%', padding: '1rem', fontSize: '1.1rem' }}
-            onClick={handleSplit}
-          >
-            <Download size={18} /> Split & Download PDF
-          </button>
-        </div>
-      )}
+        {success && (
+          <div className="success-state">
+            <CheckCircle size={54} color="var(--brand-500)" />
+            <h2>{files.length > 1 ? 'Batch Split Successful!' : 'PDF Split Successfully!'}</h2>
+            
+            {files.length > 1 ? (
+              <p style={{ margin: '0.5rem 0 1.5rem' }}>
+                Success: <strong>{stats.success}</strong> | Failed: <strong>{stats.failed}</strong>
+              </p>
+            ) : (
+              <p>Your extracted pages are ready.</p>
+            )}
 
-      {/* PRIVACY BADGE */}
-      <div style={{ textAlign: 'center', marginTop: '2rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', color: '#059669', fontSize: '0.85rem', fontWeight: '500' }}>
-         <Shield size={16} /> 100% Secure. File never leaves your browser.
+            <div className="success-actions" style={{ justifyContent: 'center', marginTop: '1rem' }}>
+              <button className="btn btn-primary" onClick={downloadProcessed}>
+                {files.length > 1 ? 'Download ZIP Archive' : 'Download New PDF'}
+              </button>
+              <button className="btn btn-outline" onClick={reset}>Start New</button>
+            </div>
+          </div>
+        )}
+
+        {error && !isSplitting && (
+          <div className="error-badge" style={{ marginTop: '1rem' }}>
+            {error}
+          </div>
+        )}
       </div>
 
+      <div className="tool-footer" style={{ borderTop: '1px solid var(--border)', paddingTop: '1.5rem', display: 'flex', justifyContent: 'center' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.85rem', color: 'var(--slate-600)' }}>
+          <Shield size={14} className="text-muted" />
+          <span>100% Client-side processing. Your financial data never leaves this browser.</span>
+        </div>
+      </div>
     </div>
   );
 }

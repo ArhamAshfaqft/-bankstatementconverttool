@@ -3,7 +3,7 @@ import { Outlet, Link, useLocation } from 'react-router-dom';
 import { 
   FileSpreadsheet, ChevronDown, FileText, FileUp, Scissors, 
   GitMerge, Table, BookOpen, Building2, CreditCard, Landmark,
-  Shield, Zap, Users, ArrowRight, X, Menu, Camera, User, LogOut
+  Shield, Zap, Users, ArrowRight, X, Menu, Camera, User, LogOut, ShieldAlert
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -90,8 +90,29 @@ export default function Layout() {
                     <Link to="/visualizer" className="mega-item" onClick={closeMega}>
                       <div className="mega-item-icon converter"><Zap size={16} /></div>
                       <div>
-                        <span className="mega-item-title">Statement visualizer</span>
+                        <span className="mega-item-title">Statement Visualizer</span>
                         <span className="mega-item-desc">Interactive spending analytics</span>
+                      </div>
+                    </Link>
+                    <Link to="/qbo-to-csv-converter" className="mega-item" onClick={closeMega}>
+                      <div className="mega-item-icon converter"><Table size={16} /></div>
+                      <div>
+                        <span className="mega-item-title">QuickBooks (.QBO) to CSV</span>
+                        <span className="mega-item-desc">Convert QBO statements back to CSV</span>
+                      </div>
+                    </Link>
+                    <Link to="/csv-to-qbo-converter" className="mega-item" onClick={closeMega}>
+                      <div className="mega-item-icon converter"><BookOpen size={16} /></div>
+                      <div>
+                        <span className="mega-item-title">CSV to QuickBooks (.QBO)</span>
+                        <span className="mega-item-desc">Direct CSV transaction mappings</span>
+                      </div>
+                    </Link>
+                    <Link to="/qif-to-qbo-converter" className="mega-item" onClick={closeMega}>
+                      <div className="mega-item-icon converter"><Zap size={16} /></div>
+                      <div>
+                        <span className="mega-item-title">Quicken (.QIF) to QuickBooks</span>
+                        <span className="mega-item-desc">Bridge legacy Quicken formats</span>
                       </div>
                     </Link>
                   </div>
@@ -118,6 +139,13 @@ export default function Layout() {
                       <div>
                         <span className="mega-item-title">Anonymize PDF</span>
                         <span className="mega-item-desc">Black out PII locally</span>
+                      </div>
+                    </Link>
+                    <Link to="/audit-statement" className="mega-item" onClick={closeMega}>
+                      <div className="mega-item-icon role"><ShieldAlert size={16} /></div>
+                      <div>
+                        <span className="mega-item-title">Fraud Detector</span>
+                        <span className="mega-item-desc">Audit forensic integrity</span>
                       </div>
                     </Link>
                   </div>
@@ -216,10 +244,14 @@ export default function Layout() {
                 <Link to="/">PDF to CSV Converter</Link>
                 <Link to="/quickbooks-qbo-converter">PDF to QuickBooks</Link>
                 <Link to="/ofx-converter">PDF to OFX / QFX</Link>
-                <Link to="/visualizer">Statement visualizer</Link>
+                <Link to="/qbo-to-csv-converter">QBO to CSV Converter</Link>
+                <Link to="/csv-to-qbo-converter">CSV to QBO Converter</Link>
+                <Link to="/qif-to-qbo-converter">QIF to QBO Converter</Link>
+                <Link to="/visualizer">Statement Visualizer</Link>
                 <Link to="/pricing">Pricing Plans</Link>
                 <Link to="/merge">Merge Tool</Link>
                 <Link to="/split">Split Tool</Link>
+                <Link to="/audit-statement">Fraud Detector</Link>
               </div>
               <div className="footer-col">
                 <h6>Supported Banks</h6>

@@ -9,17 +9,24 @@ import CitiPage from './pages/CitiPage';
 import CapitalOnePage from './pages/CapitalOnePage';
 import PricingPage from './pages/PricingPage';
 import MergePage from './pages/MergePage';
+import SplitPage from './pages/SplitPage';
+import RedactPage from './pages/RedactPage';
+import ReceiptPage from './pages/ReceiptPage';
+import DecryptPage from './pages/DecryptPage';
+import ProtectPage from './pages/ProtectPage';
+import AuditPage from './pages/AuditPage';
 import QboPage from './pages/QboPage';
 import OfxPage from './pages/OfxPage';
 import VisualizerPage from './pages/VisualizerPage';
 import CreditCardPage from './pages/CreditCardPage';
-import SplitPage from './pages/SplitPage';
-import RedactPage from './pages/RedactPage';
-import ReceiptPage from './pages/ReceiptPage';
 import LoginPage from './pages/LoginPage';
 import SuccessPage from './pages/SuccessPage';
 import PrivacyPage from './pages/PrivacyPage';
 import TermsPage from './pages/TermsPage';
+import QboToCsvPage from './pages/QboToCsvPage';
+import CsvToQboPage from './pages/CsvToQboPage';
+import QifToQboPage from './pages/QifToQboPage';
+
 
 export default function App() {
   return (
@@ -35,12 +42,18 @@ export default function App() {
         <Route path="ofx-converter" element={<OfxPage />} />
         <Route path="visualizer" element={<VisualizerPage />} />
         <Route path="credit-card-parser" element={<CreditCardPage />} />
+        <Route path="qbo-to-csv-converter" element={<QboToCsvPage />} />
+        <Route path="csv-to-qbo-converter" element={<CsvToQboPage />} />
+        <Route path="qif-to-qbo-converter" element={<QifToQboPage />} />
         <Route path="pricing" element={<PricingPage />} />
         <Route path="login" element={<LoginPage />} />
         <Route path="merge" element={<MergePage />} />
         <Route path="split" element={<SplitPage />} />
         <Route path="redact" element={<RedactPage />} />
         <Route path="receipt-scanner" element={<ReceiptPage />} />
+        <Route path="unlock-pdf" element={<DecryptPage />} />
+        <Route path="protect-pdf" element={<ProtectPage />} />
+        <Route path="audit-statement" element={<AuditPage />} />
         <Route path="success" element={<SuccessPage />} />
         <Route path="privacy" element={<PrivacyPage />} />
         <Route path="terms" element={<TermsPage />} />

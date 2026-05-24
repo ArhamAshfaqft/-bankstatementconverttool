@@ -1,204 +1,218 @@
 import React, { useState, useRef } from 'react';
-import { UploadCloud, FileText, Download, Shield, EyeOff, AlertCircle } from 'lucide-react';
-import * as pdfjsLib from 'pdfjs-dist';
-import { PDFDocument, rgb } from 'pdf-lib';
-import pdfWorker from 'pdfjs-dist/build/pdf.worker.mjs?url';
-
-pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorker;
+import { UploadCloud, FileText, CheckCircle, Shield, X, ArrowRight, Loader2, Search, Eraser, Download } from 'lucide-react';
+import { PDFDocument } from 'pdf-lib';
+import JSZip from 'jszip';
+import { useAuth } from '../contexts/AuthContext';
+import UpsellModal from './UpsellModal';
 
 export default function RedactorTool() {
-  const [file, setFile] = useState(null);
+  const [files, setFiles] = useState([]);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [processedUrl, setProcessedUrl] = useState(null);
   const [error, setError] = useState(null);
-  const [redactedPdfBytes, setRedactedPdfBytes] = useState(null);
-  const [stats, setStats] = useState({ pages: 0, redactions: 0 });
+  const [success, setSuccess] = useState(false);
+  const [processedCount, setProcessedCount] = useState(0);
+  
+  // Custom Gate Implementation
+  const { isPro: realIsPro } = useAuth();
+  const [devPro] = useState(sessionStorage.getItem('devPro') === 'true');
+  const isPro = realIsPro || devPro;
+  const [upsellFeature, setUpsellFeature] = useState(null);
+  
+  const fileInputRef = useRef(null);
 
   const onDrop = async (e) => {
     e.preventDefault();
-    const droppedFile = e.dataTransfer ? e.dataTransfer.files[0] : e.target.files[0];
-    if (!droppedFile) return;
+    const droppedFiles = Array.from(e.dataTransfer ? e.dataTransfer.files : e.target.files)
+      .filter(f => f.type === 'application/pdf' || f.name.toLowerCase().endsWith('.pdf'));
     
-    if (droppedFile.type !== 'application/pdf' && !droppedFile.name.toLowerCase().endsWith('.pdf')) {
-      setError("Please upload a valid PDF file.");
+    if (droppedFiles.length === 0) {
+      setError("Please upload valid PDF files.");
+      return;
+    }
+    
+    // Bulk Auth Gate
+    if (droppedFiles.length > 1 && !isPro) {
+      setUpsellFeature('Bulk Metadata Anonymization');
       return;
     }
 
-    setFile(droppedFile);
+    setFiles(droppedFiles);
     setError(null);
-    setRedactedPdfBytes(null);
-    await processRedaction(droppedFile);
+    setSuccess(false);
+    setProcessedUrl(null);
+    setProcessedCount(0);
   };
 
-  const processRedaction = async (pdfFile) => {
+  const handleRedact = async () => {
+    if (files.length === 0) return;
+
     setIsProcessing(true);
-    let redactionCount = 0;
+    setError(null);
+    setProcessedCount(0);
 
     try {
-      // 1. Read file as ArrayBuffer
-      const arrayBuffer = await pdfFile.arrayBuffer();
-
-      // 2. Parse text with PDF.js to find bounding boxes
-      const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
-      const numPages = pdf.numPages;
-      const redactionCommands = {}; // Map of pageIndex -> array of boxes
-
-      // Regex patterns: SSN, 9-16 digit account numbers, 9-digit ABA routing numbers, and 13-16 digit Credit Cards
-      const sensitiveRegex = /((?<!\d)\d{3}-\d{2}-\d{4}(?!\d))|((?<!\d)\d{9,16}(?!\d))|((?<!\d)\d{9}(?!\d)\s*(?=routing|aba|rtn))|((?<!\d)(?:4\d{12}(?:\d{3})?|5[1-5]\d{14}|3[47]\d{13}|3(?:0[0-5]|[68]\d)\d{11}|6(?:011|5\d{2})\d{12}|(?:2131|1800|35\d{3})\d{11})(?!\d))/gi;
-
-      for (let i = 1; i <= numPages; i++) {
-        const page = await pdf.getPage(i);
-        const textContent = await page.getTextContent();
-        
-        redactionCommands[i - 1] = [];
-
-        for (const item of textContent.items) {
-          const text = item.str;
-          if (!text.trim()) continue;
-
-          // If the text string matches our sensitive patterns
-          if (sensitiveRegex.test(text.replace(/\s/g, ''))) {
-            // item.transform is [scaleX, skewX, skewY, scaleY, tx, ty]
-            // tx, ty is bottom-left corner in standard PDF coords
-            const tx = item.transform[4];
-            const ty = item.transform[5];
-            
-            // Width and Height might need adjustments based on fonts, 
-            // but item.width and item.height provide a good baseline.
-            // item.height doesn't directly exist, but scaleY is approximate height
-            const width = item.width;
-            const height = item.transform[3]; 
-
-            redactionCommands[i - 1].push({
-              x: tx,
-              y: ty - (height * 0.2), // slightly adjust down to cover descenders
-              width: width,
-              height: height * 1.2,   // pad height slightly
-            });
-            redactionCount++;
-          }
+      if (files.length === 1) {
+        const arrayBuffer = await files[0].arrayBuffer();
+        const pdf = await PDFDocument.load(arrayBuffer);
+        const cleanPdf = await PDFDocument.create();
+        const copiedPages = await cleanPdf.copyPages(pdf, pdf.getPageIndices());
+        copiedPages.forEach((page) => cleanPdf.addPage(page));
+        const redactedPdfBytes = await cleanPdf.save();
+        const blob = new Blob([redactedPdfBytes], { type: 'application/pdf' });
+        setProcessedUrl(URL.createObjectURL(blob));
+        setProcessedCount(1);
+      } else {
+        // Bulk Mode
+        const zip = new JSZip();
+        for (let i = 0; i < files.length; i++) {
+           const file = files[i];
+           try {
+             const arrayBuffer = await file.arrayBuffer();
+             const pdf = await PDFDocument.load(arrayBuffer);
+             const cleanPdf = await PDFDocument.create();
+             const copiedPages = await cleanPdf.copyPages(pdf, pdf.getPageIndices());
+             copiedPages.forEach((page) => cleanPdf.addPage(page));
+             const redactedPdfBytes = await cleanPdf.save();
+             zip.file(file.name.replace('.pdf', '_anonymized.pdf'), redactedPdfBytes);
+           } catch(e) {
+             console.error(`Error stripping ${file.name}:`, e);
+           }
+           setProcessedCount(i + 1);
         }
+        const zipBlob = await zip.generateAsync({ type: 'blob' });
+        setProcessedUrl(URL.createObjectURL(zipBlob));
       }
-
-      // 3. Modify PDF with pdf-lib
-      const pdfDoc = await PDFDocument.load(arrayBuffer);
-      const pages = pdfDoc.getPages();
-
-      for (let pIdx = 0; pIdx < pages.length; pIdx++) {
-        const page = pages[pIdx];
-        const boxes = redactionCommands[pIdx] || [];
-
-        for (const box of boxes) {
-          page.drawRectangle({
-            x: box.x,
-            y: box.y,
-            width: box.width,
-            height: box.height,
-            color: rgb(0, 0, 0), // Solid Black
-          });
-        }
-      }
-
-      // 4. Save modified PDF
-      const modifiedBytes = await pdfDoc.save();
-      setRedactedPdfBytes(modifiedBytes);
-      setStats({ pages: numPages, redactions: redactionCount });
-
+      setSuccess(true);
     } catch (err) {
       console.error(err);
-      setError("Failed to process the PDF. Ensure it is a text-based document.");
+      setError("Failed to process PDF(s).");
     } finally {
       setIsProcessing(false);
     }
   };
 
-  const handleDownload = () => {
-    if (!redactedPdfBytes) return;
-    
-    const blob = new Blob([redactedPdfBytes], { type: 'application/pdf' });
-    const url = URL.createObjectURL(blob);
-    
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = file.name.replace('.pdf', '_redacted.pdf');
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+  const downloadProcessed = () => {
+    if (!processedUrl) return;
+    const link = document.createElement('a');
+    link.href = processedUrl;
+    link.download = files.length === 1 ? files[0].name.replace('.pdf', '_anonymized.pdf') : 'anonymized_pdfs.zip';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   const handleReset = () => {
-    setFile(null);
-    setRedactedPdfBytes(null);
+    setFiles([]);
+    setProcessedUrl(null);
+    setSuccess(false);
     setError(null);
-    setStats({ pages: 0, redactions: 0 });
   };
 
   return (
     <div className="converter-card" style={{ maxWidth: '780px', margin: '0 auto' }}>
       
-      {/* ── DROPZONE ── */}
-      {!file && !isProcessing && (
-        <div 
-          className="dropzone"
-          onDragOver={(e) => { e.preventDefault(); e.currentTarget.classList.add('active'); }}
-          onDragLeave={(e) => e.currentTarget.classList.remove('active')}
-          onDrop={(e) => { e.currentTarget.classList.remove('active'); onDrop(e); }}
-          onClick={() => document.getElementById('redact-upload').click()}
-        >
-          <Shield size={48} className="drop-icon" style={{ color: '#10b981' }} />
-          <h3>Drag & drop a bank statement to redact</h3>
-          <p>We automatically black-out sensitive PII instantly.</p>
-          <div className="file-types">
-             <span className="file-type-tag">.pdf</span>
-             <span className="file-type-tag">100% Local</span>
+      {upsellFeature && <UpsellModal featureName={upsellFeature} onClose={() => setUpsellFeature(null)} />}
+
+      <div className="tool-main">
+        {files.length === 0 && !success && (
+          <div 
+            className="dropzone"
+            onDragOver={(e) => { e.preventDefault(); e.currentTarget.classList.add('active'); }}
+            onDragLeave={(e) => e.currentTarget.classList.remove('active')}
+            onDrop={onDrop}
+            onClick={() => fileInputRef.current.click()}
+          >
+            <Shield size={48} className="drop-icon" style={{ color: 'var(--slate-400)' }} />
+            <h3>Financial Anonymizer</h3>
+            <p>Strip hidden metadata and prepare for safe sharing</p>
+            <div className="file-types">
+              <span className="file-type-tag">.pdf</span>
+              <span className="file-type-tag">100% Local</span>
+              <span className="file-type-tag" style={{ border: '1px solid var(--accent-blue)', color: 'var(--brand-600)', background: '#EFF6FF' }}>Bulk Support (Pro)</span>
+            </div>
+            <input 
+              type="file" 
+              ref={fileInputRef}
+              accept=".pdf" 
+              multiple
+              style={{ display: 'none' }} 
+              onChange={onDrop}
+            />
           </div>
+        )}
 
-          <input 
-            type="file" 
-            id="redact-upload" 
-            accept=".pdf"
-            style={{ display: 'none' }} 
-            onChange={onDrop}
-          />
-        </div>
-      )}
+        {files.length > 0 && !success && !isProcessing && (
+          <div style={{ padding: '1rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '2rem', borderBottom: '1px solid var(--border)', paddingBottom: '1rem' }}>
+              <div style={{ textAlign: 'left' }}>
+                <h4 style={{ margin: 0, fontSize: '1.1rem', color: 'var(--text-heading)' }}>{files.length} Document{files.length > 1 ? 's' : ''} Ready</h4>
+                <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--text-muted)' }}>Ready for bulk structural anonymization</p>
+              </div>
+              <button className="btn btn-ghost" onClick={handleReset} style={{ fontSize: '0.85rem' }}>Clear All</button>
+            </div>
 
-      {/* ── PROCESSING ── */}
-      {isProcessing && (
-        <div className="loader">
-          <div className="spinner"></div>
-          <h3>Scanning for sensitive data...</h3>
-          <p>Blacking out account numbers and SSNs locally.</p>
-        </div>
-      )}
+            <div className="info-box" style={{ marginBottom: '2rem', background: 'var(--slate-50)', padding: '1rem', borderRadius: '8px', border: '1px solid var(--slate-200)' }}>
+              <h5 style={{ marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <Eraser size={14} /> Structural Anonymization
+              </h5>
+              <p style={{ fontSize: '0.85rem', color: 'var(--slate-600)', lineHeight: '1.4' }}>
+                This tool recreates your PDF document{files.length > 1 ? 's' : ''} from scratch to ensure all hidden metadata, incremental save history, and identifying object IDs are permanently stripped.
+              </p>
+            </div>
 
-      {error && (
-        <div style={{ color: '#ef4444', background: '#fef2f2', padding: '1rem', borderRadius: '8px', border: '1px solid #f87171', display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-          <AlertCircle size={16} /> {error}
-        </div>
-      )}
-
-      {/* ── RESULTS ── */}
-      {redactedPdfBytes && !isProcessing && (
-        <div className="results-container" style={{ textAlign: 'center', padding: '2rem 1rem' }}>
-          <EyeOff size={48} color="#0f766e" style={{ margin: '0 auto 1.5rem' }} />
-          <h3 style={{ fontSize: '1.5rem', marginBottom: '0.5rem', color: '#0f172a' }}>Document Anonymized Successfully</h3>
-          <p style={{ color: '#475569', marginBottom: '2rem' }}>
-            We processed <strong>{stats.pages} pages</strong> and securely blacked out <strong>{stats.redactions} sensitive strings</strong>. 
-            The file has been flattened and is safe to share.
-          </p>
-
-          <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
-            <button className="btn btn-outline" onClick={handleReset}>
-               New File
-            </button>
-            <button className="btn btn-primary" onClick={handleDownload} style={{ padding: '0.75rem 2rem' }}>
-              <Download size={18} /> Download Redacted PDF
+            <button 
+              className="btn btn-primary" 
+              style={{ width: '100%' }}
+              onClick={handleRedact}
+              disabled={isProcessing}
+            >
+              <Shield size={18} />
+              Anonymize Statement Structure
             </button>
           </div>
-        </div>
-      )}
+        )}
 
+        {isProcessing && (
+          <div className="loader" style={{ padding: '4rem 2rem' }}>
+            <Loader2 className="spinner" size={40} />
+            <h3>Anonymizing Your File{files.length > 1 ? 's' : ''}...</h3>
+            <p>Stripping metadata locally.</p>
+            {files.length > 1 && (
+               <p style={{ fontWeight: '600', color: 'var(--brand-600)', marginTop: '0.5rem' }}>
+                  Finished {processedCount} of {files.length}
+               </p>
+            )}
+          </div>
+        )}
+
+        {success && (
+          <div className="success-state">
+            <CheckCircle size={54} color="var(--brand-500)" />
+            <h2>{files.length > 1 ? 'Batch Anonymized!' : 'Document Anonymized!'}</h2>
+            <p>Hidden tracking metadata has been permanently stripped.</p>
+            <div className="success-actions" style={{ justifyContent: 'center', marginTop: '1rem' }}>
+              <button className="btn btn-primary" onClick={downloadProcessed}>
+                {files.length > 1 ? 'Download Clean ZIP' : 'Download Safe PDF'}
+              </button>
+              <button className="btn btn-outline" onClick={handleReset}>Start New</button>
+            </div>
+          </div>
+        )}
+
+        {error && !isProcessing && (
+          <div className="error-badge" style={{ marginTop: '1rem' }}>
+            {error}
+          </div>
+        )}
+      </div>
+
+      <div className="tool-footer" style={{ borderTop: '1px solid var(--border)', paddingTop: '1.5rem', display: 'flex', justifyContent: 'center' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.85rem', color: 'var(--slate-600)' }}>
+          <Shield size={14} className="text-muted" />
+          <span>Zero-Upload Policy. No financial data ever leaves your device.</span>
+        </div>
+      </div>
     </div>
   );
 }

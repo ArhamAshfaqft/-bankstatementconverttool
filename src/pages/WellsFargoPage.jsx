@@ -29,23 +29,21 @@ export default function WellsFargoPage() {
       />
 
       {/* PREMIUM DARK HERO */}
-      <header className="wf-hero">
-        <div className="container" style={{ position: 'relative', zIndex: 2 }}>
-          <div className="wf-hero-badge">
+      <header className="layout-standard-hero" style={{ background: 'linear-gradient(135deg, #7A1705 0%, #D71E28 100%)' }}>
+        <div className="container">
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', padding: '0.5rem 1rem', borderRadius: '100px', fontWeight: '600', fontSize: '0.85rem', marginBottom: '2rem', color: '#FDE101' }}>
             <ShieldCheck size={16} /> Secure Local Environment
           </div>
           <h1>Convert <span>Wells Fargo</span> to CSV</h1>
-          <p>
-            Drop your eStatement PDF below to instantly merge dispersed Additions and Subtractions tables <br/>
-            into a single chronological spreadsheet without any server processing.
-          </p>
+          <p>Drop your eStatement PDF below to instantly merge dispersed Additions and Subtractions tables into a single chronological spreadsheet without any server processing.</p>
         </div>
       </header>
 
-      {/* OVERLAPPING CONVERTER TOOL */}
-      <div className="wf-overlap-zone" id="converter">
-        <ConverterTool />
-      </div>
+      <section className="layout-tool-container">
+        <div className="container">
+          <ConverterTool />
+        </div>
+      </section>
 
       {/* APPLE-STYLE BENTO BOX FEATURES */}
       <section className="section section-alt">

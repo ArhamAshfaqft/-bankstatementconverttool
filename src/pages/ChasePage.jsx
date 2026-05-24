@@ -27,23 +27,21 @@ export default function ChasePage() {
       />
 
       {/* PREMIUM CHASE HERO */}
-      <header className="chase-hero">
-        <div className="container" style={{ position: 'relative', zIndex: 2 }}>
-          <div className="chase-hero-badge">
+      <header className="layout-standard-hero" style={{ background: 'linear-gradient(135deg, #022e64 0%, #004a99 100%)' }}>
+        <div className="container">
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', padding: '0.5rem 1rem', borderRadius: '100px', fontWeight: '600', fontSize: '0.85rem', marginBottom: '2rem', color: '#ffffff' }}>
             <ShieldCheck size={16} /> Verified Chase Logic Engine
           </div>
           <h1>Extract <span>Chase Statements</span> to CSV</h1>
-          <p>
-            Process Chase Personal and Spark Business eStatements into clean data streams. <br/>
-            A secure, zero-upload tool for professional accountants and bookkeepers.
-          </p>
+          <p>Process Chase Personal and Spark Business eStatements into clean data streams. A secure, zero-upload tool for professional accountants and bookkeepers.</p>
         </div>
       </header>
 
-      {/* OVERLAPPING CONVERTER TOOL */}
-      <div className="chase-overlap-zone" id="converter">
-        <ConverterTool />
-      </div>
+      <section className="layout-tool-container">
+        <div className="container">
+          <ConverterTool />
+        </div>
+      </section>
 
       <div className="chase-content-container">
         <h2 className="chase-section-title">The Merchant Clarity Tunnel</h2>
