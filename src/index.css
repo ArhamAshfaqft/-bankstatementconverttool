@@ -2631,7 +2631,7 @@ tr.row-excluded .row-action-cell {
 /* BLOG RESPONSIVE LAYOUT */
 .blog-layout-grid {
   display: grid;
-  grid-template-columns: 1fr 380px;
+  grid-template-columns: minmax(0, 1fr) 380px;
   gap: 3rem;
   align-items: flex-start;
 }
