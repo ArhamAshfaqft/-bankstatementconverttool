@@ -11,6 +11,8 @@ import PncPage from './pages/PncPage';
 import TdPage from './pages/TdPage';
 import AmexPage from './pages/AmexPage';
 import PdfToExcelPage from './pages/PdfToExcelPage';
+import BlogIndexPage from './pages/BlogIndexPage';
+import BlogPostPage from './pages/BlogPostPage';
 import PricingPage from './pages/PricingPage';
 import MergePage from './pages/MergePage';
 import SplitPage from './pages/SplitPage';
@@ -46,6 +48,8 @@ export default function App() {
         <Route path="td-bank" element={<TdPage />} />
         <Route path="american-express" element={<AmexPage />} />
         <Route path="pdf-to-excel-converter" element={<PdfToExcelPage />} />
+        <Route path="blog" element={<BlogIndexPage />} />
+        <Route path="blog/:slug" element={<BlogPostPage />} />
         <Route path="quickbooks-qbo-converter" element={<QboPage />} />
         <Route path="ofx-converter" element={<OfxPage />} />
         <Route path="visualizer" element={<VisualizerPage />} />

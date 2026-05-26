@@ -199,6 +199,7 @@ export default function Layout() {
             </li>
 
             <li><Link to="/pricing" onClick={closeMega} className="nav-link-standard">Pricing</Link></li>
+            <li><Link to="/blog" onClick={closeMega} className="nav-link-standard">Blog</Link></li>
           </ul>
 
           <div className="nav-actions" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
@@ -281,6 +282,7 @@ export default function Layout() {
               <div className="footer-col">
                 <h6>Company</h6>
                 <Link to="/pricing">About Us</Link>
+                <Link to="/blog">Blog & Guides</Link>
                 <Link to="/privacy">Privacy Policy</Link>
                 <Link to="/terms">Terms of Service</Link>
                 <a href="mailto:hello@bankstatementconverttool.com">Contact Support</a>
