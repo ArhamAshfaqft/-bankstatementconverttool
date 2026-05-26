@@ -2672,3 +2672,25 @@ tr.row-excluded .row-action-cell {
   }
 }
 
+/* SIDEBAR CONVERTER STYLES OVERRIDE */
+.blog-sidebar .converter-card {
+  padding: 0 !important;
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+}
+
+.blog-sidebar .dropzone {
+  padding: 2.5rem 1rem !important;
+}
+
+.blog-sidebar .file-types {
+  flex-wrap: wrap;
+}
+
+.blog-sidebar .tool-footer {
+  display: none !important;
+}
+
