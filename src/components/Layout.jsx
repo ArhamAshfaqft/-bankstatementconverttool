@@ -162,9 +162,9 @@ export default function Layout() {
               >
                 Solutions <ChevronDown size={14} className={`chevron ${activeMega === 'solutions' ? 'rotated' : ''}`} />
               </a>
-              <div className="mega-menu" style={{ minWidth: '500px' }} onClick={(e) => e.stopPropagation()}>
-                <div className="mega-menu-inner">
-                  <div className="mega-col">
+              <div className="mega-menu" style={{ minWidth: '600px' }} onClick={(e) => e.stopPropagation()}>
+                <div className="mega-menu-inner" style={{ gap: '2rem' }}>
+                  <div className="mega-col" style={{ flex: '1' }}>
                     <h5 className="mega-col-title">Use Cases</h5>
                     <Link to="/merge" className="mega-item" onClick={closeMega}>
                       <div className="mega-item-icon role"><Users size={16} /></div>
@@ -180,6 +180,19 @@ export default function Layout() {
                         <span className="mega-item-desc">Manage overhead and internal audits</span>
                       </div>
                     </Link>
+                  </div>
+                  <div className="mega-col" style={{ flex: '1.2' }}>
+                    <h5 className="mega-col-title">Supported Banks</h5>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem 1rem' }}>
+                      <Link to="/chase" onClick={closeMega} style={{ fontSize: '0.85rem', textDecoration: 'none', color: 'var(--slate-600)', padding: '0.2rem 0' }}>Chase</Link>
+                      <Link to="/bank-of-america" onClick={closeMega} style={{ fontSize: '0.85rem', textDecoration: 'none', color: 'var(--slate-600)', padding: '0.2rem 0' }}>Bank of America</Link>
+                      <Link to="/wells-fargo" onClick={closeMega} style={{ fontSize: '0.85rem', textDecoration: 'none', color: 'var(--slate-600)', padding: '0.2rem 0' }}>Wells Fargo</Link>
+                      <Link to="/citibank" onClick={closeMega} style={{ fontSize: '0.85rem', textDecoration: 'none', color: 'var(--slate-600)', padding: '0.2rem 0' }}>Citibank</Link>
+                      <Link to="/capital-one" onClick={closeMega} style={{ fontSize: '0.85rem', textDecoration: 'none', color: 'var(--slate-600)', padding: '0.2rem 0' }}>Capital One</Link>
+                      <Link to="/pnc" onClick={closeMega} style={{ fontSize: '0.85rem', textDecoration: 'none', color: 'var(--slate-600)', padding: '0.2rem 0' }}>PNC Bank</Link>
+                      <Link to="/td-bank" onClick={closeMega} style={{ fontSize: '0.85rem', textDecoration: 'none', color: 'var(--slate-600)', padding: '0.2rem 0' }}>TD Bank</Link>
+                      <Link to="/american-express" onClick={closeMega} style={{ fontSize: '0.85rem', textDecoration: 'none', color: 'var(--slate-600)', padding: '0.2rem 0' }}>AMEX</Link>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -242,6 +255,7 @@ export default function Layout() {
               <div className="footer-col">
                 <h6>Product</h6>
                 <Link to="/">PDF to CSV Converter</Link>
+                <Link to="/pdf-to-excel-converter">PDF to Excel Converter</Link>
                 <Link to="/quickbooks-qbo-converter">PDF to QuickBooks</Link>
                 <Link to="/ofx-converter">PDF to OFX / QFX</Link>
                 <Link to="/qbo-to-csv-converter">QBO to CSV Converter</Link>
@@ -260,6 +274,9 @@ export default function Layout() {
                 <Link to="/wells-fargo">Wells Fargo</Link>
                 <Link to="/citibank">Citibank</Link>
                 <Link to="/capital-one">Capital One</Link>
+                <Link to="/pnc">PNC Bank</Link>
+                <Link to="/td-bank">TD Bank</Link>
+                <Link to="/american-express">American Express</Link>
               </div>
               <div className="footer-col">
                 <h6>Company</h6>

@@ -23,7 +23,47 @@ export default function ChasePage() {
         title="Convert Chase Bank Statement PDF to CSV | Professional Precision"
         description="A robust local browser engine optimized for Chase Personal and Business statements. High-fidelity extraction that cleans messy merchant strings for QuickBooks."
         canonical="https://www.bankstatementconverttool.com/chase"
-        jsonLd={[schema]}
+        jsonLd={[
+          schema,
+          {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "How do I download Chase bank statements as a PDF?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Log in to Chase online banking, click on the checking or savings account you want to export, select 'Statements' or 'Documents' from the menu, select the billing month, and download the PDF statement to your computer."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Why are Chase transaction descriptions so messy?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Chase statements often combine terminal IDs, employee card numbers, internal bank transaction codes, and the merchant name into a single visual block. Our local parsing tool uses row-level heuristics to clean these strings automatically."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Does this tool support Chase Business checking and credit cards?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Yes, we fully support all Chase Personal checking/savings statements, Ink Business credit card statement layouts, and Chase Commercial banking ledgers, keeping columns aligned."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Is my Chase financial transaction data secure?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Yes, 100%. All processing and extraction happen locally inside your web browser using HTML5/JS APIs. Your statements never touch our servers."
+                }
+              }
+            ]
+          }
+        ]}
       />
 
       {/* PREMIUM CHASE HERO */}

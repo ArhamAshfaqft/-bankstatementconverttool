@@ -23,7 +23,39 @@ export default function CitiPage() {
         title="Extract Citibank PDF Statements to CSV | High-Fidelity App"
         description="A robust local browser engine designed to parse Citibank checking and credit card PDFs. Handles multi-line descriptions and layout indentations reliably."
         canonical="https://www.bankstatementconverttool.com/citibank"
-        jsonLd={[schema]}
+        jsonLd={[
+          schema,
+          {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "How do I parse Citibank credit card statement indentations?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Citibank credit card PDFs frequently utilize heavy indentation. Our extraction algorithm reads the native PDF vector text layer, aligning deeply indented text back to its corresponding chronological row automatically."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "How does the tool handle multi-line descriptions in Citibank statements?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Citibank descriptions frequently wrap onto multiple lines. Our logic engine evaluates spacing and dynamically concatenates these strings back into a single cell, preventing row-shifting errors."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Is my Citibank transaction data uploaded?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "No. To maintain strict compliance, this tool does not utilize a backend server. Your Citibank PDFs are evaluated entirely using your local device memory, guaranteeing zero exposure to external databases."
+                }
+              }
+            ]
+          }
+        ]}
       />
 
       {/* DATA INTELLIGENCE HERO */}

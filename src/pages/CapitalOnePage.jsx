@@ -23,7 +23,39 @@ export default function CapitalOnePage() {
         title="Extract Capital One PDF Statements to CSV | Secure Parsing"
         description="Convert Capital One 360 Personal and Spark Business PDF statements into CSV format natively in your browser. Accurate extraction for Quicken and QBO."
         canonical="https://www.bankstatementconverttool.com/capital-one"
-        jsonLd={[schema]}
+        jsonLd={[
+          schema,
+          {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "How do I download Capital One statements as a PDF?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Log in to the Capital One online banking portal, select the checking or credit card account you want to convert, go to 'Statements' or 'Statements & Documents' from the menu, select the billing month, and download the PDF statement to your computer."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Does this tool support Capital One Spark Business accounts?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Yes, we fully support Capital One Spark Business credit card statements. The parser successfully identifies transactions grouped by individual employee card numbers and merges them into a clean, unified CSV list."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Is my Capital One bank statement data secure?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Yes. Our tool is built with a zero-trust model. All conversion and extraction happen locally inside your web browser's RAM; no data is ever uploaded or cached on a server."
+                }
+              }
+            ]
+          }
+        ]}
       />
 
       {/* SEGMENTED USE-CASE HERO */}

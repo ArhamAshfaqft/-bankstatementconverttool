@@ -23,7 +23,47 @@ export default function BofAPage() {
         title="Bank of America Statement PDF to CSV | Professional Audit Utility"
         description="A high-fidelity local browser engine optimized for Bank of America checking and savings statements. Secure, zero-retention extraction for multi-year accounting audits."
         canonical="https://www.bankstatementconverttool.com/bank-of-america"
-        jsonLd={[schema]}
+        jsonLd={[
+          schema,
+          {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "How do I download Bank of America statements as a PDF?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Log in to Bank of America online banking, select the checking or savings account you want, go to 'Statements & Documents' in the navigation menu, select the billing month, and download the PDF statement to your local drive."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Why do Bank of America statements split transactions across page breaks?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Bank of America statements frequently break descriptions or details across page breaks. Our parser runs horizontal and vertical space evaluation to identify and re-stitch orphaned text rows, preventing data offsets."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Does this tool support BofA commercial and corporate cards?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Yes, we fully support all BofA Checking/Savings accounts, BofA Business checking accounts, and corporate cards, aligning different columns automatically."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Is my Bank of America financial transaction data secure?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Yes, 100%. Our tool is built with a zero-trust model. All conversion and extraction happen locally inside your web browser's RAM; no data is ever uploaded or cached on a server."
+                }
+              }
+            ]
+          }
+        ]}
       />
 
       {/* PREMIUM BofA HERO */}

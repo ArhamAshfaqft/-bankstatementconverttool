@@ -7,6 +7,10 @@ import BofAPage from './pages/BofAPage';
 import WellsFargoPage from './pages/WellsFargoPage';
 import CitiPage from './pages/CitiPage';
 import CapitalOnePage from './pages/CapitalOnePage';
+import PncPage from './pages/PncPage';
+import TdPage from './pages/TdPage';
+import AmexPage from './pages/AmexPage';
+import PdfToExcelPage from './pages/PdfToExcelPage';
 import PricingPage from './pages/PricingPage';
 import MergePage from './pages/MergePage';
 import SplitPage from './pages/SplitPage';
@@ -38,6 +42,10 @@ export default function App() {
         <Route path="wells-fargo" element={<WellsFargoPage />} />
         <Route path="citibank" element={<CitiPage />} />
         <Route path="capital-one" element={<CapitalOnePage />} />
+        <Route path="pnc" element={<PncPage />} />
+        <Route path="td-bank" element={<TdPage />} />
+        <Route path="american-express" element={<AmexPage />} />
+        <Route path="pdf-to-excel-converter" element={<PdfToExcelPage />} />
         <Route path="quickbooks-qbo-converter" element={<QboPage />} />
         <Route path="ofx-converter" element={<OfxPage />} />
         <Route path="visualizer" element={<VisualizerPage />} />

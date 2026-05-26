@@ -25,7 +25,39 @@ export default function WellsFargoPage() {
         title="Wells Fargo Bank Statement PDF to CSV | Free & Secure"
         description="Extract transaction data from your Wells Fargo PDFs instantly. Our local parser merges Additions and Subtractions tables into one clean spreadsheet."
         canonical="https://www.bankstatementconverttool.com/wells-fargo"
-        jsonLd={[schema]}
+        jsonLd={[
+          schema,
+          {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "Will this handle Wells Fargo business accounts?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Yes. Wells Fargo business checking statements follow a similar tabular structure to personal accounts, which our engine detects and parses accurately."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Does Wells Fargo let you download CSVs directly?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Yes, via the 'Account Activity' tool. However, it is heavily restricted to recent transactions. Legacy PDFs are required for tax year reconciliation."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "What if there are check scans on the PDF?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Our parser detects the end of the transaction ledger and halts. It completely ignores the check image layers at the bottom of the statement, keeping your CSV clean."
+                }
+              }
+            ]
+          }
+        ]}
       />
 
       {/* PREMIUM DARK HERO */}

@@ -39,7 +39,8 @@ export default function HomePage() {
   ];
 
   const suiteTools = [
-    { icon: <FileSpreadsheet size={22} />, title: 'PDF to CSV / Excel', desc: 'Extract bank transactions with 100% accuracy', link: '/', color: '#0d9488' },
+    { icon: <FileSpreadsheet size={22} />, title: 'PDF to CSV Converter', desc: 'Extract bank transactions with 100% accuracy', link: '/', color: '#0d9488' },
+    { icon: <FileSpreadsheet size={22} />, title: 'PDF to Excel Converter', desc: 'Preserves number formatting and multi-sheet tabs', link: '/pdf-to-excel-converter', color: '#107c41' },
     { icon: <BookOpen size={22} />, title: 'PDF to QuickBooks', desc: 'Native .QBO export — no mapping errors', link: '/quickbooks-qbo-converter', color: '#059669' },
     { icon: <FileText size={22} />, title: 'PDF to OFX / QFX', desc: 'Ideal for Quicken and Xero imports', link: '/ofx-converter', color: '#0284c7' },
     { icon: <Zap size={22} />, title: 'Statement Visualizer', desc: 'Interactive spending analytics dashboard', link: '/visualizer', color: '#10b981' },
@@ -75,6 +76,60 @@ export default function HomePage() {
               "@type": "Offer",
               "price": "0"
             }
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "How do I convert a bank statement PDF to CSV?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Simply drag and drop your PDF bank statement into our converter above. The tool automatically detects tables, extracts transaction data (dates, descriptions, amounts, balances), and lets you download a clean CSV file. No account or upload required."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Is it safe to convert my bank statement online?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Absolutely. Unlike other converters that upload your file to their servers, our tool processes your PDF 100% locally inside your web browser using JavaScript. Your file is never sent anywhere. No data leaves your computer — ever."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Which banks are supported?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Our converter works with PDF statements from all major banks including Chase, Bank of America, Wells Fargo, Citi, Capital One, HSBC, Barclays, and thousands more. Any text-based PDF bank statement can be converted."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Can I export to QuickBooks (.QBO) format?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Yes! Our Pro plan includes native QuickBooks Web Connect (.QBO) file generation. This means you can import transactions directly into QuickBooks without the hassle of CSV column mapping errors."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "What if my PDF is a scanned image or receipt?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "We have a dedicated Receipt & Invoice OCR Scanner tool that uses local Optical Character Recognition to extract text from photos and scanned documents. It runs entirely in your browser — no cloud processing."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Is this tool really free?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "The core PDF to CSV converter is 100% free with no hidden limits. Pro features like bulk processing, QBO exports, and advanced tools are available with a Pro license."
+                }
+              }
+            ]
           }
         ]}
       />
