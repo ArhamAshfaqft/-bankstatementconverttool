@@ -130,15 +130,10 @@ export default function BlogPostPage() {
           </nav>
 
           {/* TWO COLUMN GRID */}
-          <div style={{ 
-            display: 'grid', 
-            gridTemplateColumns: '1fr 380px', 
-            gap: '3rem', 
-            alignItems: 'flex-start' 
-          }}>
+          <div className="blog-layout-grid">
             
             {/* MAIN CONTENT COLUMN */}
-            <main style={{ background: 'white', border: '1px solid #E2E8F0', padding: '3.5rem', borderRadius: '24px', boxShadow: '0 4px 6px rgba(0,0,0,0.01)' }}>
+            <main className="blog-post-content">
               
               {/* META INFO */}
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1.25rem', alignItems: 'center', fontSize: '0.85rem', color: '#64748B', marginBottom: '1.5rem', paddingBottom: '1.5rem', borderBottom: '1px solid #F1F5F9' }}>
@@ -168,7 +163,7 @@ export default function BlogPostPage() {
             </main>
 
             {/* STICKY CONVERTER SIDEBAR */}
-            <aside style={{ position: 'sticky', top: '7rem', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+            <aside className="blog-sidebar">
               
               <div style={{ 
                 background: 'white', 
