@@ -1,15 +1,61 @@
 import React from 'react';
-import { BookOpen, CheckCircle, Lock, MonitorSmartphone, ShieldCheck } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { BookOpen, CheckCircle, Lock, MonitorSmartphone, ShieldCheck, ArrowRight, FileText, FileSpreadsheet } from 'lucide-react';
 import ConverterTool from '../components/ConverterTool';
 import SeoHead from '../components/SeoHead';
 
 export default function QboPage() {
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "QuickBooks QBO Statement Converter",
+    "applicationCategory": "FinanceApplication",
+    "operatingSystem": "WebBrowser",
+    "offers": {
+      "@type": "Offer",
+      "price": "0.00",
+      "priceCurrency": "USD"
+    }
+  };
+
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How do I download bank statements into QuickBooks?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Log in to your online banking portal, go to statement documents or activity history, and choose the download option for Web Connect (.QBO). If your bank only provides PDFs, you can use our local PDF to QBO converter to prepare the file for direct import."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I open or edit a .QBO file directly in Excel?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No, Excel cannot natively parse the SGML structure of QuickBooks QBO Web Connect files. To open QBO transaction data in Excel, use our dedicated QBO to CSV converter to translate the logs back into clean spreadsheets."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is my QuickBooks statement data uploaded to online databases?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No, all conversion and parsing execute locally inside your browser's memory using HTML5 and JavaScript. Your financial files never touch any external servers, satisfying strict client privacy requirements."
+        }
+      }
+    ]
+  };
+
   return (
     <>
       <SeoHead 
         title="Convert Bank Statement PDF to QuickBooks (QBO) - 100% Free & Local"
         description="Easily convert your PDF bank statements into QuickBooks Web Connect (.QBO) files offline in your browser. Bypass annoying CSV mapping errors permanently."
         canonical="https://www.bankstatementconverttool.com/quickbooks-qbo-converter"
+        jsonLd={[schema, faqSchema]}
       />
       
       <header className="layout-standard-hero" style={{ background: 'linear-gradient(135deg, #10b981 0%, #064E3B 100%)' }}>
@@ -24,6 +70,75 @@ export default function QboPage() {
 
       <section className="layout-tool-container">
         <div className="container">
+          
+          {/* INTENT CROSS-ROUTING BANNERS */}
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', 
+            gap: '1.25rem', 
+            marginBottom: '2.5rem',
+            maxWidth: '780px',
+            margin: '0 auto 2.5rem'
+          }}>
+            <Link to="/qbo-to-csv-converter" style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: '1rem', 
+              padding: '1.25rem', 
+              background: '#ffffff', 
+              borderRadius: '16px', 
+              border: '1px solid #e2e8f0', 
+              textDecoration: 'none',
+              transition: 'all 0.2s ease',
+              boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)'
+            }}
+            onMouseEnter={(e) => { e.currentTarget.style.borderColor = '#10b981'; e.currentTarget.style.boxShadow = '0 10px 15px -3px rgba(16,185,129,0.1)'; }}
+            onMouseLeave={(e) => { e.currentTarget.style.borderColor = '#e2e8f0'; e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0,0,0,0.05)'; }}
+            >
+              <div style={{ 
+                width: '40px', height: '40px', borderRadius: '10px', 
+                background: '#ecfdf5', color: '#10b981', 
+                display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 
+              }}>
+                <FileText size={20} />
+              </div>
+              <div>
+                <div style={{ fontWeight: '700', fontSize: '0.9rem', color: '#0f172a', marginBottom: '0.15rem' }}>Convert QBO to CSV instead</div>
+                <div style={{ fontSize: '0.75rem', color: '#64748b' }}>Translate a .qbo file back to spreadsheets</div>
+              </div>
+              <ArrowRight size={16} style={{ marginLeft: 'auto', color: '#10b981' }} />
+            </Link>
+
+            <Link to="/csv-to-qbo-converter" style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: '1rem', 
+              padding: '1.25rem', 
+              background: '#ffffff', 
+              borderRadius: '16px', 
+              border: '1px solid #e2e8f0', 
+              textDecoration: 'none',
+              transition: 'all 0.2s ease',
+              boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)'
+            }}
+            onMouseEnter={(e) => { e.currentTarget.style.borderColor = '#10b981'; e.currentTarget.style.boxShadow = '0 10px 15px -3px rgba(16,185,129,0.1)'; }}
+            onMouseLeave={(e) => { e.currentTarget.style.borderColor = '#e2e8f0'; e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0,0,0,0.05)'; }}
+            >
+              <div style={{ 
+                width: '40px', height: '40px', borderRadius: '10px', 
+                background: '#ecfdf5', color: '#10b981', 
+                display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 
+              }}>
+                <FileSpreadsheet size={20} />
+              </div>
+              <div>
+                <div style={{ fontWeight: '700', fontSize: '0.9rem', color: '#0f172a', marginBottom: '0.15rem' }}>Convert CSV to QBO instead</div>
+                <div style={{ fontSize: '0.75rem', color: '#64748b' }}>Map spreadsheet rows directly into QBO</div>
+              </div>
+              <ArrowRight size={16} style={{ marginLeft: 'auto', color: '#10b981' }} />
+            </Link>
+          </div>
+
           <ConverterTool /> 
         </div>
       </section>
@@ -56,7 +171,6 @@ export default function QboPage() {
           </div>
         </div>
       </section>
-
     </>
   );
 }
