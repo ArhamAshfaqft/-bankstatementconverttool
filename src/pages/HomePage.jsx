@@ -46,6 +46,7 @@ export default function HomePage() {
     { icon: <Zap size={22} />, title: 'Statement Visualizer', desc: 'Interactive spending analytics dashboard', link: '/visualizer', color: '#10b981' },
     { icon: <CreditCard size={22} />, title: 'Credit Card Parser', desc: 'Handles Visa, Mastercard & Amex statements', link: '/credit-card-parser', color: '#0891b2' },
     { icon: <FileSpreadsheet size={22} />, title: 'QuickBooks (.QBO) to CSV', desc: 'Translate .qbo statements back to spreadsheet rows', link: '/qbo-to-csv-converter', color: '#0d9488' },
+    { icon: <FileSpreadsheet size={22} />, title: 'Quicken (.QFX) to CSV', desc: 'Extract Quicken Web Connect statement data locally', link: '/qfx-to-csv-converter', color: '#dc2626' },
     { icon: <BookOpen size={22} />, title: 'CSV to QuickBooks (.QBO)', desc: 'Map transaction spreadsheet rows into QBO files', link: '/csv-to-qbo-converter', color: '#059669' },
     { icon: <Zap size={22} />, title: 'Quicken (.QIF) to QuickBooks', desc: 'Convert and bridge Quicken transactions into QBO', link: '/qif-to-qbo-converter', color: '#6366f1' },
     { icon: <Camera size={22} />, title: 'Receipt OCR Scanner', desc: 'Extract data from photos & scanned invoices', link: '/receipt-scanner', color: '#7c3aed' },

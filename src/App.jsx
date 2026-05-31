@@ -32,6 +32,7 @@ import TermsPage from './pages/TermsPage';
 import QboToCsvPage from './pages/QboToCsvPage';
 import CsvToQboPage from './pages/CsvToQboPage';
 import QifToQboPage from './pages/QifToQboPage';
+import QfxToCsvPage from './pages/QfxToCsvPage';
 
 
 export default function App() {
@@ -57,6 +58,7 @@ export default function App() {
         <Route path="qbo-to-csv-converter" element={<QboToCsvPage />} />
         <Route path="csv-to-qbo-converter" element={<CsvToQboPage />} />
         <Route path="qif-to-qbo-converter" element={<QifToQboPage />} />
+        <Route path="qfx-to-csv-converter" element={<QfxToCsvPage />} />
         <Route path="pricing" element={<PricingPage />} />
         <Route path="login" element={<LoginPage />} />
         <Route path="merge" element={<MergePage />} />

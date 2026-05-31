@@ -101,6 +101,13 @@ export default function Layout() {
                         <span className="mega-item-desc">Convert QBO statements back to CSV</span>
                       </div>
                     </Link>
+                    <Link to="/qfx-to-csv-converter" className="mega-item" onClick={closeMega}>
+                      <div className="mega-item-icon converter"><Table size={16} /></div>
+                      <div>
+                        <span className="mega-item-title">Quicken (.QFX) to CSV</span>
+                        <span className="mega-item-desc">Convert QFX statements back to CSV</span>
+                      </div>
+                    </Link>
                     <Link to="/csv-to-qbo-converter" className="mega-item" onClick={closeMega}>
                       <div className="mega-item-icon converter"><BookOpen size={16} /></div>
                       <div>
@@ -260,6 +267,7 @@ export default function Layout() {
                 <Link to="/quickbooks-qbo-converter">PDF to QuickBooks</Link>
                 <Link to="/ofx-converter">PDF to OFX / QFX</Link>
                 <Link to="/qbo-to-csv-converter">QBO to CSV Converter</Link>
+                <Link to="/qfx-to-csv-converter">QFX to CSV Converter</Link>
                 <Link to="/csv-to-qbo-converter">CSV to QBO Converter</Link>
                 <Link to="/qif-to-qbo-converter">QIF to QBO Converter</Link>
                 <Link to="/visualizer">Statement Visualizer</Link>
