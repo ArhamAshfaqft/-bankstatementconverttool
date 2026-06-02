@@ -4,12 +4,57 @@ import QifToQboTool from '../components/QifToQboTool';
 import SeoHead from '../components/SeoHead';
 
 export default function QifToQboPage() {
+  const softwareSchema = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "QIF to QuickBooks QBO Converter",
+    "applicationCategory": "FinanceApplication",
+    "operatingSystem": "WebBrowser",
+    "offers": {
+      "@type": "Offer",
+      "price": "0.00",
+      "priceCurrency": "USD"
+    }
+  };
+
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Why doesn't QuickBooks import my .QIF file directly?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Intuit designed QuickBooks to utilize Web Connect (.qbo) for direct imports, locking out the older Quicken Interchange Format (.qif) to avoid reconciliation overlaps. Our converter resolves this limitation by mapping legacy tags into valid .qbo bank feed values."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Are transaction memos and categories preserved?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Any categories (L tags) or memos (M tags) present in your .qif file are cleanly mapped into the standard description fields of the QBO file, preserving critical bookkeeping detail."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is my transaction history uploaded to your servers?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. The entire conversion logic executes client-side inside your own browser window. None of your payees, account details, or transaction amounts are transmitted online."
+        }
+      }
+    ]
+  };
+
   return (
     <>
       <SeoHead 
-        title="Convert QIF to QuickBooks (QBO) - Free & Local"
+        title="Convert QIF to QBO - Free Quicken QIF to QuickBooks Converter"
         description="Convert Quicken Interchange Format (.QIF) statements into importable QuickBooks Web Connect (.QBO) files offline in your web browser. Privacy guaranteed."
         canonical="https://www.bankstatementconverttool.com/qif-to-qbo-converter"
+        jsonLd={[softwareSchema, faqSchema]}
       />
       
       <header className="layout-standard-hero" style={{ background: 'linear-gradient(135deg, #6366f1 0%, #312e81 100%)' }}>
@@ -54,11 +99,65 @@ export default function QifToQboPage() {
               <p style={{ color: '#475569', lineHeight: '1.6' }}>Our parser decodes QIF symbols (`D` for dates, `T` for amounts, `P` for payees) and maps them cleanly into the correct QuickBooks SGML fields.</p>
             </div>
           </div>
+
+          {/* STEP BY STEP WORKFLOW */}
+          <div style={{ marginTop: '5rem', marginBottom: '5rem' }}>
+            <h2 style={{ textAlign: 'center', marginBottom: '3rem' }}>How to Convert QIF to QBO in 4 Steps</h2>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '2rem' }}>
+              <div style={{ position: 'relative', background: '#ffffff', padding: '2.5rem 1.5rem 2rem', borderRadius: '16px', border: '1px solid #e2e8f0', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.05)' }}>
+                <div style={{ position: 'absolute', top: '-20px', left: '20px', width: '40px', height: '40px', borderRadius: '50%', background: '#6366f1', color: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', fontSize: '1.1rem', boxShadow: '0 4px 10px rgba(99,102,241,0.3)' }}>1</div>
+                <h3 style={{ fontSize: '1.1rem', marginTop: '0.5rem', marginBottom: '0.5rem' }}>Select QIF File</h3>
+                <p style={{ color: '#64748b', fontSize: '0.9rem', lineHeight: '1.5', margin: 0 }}>Drag and drop your Quicken .qif statement into the dashboard zone.</p>
+              </div>
+              <div style={{ position: 'relative', background: '#ffffff', padding: '2.5rem 1.5rem 2rem', borderRadius: '16px', border: '1px solid #e2e8f0', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.05)' }}>
+                <div style={{ position: 'absolute', top: '-20px', left: '20px', width: '40px', height: '40px', borderRadius: '50%', background: '#6366f1', color: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', fontSize: '1.1rem', boxShadow: '0 4px 10px rgba(99,102,241,0.3)' }}>2</div>
+                <h3 style={{ fontSize: '1.1rem', marginTop: '0.5rem', marginBottom: '0.5rem' }}>Verify Transactions</h3>
+                <p style={{ color: '#64748b', fontSize: '0.9rem', lineHeight: '1.5', margin: 0 }}>Review payee and date mapping details inside the interactive preview table.</p>
+              </div>
+              <div style={{ position: 'relative', background: '#ffffff', padding: '2.5rem 1.5rem 2rem', borderRadius: '16px', border: '1px solid #e2e8f0', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.05)' }}>
+                <div style={{ position: 'absolute', top: '-20px', left: '20px', width: '40px', height: '40px', borderRadius: '50%', background: '#6366f1', color: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', fontSize: '1.1rem', boxShadow: '0 4px 10px rgba(99,102,241,0.3)' }}>3</div>
+                <h3 style={{ fontSize: '1.1rem', marginTop: '0.5rem', marginBottom: '0.5rem' }}>Convert & Save</h3>
+                <p style={{ color: '#64748b', fontSize: '0.9rem', lineHeight: '1.5', margin: 0 }}>Export the transactions to compile a QuickBooks Web Connect file offline.</p>
+              </div>
+              <div style={{ position: 'relative', background: '#ffffff', padding: '2.5rem 1.5rem 2rem', borderRadius: '16px', border: '1px solid #e2e8f0', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.05)' }}>
+                <div style={{ position: 'absolute', top: '-20px', left: '20px', width: '40px', height: '40px', borderRadius: '50%', background: '#6366f1', color: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', fontSize: '1.1rem', boxShadow: '0 4px 10px rgba(99,102,241,0.3)' }}>4</div>
+                <h3 style={{ fontSize: '1.1rem', marginTop: '0.5rem', marginBottom: '0.5rem' }}>Import into QB</h3>
+                <p style={{ color: '#64748b', fontSize: '0.9rem', lineHeight: '1.5', margin: 0 }}>Open your QuickBooks account, click Bank Feeds, and select Web Connect import.</p>
+              </div>
+            </div>
+          </div>
+
+          {/* VERSION COMPATIBILITY */}
+          <div style={{ marginTop: '5rem', marginBottom: '5rem', background: '#f8fafc', padding: '3rem 2rem', borderRadius: '24px', border: '1px solid #e2e8f0' }}>
+            <h2 style={{ textAlign: 'center', marginBottom: '1rem' }}>QuickBooks Version Compatibility</h2>
+            <p style={{ textAlign: 'center', color: '#64748b', maxWidth: '600px', margin: '0 auto 3rem', lineHeight: '1.6' }}>
+              We compile Web Connect structures matching modern bank standards, compatible with the following QuickBooks variants:
+            </p>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.5rem', maxWidth: '900px', margin: '0 auto' }}>
+              <div style={{ background: '#ffffff', padding: '1.25rem 1.5rem', borderRadius: '12px', border: '1px solid #e2e8f0', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                <CheckCircle size={18} color="#6366f1" />
+                <span style={{ fontWeight: '600', color: '#0f172a' }}>QuickBooks Online</span>
+              </div>
+              <div style={{ background: '#ffffff', padding: '1.25rem 1.5rem', borderRadius: '12px', border: '1px solid #e2e8f0', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                <CheckCircle size={18} color="#6366f1" />
+                <span style={{ fontWeight: '600', color: '#0f172a' }}>QuickBooks Desktop Pro</span>
+              </div>
+              <div style={{ background: '#ffffff', padding: '1.25rem 1.5rem', borderRadius: '12px', border: '1px solid #e2e8f0', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                <CheckCircle size={18} color="#6366f1" />
+                <span style={{ fontWeight: '600', color: '#0f172a' }}>QuickBooks Premier</span>
+              </div>
+              <div style={{ background: '#ffffff', padding: '1.25rem 1.5rem', borderRadius: '12px', border: '1px solid #e2e8f0', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                <CheckCircle size={18} color="#6366f1" />
+                <span style={{ fontWeight: '600', color: '#0f172a' }}>QuickBooks Enterprise</span>
+              </div>
+            </div>
+          </div>
+
         </div>
       </section>
 
       {/* FAQ SECTION */}
-      <section className="section">
+      <section className="section" style={{ borderTop: '1px solid #e2e8f0' }}>
         <div className="container" style={{ maxWidth: '800px', margin: '0 auto' }}>
           <h2 style={{ textAlign: 'center', marginBottom: '2.5rem' }}>Frequently Asked Questions</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>

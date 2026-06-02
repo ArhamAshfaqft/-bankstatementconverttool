@@ -4,12 +4,57 @@ import CsvToQboTool from '../components/CsvToQboTool';
 import SeoHead from '../components/SeoHead';
 
 export default function CsvToQboPage() {
+  const softwareSchema = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "CSV to QuickBooks QBO Converter",
+    "applicationCategory": "FinanceApplication",
+    "operatingSystem": "WebBrowser",
+    "offers": {
+      "@type": "Offer",
+      "price": "0.00",
+      "priceCurrency": "USD"
+    }
+  };
+
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Does QuickBooks support importing transactions from CSV?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, but QuickBooks Online or Desktop CSV imports often run into issues like inverted transaction signs, unrecognized dates, and manual mapping questions. Converting CSV to QBO Web Connect format ensures an error-free, automatic bank feed match."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How does the column mapper work in this tool?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Once you drop your CSV statement, you can select which column represents the date, description, and amount. Our local Javascript converter maps these columns into the standard QBO tags automatically."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Are my transaction details sent to the cloud?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. The entire conversion process occurs inside your browser memory using HTML5 features. Your file's transaction rows, numbers, and dates never leave your computer."
+        }
+      }
+    ]
+  };
+
   return (
     <>
       <SeoHead 
-        title="Convert CSV to QuickBooks (QBO) - Free & Local"
+        title="Convert CSV to QBO - Free Spreadsheet to QuickBooks Converter"
         description="Convert transaction spreadsheets (.CSV) into importable QuickBooks Web Connect (.QBO) files offline in your web browser. Completely secure and private."
         canonical="https://www.bankstatementconverttool.com/csv-to-qbo-converter"
+        jsonLd={[softwareSchema, faqSchema]}
       />
       
       <header className="layout-standard-hero" style={{ background: 'linear-gradient(135deg, #059669 0%, #064e3b 100%)' }}>
@@ -54,11 +99,65 @@ export default function CsvToQboPage() {
               <p style={{ color: '#475569', lineHeight: '1.6' }}>Skip reversed amount signs, broken date schemas, and mapping prompts inside QuickBooks. The QBO format is instantly recognized.</p>
             </div>
           </div>
+
+          {/* STEP BY STEP WORKFLOW */}
+          <div style={{ marginTop: '5rem', marginBottom: '5rem' }}>
+            <h2 style={{ textAlign: 'center', marginBottom: '3rem' }}>How to Convert CSV to QBO in 4 Steps</h2>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '2rem' }}>
+              <div style={{ position: 'relative', background: '#ffffff', padding: '2.5rem 1.5rem 2rem', borderRadius: '16px', border: '1px solid #e2e8f0', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.05)' }}>
+                <div style={{ position: 'absolute', top: '-20px', left: '20px', width: '40px', height: '40px', borderRadius: '50%', background: '#059669', color: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', fontSize: '1.1rem', boxShadow: '0 4px 10px rgba(5,150,105,0.3)' }}>1</div>
+                <h3 style={{ fontSize: '1.1rem', marginTop: '0.5rem', marginBottom: '0.5rem' }}>Upload CSV</h3>
+                <p style={{ color: '#64748b', fontSize: '0.9rem', lineHeight: '1.5', margin: 0 }}>Drag and drop your spreadsheet (.csv) or browse files above.</p>
+              </div>
+              <div style={{ position: 'relative', background: '#ffffff', padding: '2.5rem 1.5rem 2rem', borderRadius: '16px', border: '1px solid #e2e8f0', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.05)' }}>
+                <div style={{ position: 'absolute', top: '-20px', left: '20px', width: '40px', height: '40px', borderRadius: '50%', background: '#059669', color: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', fontSize: '1.1rem', boxShadow: '0 4px 10px rgba(5,150,105,0.3)' }}>2</div>
+                <h3 style={{ fontSize: '1.1rem', marginTop: '0.5rem', marginBottom: '0.5rem' }}>Map Columns</h3>
+                <p style={{ color: '#64748b', fontSize: '0.9rem', lineHeight: '1.5', margin: 0 }}>Select Date, Payee, and Amount column mapping dropdowns.</p>
+              </div>
+              <div style={{ position: 'relative', background: '#ffffff', padding: '2.5rem 1.5rem 2rem', borderRadius: '16px', border: '1px solid #e2e8f0', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.05)' }}>
+                <div style={{ position: 'absolute', top: '-20px', left: '20px', width: '40px', height: '40px', borderRadius: '50%', background: '#059669', color: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', fontSize: '1.1rem', boxShadow: '0 4px 10px rgba(5,150,105,0.3)' }}>3</div>
+                <h3 style={{ fontSize: '1.1rem', marginTop: '0.5rem', marginBottom: '0.5rem' }}>Generate QBO</h3>
+                <p style={{ color: '#64748b', fontSize: '0.9rem', lineHeight: '1.5', margin: 0 }}>Click download. Our parser compiles transaction data into a valid .qbo file.</p>
+              </div>
+              <div style={{ position: 'relative', background: '#ffffff', padding: '2.5rem 1.5rem 2rem', borderRadius: '16px', border: '1px solid #e2e8f0', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.05)' }}>
+                <div style={{ position: 'absolute', top: '-20px', left: '20px', width: '40px', height: '40px', borderRadius: '50%', background: '#059669', color: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', fontSize: '1.1rem', boxShadow: '0 4px 10px rgba(5,150,105,0.3)' }}>4</div>
+                <h3 style={{ fontSize: '1.1rem', marginTop: '0.5rem', marginBottom: '0.5rem' }}>Done</h3>
+                <p style={{ color: '#64748b', fontSize: '0.9rem', lineHeight: '1.5', margin: 0 }}>Import the file into QuickBooks via the Web Connect bank feeds module.</p>
+              </div>
+            </div>
+          </div>
+
+          {/* VERSION COMPATIBILITY */}
+          <div style={{ marginTop: '5rem', marginBottom: '5rem', background: '#f8fafc', padding: '3rem 2rem', borderRadius: '24px', border: '1px solid #e2e8f0' }}>
+            <h2 style={{ textAlign: 'center', marginBottom: '1rem' }}>QuickBooks Version Compatibility</h2>
+            <p style={{ textAlign: 'center', color: '#64748b', maxWidth: '600px', margin: '0 auto 3rem', lineHeight: '1.6' }}>
+              We compile Web Connect structures matching modern bank standards, compatible with the following QuickBooks variants:
+            </p>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.5rem', maxWidth: '900px', margin: '0 auto' }}>
+              <div style={{ background: '#ffffff', padding: '1.25rem 1.5rem', borderRadius: '12px', border: '1px solid #e2e8f0', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                <CheckCircle size={18} color="#059669" />
+                <span style={{ fontWeight: '600', color: '#0f172a' }}>QuickBooks Online</span>
+              </div>
+              <div style={{ background: '#ffffff', padding: '1.25rem 1.5rem', borderRadius: '12px', border: '1px solid #e2e8f0', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                <CheckCircle size={18} color="#059669" />
+                <span style={{ fontWeight: '600', color: '#0f172a' }}>QuickBooks Desktop Pro</span>
+              </div>
+              <div style={{ background: '#ffffff', padding: '1.25rem 1.5rem', borderRadius: '12px', border: '1px solid #e2e8f0', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                <CheckCircle size={18} color="#059669" />
+                <span style={{ fontWeight: '600', color: '#0f172a' }}>QuickBooks Premier</span>
+              </div>
+              <div style={{ background: '#ffffff', padding: '1.25rem 1.5rem', borderRadius: '12px', border: '1px solid #e2e8f0', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                <CheckCircle size={18} color="#059669" />
+                <span style={{ fontWeight: '600', color: '#0f172a' }}>QuickBooks Enterprise</span>
+              </div>
+            </div>
+          </div>
+
         </div>
       </section>
 
       {/* FAQ SECTION */}
-      <section className="section">
+      <section className="section" style={{ borderTop: '1px solid #e2e8f0' }}>
         <div className="container" style={{ maxWidth: '800px', margin: '0 auto' }}>
           <h2 style={{ textAlign: 'center', marginBottom: '2.5rem' }}>Frequently Asked Questions</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
@@ -68,7 +167,7 @@ export default function CsvToQboPage() {
             </div>
             <div style={{ padding: '1.5rem', background: '#f8fafc', borderRadius: '12px' }}>
               <h4 style={{ fontSize: '1.05rem', marginBottom: '0.5rem' }}>Which QuickBooks versions support Web Connect (.QBO) import?</h4>
-              <p style={{ color: '#475569', margin: 0, fontSize: '0.95rem', lineHeight: '1.5' }}>All standard editions including QuickBooks Online, QuickBooks Desktop Pro, Premier, Enterprise, and QuickBooks Mac. Any version that supports standard bank feeds will import `.qbo` files.</p>
+              <p style={{ color: '#475569', margin: 0, fontSize: '0.95rem', lineHeight: '1.5' }}>All active desktop and cloud platforms, including QuickBooks Online, Desktop Pro/Premier, and Enterprise editions. As long as bank feeds are supported, `.qbo` imports will work.</p>
             </div>
             <div style={{ padding: '1.5rem', background: '#f8fafc', borderRadius: '12px' }}>
               <h4 style={{ fontSize: '1.05rem', marginBottom: '0.5rem' }}>Are my bank details safe with offline conversion?</h4>
