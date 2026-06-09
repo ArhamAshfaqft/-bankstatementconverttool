@@ -155,6 +155,12 @@ export default function BlogPostPage() {
                 {post.title}
               </h1>
 
+              {post.featuredImage && (
+                <div style={{ marginBottom: '2.5rem', borderRadius: '16px', overflow: 'hidden', border: '1px solid #E2E8F0', background: '#F1F5F9' }}>
+                  <img src={post.featuredImage} alt={post.title} style={{ width: '100%', height: 'auto', display: 'block' }} />
+                </div>
+              )}
+
               {/* ARTICLE BODY */}
               <div className="article-body">
                 {post.content.map((block, idx) => renderBlock(block, idx))}

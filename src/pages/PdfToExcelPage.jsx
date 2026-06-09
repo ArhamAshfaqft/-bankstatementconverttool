@@ -2,6 +2,7 @@ import React from 'react';
 import SeoHead from '../components/SeoHead';
 import ConverterTool from '../components/ConverterTool';
 import { ShieldCheck, HelpCircle, ArrowRight, Zap, CheckCircle, FileSpreadsheet, Eye } from 'lucide-react';
+import FaqSection from '../components/FaqSection';
 
 export default function PdfToExcelPage() {
   const softwareSchema = {
@@ -17,6 +18,21 @@ export default function PdfToExcelPage() {
     }
   };
 
+  const faqs = [
+    {
+      question: "How do I convert a bank statement PDF to Excel?",
+      answer: "Simply drag and drop your PDF bank statement into the converter dropzone above. Once the transaction list is extracted and displayed in the preview grid, choose 'Excel (.xlsx)' from the download options dropdown and download the clean Excel spreadsheet."
+    },
+    {
+      question: "Are scanned bank statement PDFs supported?",
+      answer: "Yes. If your bank statement is a scanned image or photo, you can use our built-in Receipt OCR Scanner tool. It uses local optical character recognition to extract texts and lists them in a table format that can be downloaded as an Excel sheet."
+    },
+    {
+      question: "Is my financial ledger data safe?",
+      answer: "Yes. None of your bank statements are sent to our servers. All PDF processing, parsing, and Excel file generation are executed using client-side JavaScript inside your web browser. This offline-first approach ensures bank statement privacy."
+    }
+  ];
+
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -26,23 +42,23 @@ export default function PdfToExcelPage() {
         "name": "How do I convert a bank statement PDF to Excel?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Drag and drop your PDF bank statement into the converter dropzone above. Once the transaction list is extracted and displayed in the preview grid, choose 'Excel (.xlsx)' from the download options dropdown and download the clean Excel spreadsheet."
+          "text": "Simply drag and drop your PDF bank statement into the converter dropzone above. Once the transaction list is extracted and displayed in the preview grid, choose 'Excel (.xlsx)' from the download options dropdown and download the clean Excel spreadsheet."
         }
       },
       {
         "@type": "Question",
-        "name": "Why is Excel (.xlsx) better than CSV for bank statement conversions?",
+        "name": "Are scanned bank statement PDFs supported?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Unlike standard CSV files, Excel files (.xlsx) preserve numeric formats (like leading zeros in account numbers or formatted currencies) without formatting glitches, and allow multiple monthly accounts to be organized into separate workbook tabs."
+          "text": "Yes. If your bank statement is a scanned image or photo, you can use our built-in Receipt OCR Scanner tool. It uses local optical character recognition to extract texts and lists them in a table format that can be downloaded as an Excel sheet."
         }
       },
       {
         "@type": "Question",
-        "name": "Is my statement data kept private?",
+        "name": "Is my financial ledger data safe?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Yes. Our tool is client-side. The PDF extraction, parsing, and Excel workbook compilation happen entirely inside your web browser's memory. No financial documents or data are sent to our servers."
+          "text": "Yes. None of your bank statements are sent to our servers. All PDF processing, parsing, and Excel file generation are executed using client-side JavaScript inside your web browser. This offline-first approach ensures bank statement privacy."
         }
       }
     ]
@@ -99,34 +115,8 @@ export default function PdfToExcelPage() {
         </div>
 
         {/* FAQ ACCORDION */}
-        <h2 className="chase-section-title">Frequently Asked Questions</h2>
-        <div className="faq-list" style={{ maxWidth: '900px', margin: '0 auto 5rem' }}>
-          <div className="faq-item open">
-            <div className="faq-question" style={{ cursor: 'default', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-              <HelpCircle size={18} className="text-primary" /> How do I convert a bank statement PDF to Excel?
-            </div>
-            <div className="faq-answer" style={{ maxHeight: 'none', opacity: 1, paddingBottom: '1.5rem' }}>
-              <p style={{ margin: 0 }}>Simply drag and drop your PDF bank statement into the converter dropzone above. Once the transaction list is extracted and displayed in the preview grid, choose "Excel (.xlsx)" from the download options dropdown and download the clean Excel spreadsheet.</p>
-            </div>
-          </div>
-
-          <div className="faq-item open">
-            <div className="faq-question" style={{ cursor: 'default', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-              <HelpCircle size={18} className="text-primary" /> Are scanned bank statement PDFs supported?
-            </div>
-            <div className="faq-answer" style={{ maxHeight: 'none', opacity: 1, paddingBottom: '1.5rem' }}>
-              <p style={{ margin: 0 }}>Yes. If your bank statement is a scanned image or photo, you can use our built-in Receipt OCR Scanner tool. It uses local optical character recognition to extract texts and lists them in a table format that can be downloaded as an Excel sheet.</p>
-            </div>
-          </div>
-
-          <div className="faq-item open">
-            <div className="faq-question" style={{ cursor: 'default', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-              <HelpCircle size={18} className="text-primary" /> Is my financial ledger data safe?
-            </div>
-            <div className="faq-answer" style={{ maxHeight: 'none', opacity: 1, paddingBottom: '1.5rem' }}>
-              <p style={{ margin: 0 }}>Yes. None of your bank statements are sent to our servers. All PDF processing, parsing, and Excel file generation are executed using client-side JavaScript inside your web browser. This offline-first approach ensures bank statement privacy.</p>
-            </div>
-          </div>
+        <div style={{ margin: '0 -2rem' }}>
+          <FaqSection faqs={faqs} />
         </div>
       </div>
 

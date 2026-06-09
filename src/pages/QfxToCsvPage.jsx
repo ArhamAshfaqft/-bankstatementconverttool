@@ -2,6 +2,7 @@ import React from 'react';
 import { Table, CheckCircle, Lock, ShieldCheck } from 'lucide-react';
 import QfxToCsvTool from '../components/QfxToCsvTool';
 import SeoHead from '../components/SeoHead';
+import FaqSection from '../components/FaqSection';
 
 export default function QfxToCsvPage() {
   const softwareSchema = {
@@ -16,6 +17,21 @@ export default function QfxToCsvPage() {
       "priceCurrency": "USD"
     }
   };
+
+  const faqs = [
+    {
+      question: "How do I open a .QFX file in Excel?",
+      answer: "Excel cannot natively parse the structured SGML tags of a .qfx (Quicken Web Connect) file. By uploading your file to our local converter, we parse the transactions and compile them into a clean tabular structure. You can then download it as a standard CSV or Excel (.xlsx) file that opens instantly."
+    },
+    {
+      question: "Is my financial data secure when converting QFX files?",
+      answer: "Yes, 100%. Our tool runs entirely in your local browser's execution memory using HTML5 APIs. No files are uploaded to any external server, ensuring complete data privacy and security for your financial statements."
+    },
+    {
+      question: "Does this tool support both .QFX and .OFX files?",
+      answer: "Yes. Quicken Web Connect (.qfx) is a proprietary extension of the Open Financial Exchange (.ofx) format. Since they share the same underlying XML/SGML tag schema, our converter parses both formats seamlessly."
+    }
+  ];
 
   const faqSchema = {
     "@context": "https://schema.org",
@@ -103,25 +119,7 @@ export default function QfxToCsvPage() {
       </section>
 
       {/* FAQ SECTION */}
-      <section className="section">
-        <div className="container" style={{ maxWidth: '800px', margin: '0 auto' }}>
-          <h2 style={{ textAlign: 'center', marginBottom: '2.5rem' }}>Frequently Asked Questions</h2>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-            <div style={{ padding: '1.5rem', background: '#f8fafc', borderRadius: '12px' }}>
-              <h4 style={{ fontSize: '1.05rem', marginBottom: '0.5rem' }}>How do I open a .QFX file in Excel?</h4>
-              <p style={{ color: '#475569', margin: 0, fontSize: '0.95rem', lineHeight: '1.5' }}>Excel cannot natively parse `.qfx` formatting. By dropping it into our tool, we extract all transaction lists and format them as standard `.csv` or `.xlsx` files which open instantly in Excel or Google Sheets.</p>
-            </div>
-            <div style={{ padding: '1.5rem', background: '#f8fafc', borderRadius: '12px' }}>
-              <h4 style={{ fontSize: '1.05rem', marginBottom: '0.5rem' }}>Is my financial data uploaded to any server?</h4>
-              <p style={{ color: '#475569', margin: 0, fontSize: '0.95rem', lineHeight: '1.5' }}>No. The conversion logic runs entirely in your browser's execution memory using HTML5 APIs. No files are uploaded, making it completely private and compliant with bank security practices.</p>
-            </div>
-            <div style={{ padding: '1.5rem', background: '#f8fafc', borderRadius: '12px' }}>
-              <h4 style={{ fontSize: '1.05rem', marginBottom: '0.5rem' }}>Does this tool support .OFX files too?</h4>
-              <p style={{ color: '#475569', margin: 0, fontSize: '0.95rem', lineHeight: '1.5' }}>Yes. Since Quicken Web Connect (.qfx) is based on the Open Financial Exchange (.ofx) structure, this converter supports both file formats seamlessly.</p>
-            </div>
-          </div>
-        </div>
-      </section>
+      <FaqSection faqs={faqs} />
     </>
   );
 }

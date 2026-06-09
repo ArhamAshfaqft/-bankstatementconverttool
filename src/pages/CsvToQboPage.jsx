@@ -2,6 +2,7 @@ import React from 'react';
 import { Table, CheckCircle, Lock, ShieldCheck } from 'lucide-react';
 import CsvToQboTool from '../components/CsvToQboTool';
 import SeoHead from '../components/SeoHead';
+import FaqSection from '../components/FaqSection';
 
 export default function CsvToQboPage() {
   const softwareSchema = {
@@ -17,16 +18,43 @@ export default function CsvToQboPage() {
     }
   };
 
+  const faqs = [
+    {
+      question: "Does QuickBooks support direct CSV imports?",
+      answer: "Yes, but direct CSV imports in QuickBooks frequently cause formatting headaches (such as inverted debit/credit columns or unrecognized date structures). Converting your CSV into a Web Connect (.qbo) format bypasses these mapping issues completely."
+    },
+    {
+      question: "Which QuickBooks versions support Web Connect (.QBO) import?",
+      answer: "All active desktop and cloud platforms, including QuickBooks Online, Desktop Pro/Premier, and Enterprise editions. As long as bank feeds are supported, .qbo imports will work."
+    },
+    {
+      question: "How does the column mapper work in this tool?",
+      answer: "Once you drop your CSV statement, you can select which column represents the date, description, and amount. Our local Javascript converter maps these columns into the standard QBO tags automatically."
+    },
+    {
+      question: "Are my bank details safe with offline conversion?",
+      answer: "Yes, absolutely. Because the code runs client-side inside your own browser window, your account sheets, numbers, payees, and financial histories are never processed on our servers."
+    }
+  ];
+
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
     "mainEntity": [
       {
         "@type": "Question",
-        "name": "Does QuickBooks support importing transactions from CSV?",
+        "name": "Does QuickBooks support direct CSV imports?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Yes, but QuickBooks Online or Desktop CSV imports often run into issues like inverted transaction signs, unrecognized dates, and manual mapping questions. Converting CSV to QBO Web Connect format ensures an error-free, automatic bank feed match."
+          "text": "Yes, but direct CSV imports in QuickBooks frequently cause formatting headaches (such as inverted debit/credit columns or unrecognized date structures). Converting your CSV into a Web Connect (.qbo) format bypasses these mapping issues completely."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Which QuickBooks versions support Web Connect (.QBO) import?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "All active desktop and cloud platforms, including QuickBooks Online, Desktop Pro/Premier, and Enterprise editions. As long as bank feeds are supported, .qbo imports will work."
         }
       },
       {
@@ -39,10 +67,10 @@ export default function CsvToQboPage() {
       },
       {
         "@type": "Question",
-        "name": "Are my transaction details sent to the cloud?",
+        "name": "Are my bank details safe with offline conversion?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "No. The entire conversion process occurs inside your browser memory using HTML5 features. Your file's transaction rows, numbers, and dates never leave your computer."
+          "text": "Yes, absolutely. Because the code runs client-side inside your own browser window, your account sheets, numbers, payees, and financial histories are never processed on our servers."
         }
       }
     ]
@@ -157,25 +185,9 @@ export default function CsvToQboPage() {
       </section>
 
       {/* FAQ SECTION */}
-      <section className="section" style={{ borderTop: '1px solid #e2e8f0' }}>
-        <div className="container" style={{ maxWidth: '800px', margin: '0 auto' }}>
-          <h2 style={{ textAlign: 'center', marginBottom: '2.5rem' }}>Frequently Asked Questions</h2>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-            <div style={{ padding: '1.5rem', background: '#f8fafc', borderRadius: '12px' }}>
-              <h4 style={{ fontSize: '1.05rem', marginBottom: '0.5rem' }}>Does QuickBooks support direct CSV imports?</h4>
-              <p style={{ color: '#475569', margin: 0, fontSize: '0.95rem', lineHeight: '1.5' }}>Yes, but direct CSV imports in QuickBooks frequently cause formatting headaches (such as inverted debit/credit columns or unrecognized date structures). Converting your CSV into a Web Connect (.qbo) format bypasses these mapping issues completely.</p>
-            </div>
-            <div style={{ padding: '1.5rem', background: '#f8fafc', borderRadius: '12px' }}>
-              <h4 style={{ fontSize: '1.05rem', marginBottom: '0.5rem' }}>Which QuickBooks versions support Web Connect (.QBO) import?</h4>
-              <p style={{ color: '#475569', margin: 0, fontSize: '0.95rem', lineHeight: '1.5' }}>All active desktop and cloud platforms, including QuickBooks Online, Desktop Pro/Premier, and Enterprise editions. As long as bank feeds are supported, `.qbo` imports will work.</p>
-            </div>
-            <div style={{ padding: '1.5rem', background: '#f8fafc', borderRadius: '12px' }}>
-              <h4 style={{ fontSize: '1.05rem', marginBottom: '0.5rem' }}>Are my bank details safe with offline conversion?</h4>
-              <p style={{ color: '#475569', margin: 0, fontSize: '0.95rem', lineHeight: '1.5' }}>Yes, absolutely. Because the code runs client-side inside your own browser window, your account sheets, numbers, payees, and financial histories are never processed on our servers.</p>
-            </div>
-          </div>
-        </div>
-      </section>
+      <div style={{ borderTop: '1px solid #e2e8f0' }}>
+        <FaqSection faqs={faqs} />
+      </div>
     </>
   );
 }

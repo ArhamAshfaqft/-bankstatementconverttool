@@ -111,11 +111,17 @@ export default function BlogIndexPage() {
                     transition: 'transform 0.2s ease, box-shadow 0.2s ease',
                     display: 'flex',
                     flexDirection: 'column',
-                    gap: '1.25rem'
+                    gap: '1.25rem',
+                    overflow: 'hidden'
                   }}
                   onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 10px 15px rgba(0, 0, 0, 0.03)'; }}
                   onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.01)'; }}
                 >
+                  {post.featuredImage && (
+                    <div style={{ margin: '-2.5rem -2.5rem 0 -2.5rem', height: '280px', background: '#F1F5F9', overflow: 'hidden' }}>
+                      <img src={post.featuredImage} alt={post.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    </div>
+                  )}
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                     <span style={{ 
                       fontSize: '0.75rem', 
