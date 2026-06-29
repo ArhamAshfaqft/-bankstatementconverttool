@@ -9,7 +9,7 @@ export default function CreditCardPage() {
       <SeoHead 
         title="Convert Credit Card Statement PDF to CSV | Parse Visa, Mastercard, Amex"
         description="A specialized local parser built to extract transactions from Credit Card statements. Easily export to CSV or Excel for business expense tracking."
-        canonical="https://www.bankstatementconverttool.com/credit-card-parser"
+        canonical="https://bankstatementconverttool.com/credit-card-parser"
       />
       
       {/* HERO SECTION */}

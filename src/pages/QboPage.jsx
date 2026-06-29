@@ -54,7 +54,7 @@ export default function QboPage() {
       <SeoHead 
         title="PDF to QBO Converter - Convert Bank Statement to QuickBooks Free"
         description="Convert your PDF bank statements into QuickBooks Web Connect (.QBO) files locally. Free online converter to bypass CSV mapping errors offline in your browser."
-        canonical="https://www.bankstatementconverttool.com/quickbooks-qbo-converter"
+        canonical="https://bankstatementconverttool.com/quickbooks-qbo-converter"
         jsonLd={[schema, faqSchema]}
       />
       

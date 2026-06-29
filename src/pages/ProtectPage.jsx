@@ -9,7 +9,7 @@ export default function ProtectPage() {
       <SeoHead 
         title="Secure PDF with Password Locally | Private Bank Statement Protector"
         description="Password-protect your bank statements and financial documents instantly in your browser. 100% private encryption ensures your password never leaves your device."
-        canonical="https://www.bankstatementconverttool.com/protect-pdf"
+        canonical="https://bankstatementconverttool.com/protect-pdf"
       />
       
       {/* HERO SECTION */}

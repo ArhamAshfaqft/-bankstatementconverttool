@@ -9,7 +9,7 @@ export default function SplitPage() {
       <SeoHead 
         title="Split PDF Bank Statements | Extract Pages Locally"
         description="Extract specific pages from your bank statements or financial documents. 100% private, local processing ensures total security. No uploads required."
-        canonical="https://www.bankstatementconverttool.com/split"
+        canonical="https://bankstatementconverttool.com/split"
       />
       
       <header className="layout-standard-hero" style={{ background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)' }}>

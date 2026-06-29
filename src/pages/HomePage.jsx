@@ -61,15 +61,15 @@ export default function HomePage() {
   return (
     <>
       <SeoHead 
-        title="Stop Manually Copying Bank Statements — Convert PDF to CSV in Seconds"
-        description="The accounting automation suite that converts bank statements, credit cards, and receipts to CSV, Excel, and QuickBooks. 100% private — your files never leave your browser."
-        canonical="https://www.bankstatementconverttool.com/"
+        title="Bank Statement to CSV Converter - Free, Private PDF Parser"
+        description="Convert bank statement PDFs to CSV, Excel, and QuickBooks formats in your browser. Free local parser for accountants, bookkeepers, and business owners."
+        canonical="https://bankstatementconverttool.com/"
         jsonLd={[
           {
             "@context": "https://schema.org",
             "@type": "WebApplication",
             "name": "Bank Statement PDF to CSV Converter",
-            "url": "https://www.bankstatementconverttool.com/",
+            "url": "https://bankstatementconverttool.com/",
             "applicationCategory": "BusinessApplication",
             "operatingSystem": "All",
             "description": "A privacy-first accounting automation suite to convert bank statement PDFs into CSV, Excel, and QuickBooks formats without uploading to servers.",
@@ -189,6 +189,84 @@ export default function HomePage() {
           <div className="trust-item"><Users size={16} /> Built for accountants</div>
         </div>
       </div>
+
+      {/* ===== PRIVACY PROOF ===== */}
+      <section className="section" id="privacy-proof">
+        <div className="container">
+          <div className="section-header">
+            <span className="section-label">Privacy Proof</span>
+            <h2>Your Statement Is Processed on Your Device</h2>
+            <p>Financial files are sensitive. The converter reads the PDF in browser memory, extracts rows locally, and creates the download on your computer.</p>
+          </div>
+
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
+            gap: '1.25rem',
+            maxWidth: '1080px',
+            margin: '0 auto'
+          }}>
+            <div className="feature-card">
+              <div className="feature-icon teal"><FileText size={20} /></div>
+              <h3>No Upload Step</h3>
+              <p>The file is opened with the browser File API. There is no progress bar for uploading because no server upload is required.</p>
+            </div>
+            <div className="feature-card">
+              <div className="feature-icon emerald"><ShieldCheck size={20} /></div>
+              <h3>Works After Loading</h3>
+              <p>Once the page is loaded, parsing and export logic runs locally. Your statement content is not sent to a remote parser.</p>
+            </div>
+            <div className="feature-card">
+              <div className="feature-icon blue"><Eye size={20} /></div>
+              <h3>Preview Before Export</h3>
+              <p>Review dates, descriptions, amounts, and balances before downloading. You can correct cells before creating the CSV.</p>
+            </div>
+          </div>
+
+          <div style={{ marginTop: '4rem', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '18px', overflow: 'hidden' }}>
+            <div style={{ padding: '1.5rem 1.5rem 0' }}>
+              <h3 style={{ marginBottom: '0.5rem' }}>Typical CSV Output</h3>
+              <p style={{ color: '#64748b', margin: 0 }}>Clean transaction rows ready for Excel, Google Sheets, QuickBooks imports, bookkeeping templates, and reconciliation.</p>
+            </div>
+            <div className="table-container" style={{ marginTop: '1.5rem' }}>
+              <table style={{ width: '100%', margin: 0 }}>
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Description</th>
+                    <th>Amount</th>
+                    <th>Balance</th>
+                    <th>Source</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>2026-06-03</td>
+                    <td>ACH Payroll Deposit</td>
+                    <td>2450.00</td>
+                    <td>8124.52</td>
+                    <td>PDF page 1</td>
+                  </tr>
+                  <tr>
+                    <td>2026-06-05</td>
+                    <td>Office Supplies</td>
+                    <td>-118.43</td>
+                    <td>8006.09</td>
+                    <td>PDF page 1</td>
+                  </tr>
+                  <tr>
+                    <td>2026-06-07</td>
+                    <td>Client Payment</td>
+                    <td>900.00</td>
+                    <td>8906.09</td>
+                    <td>PDF page 2</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
 
 
       {/* ===== PAIN → SOLUTION SECTION ===== */}

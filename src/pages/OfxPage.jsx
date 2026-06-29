@@ -53,7 +53,7 @@ export default function OfxPage() {
       <SeoHead 
         title="PDF to OFX Converter - Convert Bank Statement to OFX/QFX Free"
         description="Convert your PDF bank statements into OFX or QFX format offline in your browser. Free online tool for Quicken, Xero, MS Money, and accounting programs."
-        canonical="https://www.bankstatementconverttool.com/ofx-converter"
+        canonical="https://bankstatementconverttool.com/ofx-converter"
         jsonLd={[softwareSchema, faqSchema]}
       />
       

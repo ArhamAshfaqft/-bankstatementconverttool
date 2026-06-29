@@ -69,7 +69,7 @@ export default function PdfToExcelPage() {
       <SeoHead 
         title="Convert PDF Bank Statement to Excel Online | Free & Local"
         description="Convert your PDF bank statements directly into clean Excel (.xlsx) spreadsheets instantly. 100% browser-based with zero data uploads."
-        canonical="https://www.bankstatementconverttool.com/pdf-to-excel-converter"
+        canonical="https://bankstatementconverttool.com/pdf-to-excel-converter"
         jsonLd={[softwareSchema, faqSchema]}
       />
 

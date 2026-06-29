@@ -53,7 +53,7 @@ export default function TdPage() {
       <SeoHead 
         title="Convert TD Bank Statement PDF to CSV | Free & Local"
         description="Extract transactions from TD Bank Personal & Business PDF statements locally. Secure browser-based converter with zero data uploads."
-        canonical="https://www.bankstatementconverttool.com/td-bank"
+        canonical="https://bankstatementconverttool.com/td-bank"
         jsonLd={[softwareSchema, faqSchema]}
       />
 

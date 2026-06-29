@@ -33,6 +33,7 @@ import QboToCsvPage from './pages/QboToCsvPage';
 import CsvToQboPage from './pages/CsvToQboPage';
 import QifToQboPage from './pages/QifToQboPage';
 import QfxToCsvPage from './pages/QfxToCsvPage';
+import NotFoundPage from './pages/NotFoundPage';
 
 
 export default function App() {
@@ -71,7 +72,7 @@ export default function App() {
         <Route path="success" element={<SuccessPage />} />
         <Route path="privacy" element={<PrivacyPage />} />
         <Route path="terms" element={<TermsPage />} />
-        <Route path="*" element={<HomePage />} />
+        <Route path="*" element={<NotFoundPage />} />
       </Route>
     </Routes>
   );

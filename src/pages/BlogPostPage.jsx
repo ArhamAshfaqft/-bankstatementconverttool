@@ -38,12 +38,12 @@ export default function BlogPostPage() {
       "name": "StatementToCSV",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://www.bankstatementconverttool.com/assets/logo.png"
+        "url": "https://bankstatementconverttool.com/assets/logo.png"
       }
     },
     "mainEntityOfPage": {
       "@type": "WebPage",
-      "@id": `https://www.bankstatementconverttool.com/blog/${post.slug}`
+      "@id": `https://bankstatementconverttool.com/blog/${post.slug}`
     }
   };
 
@@ -111,7 +111,7 @@ export default function BlogPostPage() {
       <SeoHead 
         title={post.metaTitle || post.title}
         description={post.description}
-        canonical={`https://www.bankstatementconverttool.com/blog/${post.slug}`}
+        canonical={`https://bankstatementconverttool.com/blog/${post.slug}`}
         jsonLd={[articleSchema]}
       />
 

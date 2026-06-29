@@ -30,46 +30,40 @@ export default function QfxToCsvPage() {
     {
       question: "Does this tool support both .QFX and .OFX files?",
       answer: "Yes. Quicken Web Connect (.qfx) is a proprietary extension of the Open Financial Exchange (.ofx) format. Since they share the same underlying XML/SGML tag schema, our converter parses both formats seamlessly."
+    },
+    {
+      question: "Can I import the CSV into QuickBooks or accounting software?",
+      answer: "Yes. After conversion, you can use the CSV in Excel, Google Sheets, bookkeeping templates, or software import flows that accept spreadsheet transaction data."
+    },
+    {
+      question: "Does the converter keep transaction IDs?",
+      answer: "When transaction IDs are present in the QFX file, the parser preserves them so you can detect duplicates and reconcile imported activity."
+    },
+    {
+      question: "Do I need Quicken installed?",
+      answer: "No. The converter reads the QFX file directly in your browser and exports a spreadsheet without requiring Quicken, plugins, or desktop software."
     }
   ];
 
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "How do I open a .QFX file in Excel?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Excel cannot natively parse the structured SGML tags of a .qfx (Quicken Web Connect) file. By uploading your file to our local converter, we parse the transactions and compile them into a clean tabular structure. You can then download it as a standard CSV or Excel (.xlsx) file that opens instantly."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Is my financial data secure when converting QFX files?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Yes, 100%. Our tool runs entirely in your local browser's execution memory using HTML5 APIs. No files are uploaded to any external server, ensuring complete data privacy and security for your financial statements."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Does this tool support both .QFX and .OFX files?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Yes. Quicken Web Connect (.qfx) is a proprietary extension of the Open Financial Exchange (.ofx) format. Since they share the same underlying XML/SGML tag schema, our converter parses both formats seamlessly."
-        }
+    "mainEntity": faqs.map((faq) => ({
+      "@type": "Question",
+      "name": faq.question,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": faq.answer
       }
-    ]
+    }))
   };
 
   return (
     <>
       <SeoHead 
-        title="Convert Quicken (QFX) to CSV or Excel - Free & Local"
-        description="Easily convert your Quicken Web Connect (.QFX) files and OFX statements back into standard CSV or Excel files. 100% private, no cloud uploads."
-        canonical="https://www.bankstatementconverttool.com/qfx-to-csv-converter"
+        title="QFX to CSV Converter - Open Quicken Files in Excel Free"
+        description="Convert Quicken Web Connect (.QFX) and OFX files to CSV or Excel locally in your browser. Private, instant, and no Quicken install required."
+        canonical="https://bankstatementconverttool.com/qfx-to-csv-converter"
         jsonLd={[softwareSchema, faqSchema]}
       />
       
@@ -113,6 +107,21 @@ export default function QfxToCsvPage() {
               <Lock size={32} color="#e11d48" style={{ marginBottom: '1rem' }} />
               <h3 style={{ fontSize: '1.25rem', marginBottom: '0.5rem' }}>Edit Before Downloading</h3>
               <p style={{ color: '#475569', lineHeight: '1.6' }}>View and modify details or discard duplicate headers and opening/closing balances in a live preview grid before triggering your CSV export.</p>
+            </div>
+          </div>
+
+          <div style={{ marginTop: '5rem', background: '#fff1f2', padding: '2rem', borderRadius: '20px', border: '1px solid #fecdd3' }}>
+            <h2 style={{ textAlign: 'center', marginBottom: '1rem' }}>Built for Quicken exports</h2>
+            <p style={{ color: '#475569', lineHeight: '1.7', maxWidth: '760px', margin: '0 auto 2rem', textAlign: 'center' }}>
+              QFX files are useful for Quicken imports but awkward for spreadsheet review. This converter extracts the readable transaction layer so you can audit payees, dates, amounts, memos, and IDs without opening Quicken.
+            </p>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1rem' }}>
+              {['No Quicken subscription needed', 'Preserves transaction IDs', 'Works with OFX-style bank files', 'Exports clean spreadsheet rows'].map((item) => (
+                <div key={item} style={{ background: '#ffffff', padding: '1rem 1.25rem', borderRadius: '12px', color: '#334155', fontWeight: 700 }}>
+                  <CheckCircle size={16} color="#e11d48" style={{ verticalAlign: 'middle', marginRight: '0.5rem' }} />
+                  {item}
+                </div>
+              ))}
             </div>
           </div>
         </div>

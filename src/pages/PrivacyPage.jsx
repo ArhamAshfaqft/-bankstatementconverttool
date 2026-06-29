@@ -3,7 +3,7 @@ import SeoHead from '../components/SeoHead';
 
 export default function PrivacyPage() {
   const lastUpdated = "April 18, 2026";
-  const domain = "www.bankstatementconverttool.com";
+  const domain = "bankstatementconverttool.com";
 
   return (
     <>

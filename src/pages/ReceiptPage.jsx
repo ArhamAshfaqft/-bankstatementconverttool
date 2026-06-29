@@ -9,7 +9,7 @@ export default function ReceiptPage() {
       <SeoHead 
         title="Receipt & Invoice OCR Scanner | Extract Data Locally"
         description="Scan receipts and invoices directly in your browser. Our local OCR technology ensures your financial photos never touch our servers."
-        canonical="https://www.bankstatementconverttool.com/receipt-scanner"
+        canonical="https://bankstatementconverttool.com/receipt-scanner"
       />
       
       {/* HERO SECTION */}

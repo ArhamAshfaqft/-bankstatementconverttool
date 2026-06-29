@@ -22,7 +22,7 @@ export default function CitiPage() {
       <SeoHead 
         title="Extract Citibank PDF Statements to CSV | High-Fidelity App"
         description="A robust local browser engine designed to parse Citibank checking and credit card PDFs. Handles multi-line descriptions and layout indentations reliably."
-        canonical="https://www.bankstatementconverttool.com/citibank"
+        canonical="https://bankstatementconverttool.com/citibank"
         jsonLd={[
           schema,
           {

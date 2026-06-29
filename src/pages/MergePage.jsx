@@ -9,7 +9,7 @@ export default function MergePage() {
       <SeoHead 
         title="Merge Bank Statement PDFs | Combine Multiple Files Locally"
         description="Easily merge multiple PDF bank statements into a single document. 100% private, local processing ensures your sensitive financial data never leaves your computer."
-        canonical="https://www.bankstatementconverttool.com/merge"
+        canonical="https://bankstatementconverttool.com/merge"
       />
       
       {/* HERO SECTION */}

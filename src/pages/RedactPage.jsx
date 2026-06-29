@@ -9,7 +9,7 @@ export default function RedactPage() {
       <SeoHead 
         title="Anonymize PDF Bank Statements | Redact PII Locally"
         description="Securely strip metadata and anonymize your financial PDFs. 100% private, local processing ensures sensitive info stays off the cloud."
-        canonical="https://www.bankstatementconverttool.com/redact"
+        canonical="https://bankstatementconverttool.com/redact"
       />
       
       {/* HERO SECTION */}

@@ -9,7 +9,7 @@ export default function AuditPage() {
       <SeoHead 
         title="Financial Forgery & Fraud Detector | Audit Bank Statements Locally"
         description="Verify the integrity of bank statements. Our local forensic tool scans for mathematical mismatches, metadata tampering, and structural anomalies without uploading data."
-        canonical="https://www.bankstatementconverttool.com/audit-statement"
+        canonical="https://bankstatementconverttool.com/audit-statement"
       />
       
       {/* HERO SECTION */}

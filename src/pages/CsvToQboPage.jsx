@@ -34,54 +34,40 @@ export default function CsvToQboPage() {
     {
       question: "Are my bank details safe with offline conversion?",
       answer: "Yes, absolutely. Because the code runs client-side inside your own browser window, your account sheets, numbers, payees, and financial histories are never processed on our servers."
+    },
+    {
+      question: "What CSV columns do I need?",
+      answer: "At minimum you need a date column, a description or payee column, and an amount column. Optional columns such as check number, memo, or separate debit and credit fields can be mapped when available."
+    },
+    {
+      question: "Can I fix reversed debits and credits?",
+      answer: "Yes. Review the preview before export. If your source spreadsheet uses separate debit and credit columns or reversed signs, map the fields carefully before downloading the QBO file."
+    },
+    {
+      question: "Will QuickBooks treat this like a bank feed file?",
+      answer: "The exported file is built as a Web Connect QBO file, which is designed for QuickBooks bank feed imports rather than a generic spreadsheet upload."
     }
   ];
 
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "Does QuickBooks support direct CSV imports?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Yes, but direct CSV imports in QuickBooks frequently cause formatting headaches (such as inverted debit/credit columns or unrecognized date structures). Converting your CSV into a Web Connect (.qbo) format bypasses these mapping issues completely."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Which QuickBooks versions support Web Connect (.QBO) import?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "All active desktop and cloud platforms, including QuickBooks Online, Desktop Pro/Premier, and Enterprise editions. As long as bank feeds are supported, .qbo imports will work."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "How does the column mapper work in this tool?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Once you drop your CSV statement, you can select which column represents the date, description, and amount. Our local Javascript converter maps these columns into the standard QBO tags automatically."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Are my bank details safe with offline conversion?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Yes, absolutely. Because the code runs client-side inside your own browser window, your account sheets, numbers, payees, and financial histories are never processed on our servers."
-        }
+    "mainEntity": faqs.map((faq) => ({
+      "@type": "Question",
+      "name": faq.question,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": faq.answer
       }
-    ]
+    }))
   };
 
   return (
     <>
       <SeoHead 
-        title="Convert CSV to QBO - Free Spreadsheet to QuickBooks Converter"
-        description="Convert transaction spreadsheets (.CSV) into importable QuickBooks Web Connect (.QBO) files offline in your web browser. Completely secure and private."
-        canonical="https://www.bankstatementconverttool.com/csv-to-qbo-converter"
+        title="CSV to QBO Converter - Import Spreadsheets into QuickBooks"
+        description="Convert CSV transaction spreadsheets into QuickBooks Web Connect (.QBO) files locally. Map columns, preview rows, and download a private bank feed file."
+        canonical="https://bankstatementconverttool.com/csv-to-qbo-converter"
         jsonLd={[softwareSchema, faqSchema]}
       />
       

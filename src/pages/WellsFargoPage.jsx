@@ -24,7 +24,7 @@ export default function WellsFargoPage() {
       <SeoHead 
         title="Wells Fargo Bank Statement PDF to CSV | Free & Secure"
         description="Extract transaction data from your Wells Fargo PDFs instantly. Our local parser merges Additions and Subtractions tables into one clean spreadsheet."
-        canonical="https://www.bankstatementconverttool.com/wells-fargo"
+        canonical="https://bankstatementconverttool.com/wells-fargo"
         jsonLd={[
           schema,
           {

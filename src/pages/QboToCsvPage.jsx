@@ -17,38 +17,32 @@ export default function QboToCsvPage() {
     {
       question: "Does this tool support both .QBO and .OFX files?",
       answer: "Yes. QuickBooks Web Connect (.qbo) is a proprietary extension of the Open Financial Exchange (.ofx) format. Since they share the same underlying XML/SGML tag schema, our converter parses both formats seamlessly."
+    },
+    {
+      question: "What columns are included in the exported CSV?",
+      answer: "The export includes the fields accountants usually need first: posted date, description or payee, amount, transaction type, check number when present, and the original transaction ID for reconciliation."
+    },
+    {
+      question: "Can I use the CSV in Google Sheets or Excel?",
+      answer: "Yes. The downloaded CSV opens in Excel, Google Sheets, Numbers, LibreOffice, and most bookkeeping tools that accept spreadsheet imports."
+    },
+    {
+      question: "Will this change my original QBO file?",
+      answer: "No. The original file is read in your browser only. The converter creates a new CSV or Excel file and never modifies the source QBO statement."
     }
   ];
 
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "How do I open a .QBO file in Excel?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Excel cannot natively parse the structured SGML tags of a .qbo (QuickBooks Web Connect) file. By uploading your file to our local converter, we parse the transactions and compile them into a clean tabular structure. You can then download it as a standard CSV or Excel (.xlsx) file that opens instantly."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Is my financial data secure when converting QBO files?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Yes, 100%. Our tool runs entirely in your local browser's execution memory using HTML5 APIs. No files are uploaded to any external server, ensuring complete data privacy and security for your financial statements."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Does this tool support both .QBO and .OFX files?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Yes. QuickBooks Web Connect (.qbo) is a proprietary extension of the Open Financial Exchange (.ofx) format. Since they share the same underlying XML/SGML tag schema, our converter parses both formats seamlessly."
-        }
+    "mainEntity": faqs.map((faq) => ({
+      "@type": "Question",
+      "name": faq.question,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": faq.answer
       }
-    ]
+    }))
   };
 
   const softwareSchema = {
@@ -67,9 +61,9 @@ export default function QboToCsvPage() {
   return (
     <>
       <SeoHead 
-        title="Convert QuickBooks (QBO) to CSV or Excel - Free & Local"
-        description="Easily convert your QuickBooks Web Connect (.QBO) files and OFX statements back into standard CSV or Excel files. 100% private, no cloud uploads."
-        canonical="https://www.bankstatementconverttool.com/qbo-to-csv-converter"
+        title="QBO to CSV Converter - Open QuickBooks Files in Excel Free"
+        description="Convert QuickBooks Web Connect (.QBO) and OFX files to clean CSV or Excel tables locally in your browser. No upload, no account, no cloud processing."
+        canonical="https://bankstatementconverttool.com/qbo-to-csv-converter"
         jsonLd={[softwareSchema, faqSchema]}
       />
       
@@ -113,6 +107,33 @@ export default function QboToCsvPage() {
               <Lock size={32} color="#0d9488" style={{ marginBottom: '1rem' }} />
               <h3 style={{ fontSize: '1.25rem', marginBottom: '0.5rem' }}>Edit Before Downloading</h3>
               <p style={{ color: '#475569', lineHeight: '1.6' }}>View and modify details or discard duplicate headers and opening/closing balances in a live preview grid before triggering your CSV export.</p>
+            </div>
+          </div>
+
+          <div style={{ marginTop: '5rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '2rem', alignItems: 'stretch' }}>
+            <div style={{ background: '#ffffff', padding: '2rem', borderRadius: '16px', border: '1px solid #e2e8f0' }}>
+              <h2 style={{ fontSize: '1.5rem', marginBottom: '1rem' }}>What the converter extracts</h2>
+              <p style={{ color: '#475569', lineHeight: '1.7' }}>
+                QBO files store transactions in OFX-style tags such as posted date, transaction amount, transaction ID, memo, payee, and check number. This page turns those tags into a plain spreadsheet table that is easy to audit.
+              </p>
+            </div>
+            <div style={{ background: '#ffffff', padding: '2rem', borderRadius: '16px', border: '1px solid #e2e8f0' }}>
+              <h2 style={{ fontSize: '1.5rem', marginBottom: '1rem' }}>Best use cases</h2>
+              <p style={{ color: '#475569', lineHeight: '1.7' }}>
+                Use it when a client sends a QuickBooks Web Connect file but you need to review it in Excel, merge it into a workbook, import it into another system, or reconcile transaction IDs before import.
+              </p>
+            </div>
+          </div>
+
+          <div style={{ marginTop: '4rem', background: '#f8fafc', padding: '2rem', borderRadius: '20px', border: '1px solid #e2e8f0' }}>
+            <h2 style={{ textAlign: 'center', marginBottom: '2rem' }}>QBO to CSV workflow</h2>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.25rem' }}>
+              {['Drop your .qbo or .ofx file', 'Preview parsed transactions', 'Edit descriptions or exclude rows', 'Download CSV or Excel'].map((step, index) => (
+                <div key={step} style={{ background: '#ffffff', padding: '1.5rem', borderRadius: '14px', border: '1px solid #e2e8f0' }}>
+                  <div style={{ color: '#0d9488', fontWeight: 800, marginBottom: '0.5rem' }}>0{index + 1}</div>
+                  <p style={{ margin: 0, color: '#334155', fontWeight: 600 }}>{step}</p>
+                </div>
+              ))}
             </div>
           </div>
         </div>

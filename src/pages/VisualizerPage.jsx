@@ -22,7 +22,7 @@ export default function VisualizerPage() {
       <SeoHead 
         title="Interactive Bank Statement Visualizer | Private Spending Insights"
         description="Visualize your bank statements instantly without uploading data. Our local engine categorizes spending and generates beautiful financial dashboards in your browser."
-        canonical="https://www.bankstatementconverttool.com/visualizer"
+        canonical="https://bankstatementconverttool.com/visualizer"
         jsonLd={[schema]}
       />
 

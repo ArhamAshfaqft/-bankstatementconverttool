@@ -2,8 +2,32 @@ import React from 'react';
 import { Table, CheckCircle, Lock, ShieldCheck } from 'lucide-react';
 import QifToQboTool from '../components/QifToQboTool';
 import SeoHead from '../components/SeoHead';
+import FaqSection from '../components/FaqSection';
 
 export default function QifToQboPage() {
+  const faqs = [
+    {
+      question: "Why doesn't QuickBooks import my .QIF file directly?",
+      answer: "Intuit designed QuickBooks to use Web Connect (.qbo) for direct imports, locking out the older Quicken Interchange Format (.qif) to avoid reconciliation overlaps. Our converter maps legacy tags into valid .qbo bank feed values."
+    },
+    {
+      question: "Are transaction memos and categories preserved?",
+      answer: "Yes. Categories (L tags) and memos (M tags) present in your .qif file are mapped into the description fields of the QBO file, preserving critical bookkeeping detail."
+    },
+    {
+      question: "Is my transaction history uploaded to your servers?",
+      answer: "No. The entire conversion logic executes client-side inside your browser. None of your payees, account details, or transaction amounts are transmitted online."
+    },
+    {
+      question: "Can I convert old Quicken exports for QuickBooks Online?",
+      answer: "Yes. The converter is designed for legacy Quicken QIF exports that need to be reshaped into Web Connect QBO files for QuickBooks import workflows."
+    },
+    {
+      question: "What QIF tags are supported?",
+      answer: "The parser supports common transaction tags including dates, amounts, payees, memos, categories, check numbers, and transaction separators."
+    }
+  ];
+
   const softwareSchema = {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
@@ -20,40 +44,22 @@ export default function QifToQboPage() {
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "Why doesn't QuickBooks import my .QIF file directly?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Intuit designed QuickBooks to utilize Web Connect (.qbo) for direct imports, locking out the older Quicken Interchange Format (.qif) to avoid reconciliation overlaps. Our converter resolves this limitation by mapping legacy tags into valid .qbo bank feed values."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Are transaction memos and categories preserved?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Yes. Any categories (L tags) or memos (M tags) present in your .qif file are cleanly mapped into the standard description fields of the QBO file, preserving critical bookkeeping detail."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Is my transaction history uploaded to your servers?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "No. The entire conversion logic executes client-side inside your own browser window. None of your payees, account details, or transaction amounts are transmitted online."
-        }
+    "mainEntity": faqs.map((faq) => ({
+      "@type": "Question",
+      "name": faq.question,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": faq.answer
       }
-    ]
+    }))
   };
 
   return (
     <>
       <SeoHead 
-        title="Convert QIF to QBO - Free Quicken QIF to QuickBooks Converter"
-        description="Convert Quicken Interchange Format (.QIF) statements into importable QuickBooks Web Connect (.QBO) files offline in your web browser. Privacy guaranteed."
-        canonical="https://www.bankstatementconverttool.com/qif-to-qbo-converter"
+        title="QIF to QBO Converter - Move Quicken Files to QuickBooks"
+        description="Convert legacy Quicken .QIF files into QuickBooks Web Connect .QBO files locally. Preserve payees, dates, memos, and amounts with private browser processing."
+        canonical="https://bankstatementconverttool.com/qif-to-qbo-converter"
         jsonLd={[softwareSchema, faqSchema]}
       />
       
@@ -157,25 +163,9 @@ export default function QifToQboPage() {
       </section>
 
       {/* FAQ SECTION */}
-      <section className="section" style={{ borderTop: '1px solid #e2e8f0' }}>
-        <div className="container" style={{ maxWidth: '800px', margin: '0 auto' }}>
-          <h2 style={{ textAlign: 'center', marginBottom: '2.5rem' }}>Frequently Asked Questions</h2>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-            <div style={{ padding: '1.5rem', background: '#f8fafc', borderRadius: '12px' }}>
-              <h4 style={{ fontSize: '1.05rem', marginBottom: '0.5rem' }}>Why doesn't QuickBooks import my .QIF file?</h4>
-              <p style={{ color: '#475569', margin: 0, fontSize: '0.95rem', lineHeight: '1.5' }}>Intuit designed QuickBooks to utilize Web Connect (.qbo) for direct imports, locking out the older Quicken Interchange Format (.qif) to avoid reconciliation overlaps. Our tool lets you easily bypass this block.</p>
-            </div>
-            <div style={{ padding: '1.5rem', background: '#f8fafc', borderRadius: '12px' }}>
-              <h4 style={{ fontSize: '1.05rem', marginBottom: '0.5rem' }}>Are transaction categories and memos preserved?</h4>
-              <p style={{ color: '#475569', margin: 0, fontSize: '0.95rem', lineHeight: '1.5' }}>Yes. Any categories (`L` tags) or memos (`M` tags) present in your `.qif` file are cleanly combined into the transaction details description, ensuring no tracking information is lost.</p>
-            </div>
-            <div style={{ padding: '1.5rem', background: '#f8fafc', borderRadius: '12px' }}>
-              <h4 style={{ fontSize: '1.05rem', marginBottom: '0.5rem' }}>How long does the QIF parsing process take?</h4>
-              <p style={{ color: '#475569', margin: 0, fontSize: '0.95rem', lineHeight: '1.5' }}>Conversion is instantaneous. Because parsing is computed locally using browser power rather than queueing on a cloud database, even files with thousands of lines process in milliseconds.</p>
-            </div>
-          </div>
-        </div>
-      </section>
+      <div style={{ borderTop: '1px solid #e2e8f0' }}>
+        <FaqSection faqs={faqs} />
+      </div>
     </>
   );
 }

@@ -9,7 +9,7 @@ export default function DecryptPage() {
       <SeoHead 
         title="Unlock Password-Protected PDF Bank Statements | Free & Local"
         description="Permanently remove passwords from your bank statements locally. 100% private decryption ensures your password never leaves your browser."
-        canonical="https://www.bankstatementconverttool.com/unlock-pdf"
+        canonical="https://bankstatementconverttool.com/unlock-pdf"
       />
       
       {/* HERO SECTION */}

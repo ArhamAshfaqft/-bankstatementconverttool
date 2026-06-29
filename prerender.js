@@ -80,6 +80,8 @@ const pageRoutes = {
   'LoginPage.jsx': 'login'
 };
 
+const noindexRoutes = new Set(['login']);
+
 async function run() {
   if (!fs.existsSync(templatePath)) {
     console.error('Built template dist/index.html not found! Run npm run build first.');
@@ -104,22 +106,29 @@ async function run() {
 
     const title = titleMatch ? titleMatch[1] : '';
     const description = descMatch ? descMatch[1] : '';
-    const canonical = canonicalMatch ? canonicalMatch[1] : `https://www.bankstatementconverttool.com/${route}`;
+    const canonical = canonicalMatch ? canonicalMatch[1] : `https://bankstatementconverttool.com/${route}`;
 
     // Extract schema variables
     const schemaDeclarations = {};
-    const varNames = ['schema', 'faqSchema', 'softwareSchema', 'articleSchema'];
+    const varNames = ['faqs', 'schema', 'faqSchema', 'softwareSchema', 'articleSchema'];
     
     varNames.forEach(varName => {
-      const regex = new RegExp(`const\\s+${varName}\\s*=\\s*({)`);
+      const regex = new RegExp(`const\\s+${varName}\\s*=\\s*([\\[{])`);
       const match = content.match(regex);
       if (match && match.index !== undefined) {
         const braceIndex = match.index + match[0].length - 1;
-        const objectStr = extractBracket(content, braceIndex, '{', '}');
-        if (objectStr) {
+        const startChar = match[1];
+        const endChar = startChar === '[' ? ']' : '}';
+        const declarationStr = extractBracket(content, braceIndex, startChar, endChar);
+        if (declarationStr) {
           try {
-            schemaDeclarations[varName] = eval(`(${objectStr})`);
-          } catch (e) {}
+            const keys = Object.keys(schemaDeclarations);
+            const vals = Object.values(schemaDeclarations);
+            const evalFunc = new Function(...keys, `return (${declarationStr});`);
+            schemaDeclarations[varName] = evalFunc(...vals);
+          } catch (e) {
+            console.error(`Failed to parse ${varName} for ${filename}:`, e.message);
+          }
         }
       }
     });
@@ -143,7 +152,7 @@ async function run() {
       }
     }
 
-    standardPages.push({ route, title, description, canonical, jsonLd });
+    standardPages.push({ route, title, description, canonical, jsonLd, noindex: noindexRoutes.has(route) });
   }
 
   // Process Blog Posts
@@ -159,7 +168,7 @@ async function run() {
           const route = `blog/${post.slug}`;
           const title = post.metaTitle || post.title;
           const description = post.description;
-          const canonical = `https://www.bankstatementconverttool.com/blog/${post.slug}`;
+          const canonical = `https://bankstatementconverttool.com/blog/${post.slug}`;
           const jsonLd = [
             {
               "@context": "https://schema.org",
@@ -176,7 +185,7 @@ async function run() {
                 "name": "StatementToCSV",
                 "logo": {
                   "@type": "ImageObject",
-                  "url": "https://www.bankstatementconverttool.com/favicon-96x96.png"
+                  "url": "https://bankstatementconverttool.com/favicon-96x96.png"
                 }
               },
               "mainEntityOfPage": {
@@ -198,7 +207,7 @@ async function run() {
     let html = templateHtml;
 
     // 1. Substitute Title
-    const defaultTitle = '<title>Bank Statement PDF to CSV Converter — Free, Instant & 100% Private</title>';
+    const defaultTitle = '<title>Bank Statement to CSV Converter - Free, Private PDF Parser</title>';
     if (page.title) {
       html = html.replace(defaultTitle, `<title>${page.title}</title>`);
       html = html.replace(/<meta property="og:title" content="[^"]+" \/>/, `<meta property="og:title" content="${page.title}" />`);
@@ -225,6 +234,13 @@ async function run() {
       html = html.replace(
         /<meta property="og:url" content="[^"]+" \/>/,
         `<meta property="og:url" content="${page.canonical}" />`
+      );
+    }
+
+    if (page.noindex && !html.includes('name="robots"')) {
+      html = html.replace(
+        /<meta name="description" content="[^"]+" \/>/,
+        (match) => `${match}\n    <meta name="robots" content="noindex,follow" />`
       );
     }
 

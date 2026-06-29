@@ -103,6 +103,7 @@ export default function PricingPage() {
       <SeoHead 
         title="Pricing | Bank Statement Converter"
         description="Choose the right plan. Process single bank statements for free, or upgrade to Pro for bulk multi-file merging and Excel/QuickBooks exports."
+        canonical="https://bankstatementconverttool.com/pricing"
       />
       
       <div className="pricing-page">

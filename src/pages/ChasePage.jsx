@@ -22,7 +22,7 @@ export default function ChasePage() {
       <SeoHead 
         title="Convert Chase Bank Statement PDF to CSV | Professional Precision"
         description="A robust local browser engine optimized for Chase Personal and Business statements. High-fidelity extraction that cleans messy merchant strings for QuickBooks."
-        canonical="https://www.bankstatementconverttool.com/chase"
+        canonical="https://bankstatementconverttool.com/chase"
         jsonLd={[
           schema,
           {

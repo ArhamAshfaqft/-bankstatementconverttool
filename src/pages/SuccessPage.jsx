@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { CheckCircle, ArrowRight, Loader } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../lib/supabase';
+import SeoHead from '../components/SeoHead';
 
 export default function SuccessPage() {
   const { user, isPro, checkProStatus } = useAuth();
@@ -60,26 +61,34 @@ export default function SuccessPage() {
   }, [user, checkProStatus]);
 
   return (
-    <div className="container" style={{ minHeight: '80vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <div className="card" style={{ maxWidth: '500px', textAlign: 'center', padding: '3rem' }}>
-        <CheckCircle size={64} style={{ color: 'var(--brand-500)', marginBottom: '1.5rem' }} />
-        <h1 style={{ fontSize: '2rem', marginBottom: '1rem' }}>Welcome to Pro!</h1>
-        <p style={{ color: 'var(--text-body)', marginBottom: '2rem', lineHeight: '1.6' }}>
-          Thank you for choosing Bank Statement Tools. Your account is being upgraded. 
-          This usually takes a few seconds.
-        </p>
+    <>
+      <SeoHead
+        title="Subscription Success | StatementToCSV"
+        description="Your StatementToCSV subscription is being verified."
+        canonical="https://bankstatementconverttool.com/success"
+        noindex
+      />
+      <div className="container" style={{ minHeight: '80vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div className="card" style={{ maxWidth: '500px', textAlign: 'center', padding: '3rem' }}>
+          <CheckCircle size={64} style={{ color: 'var(--brand-500)', marginBottom: '1.5rem' }} />
+          <h1 style={{ fontSize: '2rem', marginBottom: '1rem' }}>Welcome to Pro!</h1>
+          <p style={{ color: 'var(--text-body)', marginBottom: '2rem', lineHeight: '1.6' }}>
+            Thank you for choosing Bank Statement Tools. Your account is being upgraded.
+            This usually takes a few seconds.
+          </p>
 
-        {verifying ? (
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', color: 'var(--text-muted)' }}>
-            <Loader className="spinner" size={18} />
-            <span>Verifying subscription...</span>
-          </div>
-        ) : (
-          <button className="btn btn-primary" onClick={() => navigate('/')} style={{ width: '100%' }}>
-            Go to My Dashboard <ArrowRight size={18} />
-          </button>
-        )}
+          {verifying ? (
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', color: 'var(--text-muted)' }}>
+              <Loader className="spinner" size={18} />
+              <span>Verifying subscription...</span>
+            </div>
+          ) : (
+            <button className="btn btn-primary" onClick={() => navigate('/')} style={{ width: '100%' }}>
+              Go to My Dashboard <ArrowRight size={18} />
+            </button>
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 }

@@ -53,7 +53,7 @@ export default function AmexPage() {
       <SeoHead 
         title="Convert American Express Statement PDF to CSV | Local & Secure"
         description="A specialized local parser built to extract transactions from American Express personal & business statements. Clean merchant names and separate employee card rows."
-        canonical="https://www.bankstatementconverttool.com/american-express"
+        canonical="https://bankstatementconverttool.com/american-express"
         jsonLd={[softwareSchema, faqSchema]}
       />
 

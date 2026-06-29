@@ -22,7 +22,7 @@ export default function BofAPage() {
       <SeoHead 
         title="Bank of America Statement PDF to CSV | Professional Audit Utility"
         description="A high-fidelity local browser engine optimized for Bank of America checking and savings statements. Secure, zero-retention extraction for multi-year accounting audits."
-        canonical="https://www.bankstatementconverttool.com/bank-of-america"
+        canonical="https://bankstatementconverttool.com/bank-of-america"
         jsonLd={[
           schema,
           {

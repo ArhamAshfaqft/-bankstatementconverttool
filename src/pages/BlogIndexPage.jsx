@@ -22,7 +22,7 @@ export default function BlogIndexPage() {
       <SeoHead 
         title="Accounting & Security Blog - StatementToCSV"
         description="Expert guides, tutorials, and security audits on converting bank statements, managing transaction formats, and preserving financial data privacy."
-        canonical="https://www.bankstatementconverttool.com/blog"
+        canonical="https://bankstatementconverttool.com/blog"
       />
 
       <header className="layout-standard-hero" style={{ background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)' }}>

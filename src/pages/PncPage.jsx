@@ -53,7 +53,7 @@ export default function PncPage() {
       <SeoHead 
         title="Convert PNC Bank Statement PDF to CSV | Free & Local"
         description="A specialized local browser parser built to extract transactions from PNC Personal & Virtual Wallet statements. Fast, secure, and preserves ledger integrity."
-        canonical="https://www.bankstatementconverttool.com/pnc"
+        canonical="https://bankstatementconverttool.com/pnc"
         jsonLd={[softwareSchema, faqSchema]}
       />
 

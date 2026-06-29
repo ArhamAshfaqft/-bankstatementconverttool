@@ -22,7 +22,7 @@ export default function CapitalOnePage() {
       <SeoHead 
         title="Extract Capital One PDF Statements to CSV | Secure Parsing"
         description="Convert Capital One 360 Personal and Spark Business PDF statements into CSV format natively in your browser. Accurate extraction for Quicken and QBO."
-        canonical="https://www.bankstatementconverttool.com/capital-one"
+        canonical="https://bankstatementconverttool.com/capital-one"
         jsonLd={[
           schema,
           {

@@ -41,6 +41,8 @@ export default function LoginPage() {
       <SeoHead 
         title={`${isLogin ? 'Log In' : 'Sign Up'} | Bank Statement Converter`}
         description="Log in to access your pro features, bulk processing, and QuickBooks exports."
+        canonical="https://bankstatementconverttool.com/login"
+        noindex
       />
 
       <div className="auth-container">
