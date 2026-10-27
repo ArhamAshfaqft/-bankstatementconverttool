@@ -9,6 +9,27 @@ const pagesDir = path.join(__dirname, 'src/pages');
 const distDir = path.join(__dirname, 'dist');
 const templatePath = path.join(distDir, 'index.html');
 
+const escapeHtml = (value = '') => String(value).replace(/[&<>"']/g, character => ({
+  '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+}[character]));
+
+function renderBlogBlock(block) {
+  const text = escapeHtml(block.text);
+  if (['h2', 'h3', 'p'].includes(block.type)) return `<${block.type}>${text}</${block.type}>`;
+  if (block.type === 'warning') return `<aside><p>${text}</p></aside>`;
+  if (block.type === 'link') return `<p><a href="${escapeHtml(block.href)}">${text}</a></p>`;
+  if (block.type === 'list-items' || block.type === 'list-ordered') {
+    const tag = block.type === 'list-items' ? 'ul' : 'ol';
+    return `<${tag}>${block.items.map(item => `<li>${escapeHtml(item)}</li>`).join('')}</${tag}>`;
+  }
+  if (block.type === 'table') return `<table><thead><tr>${block.headers.map(header => `<th>${escapeHtml(header)}</th>`).join('')}</tr></thead><tbody>${block.rows.map(row => `<tr>${row.map(cell => `<td>${escapeHtml(cell)}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
+  return '';
+}
+
+function renderStaticBlog(post) {
+  return `<main class="static-blog-content"><nav><a href="/">Home</a> / <a href="/blog">Blog</a></nav><article><h1>${escapeHtml(post.title)}</h1><p>${escapeHtml(post.date)} · ${escapeHtml(post.author)}</p>${post.featuredImage ? `<img src="${escapeHtml(post.featuredImage)}" alt="${escapeHtml(post.imageAlt || post.title)}" width="1600" height="900">` : ''}${post.content.map(renderBlogBlock).join('')}</article></main>`;
+}
+
 // Helper to balance braces/brackets robustly
 function extractBracket(content, startIndex, startChar, endChar) {
   let count = 0;
@@ -87,6 +108,7 @@ async function run() {
   }
 
   const templateHtml = fs.readFileSync(templatePath, 'utf8');
+  const { blogPosts } = await import('./src/data/blogPosts.js');
 
   // Process standard routes
   const standardPages = [];
@@ -156,12 +178,7 @@ async function run() {
   // Process Blog Posts
   const blogPostsFile = path.join(__dirname, 'src/data/blogPosts.js');
   if (fs.existsSync(blogPostsFile)) {
-    const blogContent = fs.readFileSync(blogPostsFile, 'utf8');
-    const arrayStartIndex = blogContent.indexOf('[');
-    const arrayStr = extractBracket(blogContent, arrayStartIndex, '[', ']');
-    if (arrayStr) {
-      try {
-        const blogPosts = eval(`(${arrayStr})`);
+    try {
         blogPosts.forEach(post => {
           const route = `blog/${post.slug}`;
           const title = post.metaTitle || post.title;
@@ -173,7 +190,9 @@ async function run() {
               "@type": "BlogPosting",
               "headline": post.title,
               "description": post.description,
-              "datePublished": new Date(post.date).toISOString().split('T')[0],
+              "datePublished": post.publishedDate || new Date(post.date).toISOString().split('T')[0],
+              "dateModified": post.publishedDate || new Date(post.date).toISOString().split('T')[0],
+              ...(post.featuredImage && { "image": `https://bankstatementconverttool.com${post.featuredImage}` }),
               "author": {
                 "@type": "Person",
                 "name": post.author || "Mirza Arham"
@@ -192,11 +211,10 @@ async function run() {
               }
             }
           ];
-          standardPages.push({ route, title, description, canonical, jsonLd });
+          standardPages.push({ route, title, description, canonical, jsonLd, post });
         });
-      } catch (e) {
-        console.error('Failed to parse blog posts data:', e.message);
-      }
+    } catch (e) {
+      console.error('Failed to import blog posts data:', e.message);
     }
   }
 
@@ -233,6 +251,17 @@ async function run() {
         /<meta property="og:url" content="[^"]+" \/>/,
         `<meta property="og:url" content="${page.canonical}" />`
       );
+    }
+
+    if (page.post) {
+      html = html.replace('<div id="root"></div>', `<div id="root">${renderStaticBlog(page.post)}</div>`);
+      html = html.replace('<meta property="og:type" content="website" />', '<meta property="og:type" content="article" />');
+      html = html.replace('</head>', `    <meta property="og:url" content="${escapeHtml(page.canonical)}" />\n  </head>`);
+      if (page.post.featuredImage) {
+        html = html.replace('</head>', `    <meta property="og:image" content="https://bankstatementconverttool.com${escapeHtml(page.post.featuredImage)}" />\n    <meta name="twitter:card" content="summary_large_image" />\n  </head>`);
+      }
+    } else if (page.route === 'blog') {
+      html = html.replace('<div id="root"></div>', `<div id="root"><main class="static-blog-content"><h1>Bank Statement How-To Guides</h1>${blogPosts.map(post => `<article><h2><a href="/blog/${escapeHtml(post.slug)}">${escapeHtml(post.title)}</a></h2><p>${escapeHtml(post.description)}</p></article>`).join('')}</main></div>`);
     }
 
     if (page.noindex && !html.includes('name="robots"')) {

@@ -8,7 +8,7 @@ export default function BlogIndexPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [activeCategory, setActiveCategory] = useState('All');
 
-  const categories = ['All', 'Security', 'Tutorial', 'QuickBooks'];
+  const categories = ['All', 'Tutorial', 'QuickBooks', 'Security'];
 
   const filteredPosts = blogPosts.filter(post => {
     const matchesSearch = post.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
@@ -20,18 +20,18 @@ export default function BlogIndexPage() {
   return (
     <>
       <SeoHead 
-        title="Accounting & Security Blog - StatementToCSV"
-        description="Expert guides, tutorials, and security audits on converting bank statements, managing transaction formats, and preserving financial data privacy."
+        title="Bank Statement Conversion Guides | StatementToCSV"
+        description="Practical guides for converting PDF bank statements to CSV, merging monthly statements, and importing transactions into QuickBooks."
         canonical="https://bankstatementconverttool.com/blog"
       />
 
       <header className="layout-standard-hero" style={{ background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)' }}>
         <div className="container" style={{ textAlign: 'center' }}>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', padding: '0.5rem 1rem', borderRadius: '100px', fontWeight: '600', fontSize: '0.85rem', marginBottom: '2rem', color: '#ffffff' }}>
-            <Cpu size={16} /> Auditor-Grade Content Hub
+            <Cpu size={16} /> Practical Bank Statement Guides
           </div>
-          <h1>The Accounting <span>Security Blog</span></h1>
-          <p>Guides on secure data extraction, bookkeeping automation, and keeping sensitive financials local.</p>
+          <h1>Bank Statement <span>How-To Guides</span></h1>
+          <p>Clear steps for converting, checking, and importing transaction files.</p>
         </div>
       </header>
 
@@ -119,7 +119,7 @@ export default function BlogIndexPage() {
                 >
                   {post.featuredImage && (
                     <div style={{ margin: '-2.5rem -2.5rem 0 -2.5rem', height: '280px', background: '#F1F5F9', overflow: 'hidden' }}>
-                      <img src={post.featuredImage} alt={post.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      <img src={post.featuredImage} alt={post.imageAlt || post.title} loading="lazy" width="1600" height="900" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                     </div>
                   )}
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>

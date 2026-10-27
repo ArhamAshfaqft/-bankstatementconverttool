@@ -1,4 +1,6 @@
-export const blogPosts = [
+import { newBlogPosts } from './newBlogPosts.js';
+
+const legacyBlogPosts = [
   {
     slug: 'convert-pdf-bank-statement-to-excel-locally',
     title: 'How to Convert PDF Bank Statements to Excel Locally (Ultimate Security Guide)',
@@ -211,3 +213,5 @@ export const blogPosts = [
     ]
   }
 ];
+
+export const blogPosts = [...newBlogPosts, ...legacyBlogPosts];

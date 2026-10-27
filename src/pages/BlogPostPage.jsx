@@ -27,8 +27,9 @@ export default function BlogPostPage() {
     "@type": "BlogPosting",
     "headline": post.title,
     "description": post.description,
-    "datePublished": "2026-05-26",
-    "dateModified": "2026-05-26",
+    "datePublished": post.publishedDate || new Date(post.date).toISOString().slice(0, 10),
+    "dateModified": post.publishedDate || new Date(post.date).toISOString().slice(0, 10),
+    ...(post.featuredImage && { "image": `https://bankstatementconverttool.com${post.featuredImage}` }),
     "author": {
       "@type": "Person",
       "name": post.author
@@ -38,7 +39,7 @@ export default function BlogPostPage() {
       "name": "StatementToCSV",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://bankstatementconverttool.com/assets/logo.png"
+        "url": "https://bankstatementconverttool.com/favicon-96x96.png"
       }
     },
     "mainEntityOfPage": {
@@ -78,6 +79,12 @@ export default function BlogPostPage() {
             <p style={{ margin: 0, color: '#991B1B', fontSize: '0.95rem', fontWeight: '500', lineHeight: '1.6' }}>{block.text}</p>
           </div>
         );
+      case 'link':
+        return block.href.startsWith('/') ? (
+          <p key={idx} style={{ margin: '0 0 1.5rem' }}><Link to={block.href} style={{ color: '#087647', fontWeight: 700, textDecoration: 'underline' }}>{block.text}</Link></p>
+        ) : (
+          <p key={idx} style={{ margin: '0 0 1.5rem' }}><a href={block.href} target="_blank" rel="noopener noreferrer" style={{ color: '#087647', fontWeight: 700, textDecoration: 'underline' }}>{block.text}</a></p>
+        );
       case 'table':
         return (
           <div key={idx} className="citi-table-container" style={{ margin: '2rem 0', overflowX: 'auto' }}>
@@ -113,6 +120,8 @@ export default function BlogPostPage() {
         description={post.description}
         canonical={`https://bankstatementconverttool.com/blog/${post.slug}`}
         jsonLd={[articleSchema]}
+        image={post.featuredImage ? `https://bankstatementconverttool.com${post.featuredImage}` : undefined}
+        type="article"
       />
 
       <div style={{ background: '#F8FAFC', minHeight: '100vh', padding: '3rem 0 6rem' }}>
@@ -157,7 +166,7 @@ export default function BlogPostPage() {
 
               {post.featuredImage && (
                 <div style={{ marginBottom: '2.5rem', borderRadius: '16px', overflow: 'hidden', border: '1px solid #E2E8F0', background: '#F1F5F9' }}>
-                  <img src={post.featuredImage} alt={post.title} style={{ width: '100%', height: 'auto', display: 'block' }} />
+                  <img src={post.featuredImage} alt={post.imageAlt || post.title} width="1600" height="900" style={{ width: '100%', height: 'auto', display: 'block' }} />
                 </div>
               )}
 
@@ -165,6 +174,15 @@ export default function BlogPostPage() {
               <div className="article-body">
                 {post.content.map((block, idx) => renderBlock(block, idx))}
               </div>
+
+              <section aria-label="Related guides" style={{ marginTop: '3rem', paddingTop: '2rem', borderTop: '1px solid #E2E8F0' }}>
+                <h2 style={{ fontSize: '1.4rem', color: '#0F172A' }}>Related guides</h2>
+                <ul style={{ display: 'grid', gap: '0.75rem', paddingLeft: '1.25rem' }}>
+                  {blogPosts.filter(item => item.slug !== post.slug).slice(0, 3).map(item => (
+                    <li key={item.slug}><Link to={`/blog/${item.slug}`} style={{ color: '#087647', fontWeight: 600 }}>{item.title}</Link></li>
+                  ))}
+                </ul>
+              </section>
 
             </main>
 
@@ -179,10 +197,10 @@ export default function BlogPostPage() {
                 boxShadow: '0 10px 15px rgba(0,0,0,0.03)' 
               }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#107c41', fontWeight: '700', fontSize: '0.95rem', marginBottom: '0.75rem' }}>
-                  <Lock size={16} /> 100% Offline Converter
+                  <Lock size={16} /> Browser-Local Converter
                 </div>
                 <h3 style={{ fontSize: '1.25rem', fontWeight: '800', color: '#0F172A', margin: '0 0 0.5rem', lineHeight: '1.3' }}>
-                  Convert to Excel Instantly
+                  Try the Free PDF Converter
                 </h3>
                 <p style={{ fontSize: '0.85rem', color: '#64748B', lineHeight: '1.5', margin: '0 0 1.5rem' }}>
                   Drop your PDF bank statement below to extract your transaction tables locally in your browser.
@@ -209,10 +227,10 @@ export default function BlogPostPage() {
                     <CheckCircle size={14} style={{ color: '#A7F3D0', flexShrink: 0 }} /> Your data never leaves your computer
                   </li>
                   <li style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                    <CheckCircle size={14} style={{ color: '#A7F3D0', flexShrink: 0 }} /> Secure for accounting compliance
+                    <CheckCircle size={14} style={{ color: '#A7F3D0', flexShrink: 0 }} /> Review every extracted row
                   </li>
                   <li style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                    <CheckCircle size={14} style={{ color: '#A7F3D0', flexShrink: 0 }} /> Instantly clean row alignment
+                    <CheckCircle size={14} style={{ color: '#A7F3D0', flexShrink: 0 }} /> Export CSV or Excel for free
                   </li>
                 </ul>
               </div>
