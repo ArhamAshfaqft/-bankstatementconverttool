@@ -2,8 +2,6 @@ import React, { useState, useRef } from 'react';
 import { UploadCloud, FileText, Download, ChevronDown, RefreshCw, Pencil, Check, EyeOff, Eye, Shield } from 'lucide-react';
 import { parseQboToRows } from '../lib/qboParser';
 import { downloadFile } from '../lib/exportData';
-import { useAuth } from '../contexts/AuthContext';
-import UpsellModal from './UpsellModal';
 
 const COLUMN_PRESETS = ['Date', 'Description', 'Amount', 'Check No.', 'Reference / FitId', 'Type', 'Memo'];
 
@@ -20,10 +18,6 @@ export default function QboToCsvTool() {
   const [format, setFormat] = useState('csv');
   const editInputRef = useRef(null);
 
-  const { isPro: realIsPro } = useAuth();
-  const [devPro] = useState(sessionStorage.getItem('devPro') === 'true');
-  const isPro = realIsPro || devPro;
-  const [upsellFeature, setUpsellFeature] = useState(null);
 
   const fileInputRef = useRef(null);
 
@@ -64,14 +58,13 @@ export default function QboToCsvTool() {
     }
   };
 
-  const handleDownload = () => {
-    if (format !== 'csv' && !isPro) {
-      setUpsellFeature('Premium Excel Export');
-      return;
+  const handleDownload = async () => {
+    try {
+      const exportableData = workingData.filter((_, i) => i === 0 || !excludedRows.has(i));
+      await downloadFile(exportableData, fileName, format);
+    } catch (exportError) {
+      setError(exportError.message || 'Could not export this table.');
     }
-
-    const exportableData = workingData.filter((_, i) => i === 0 || !excludedRows.has(i));
-    downloadFile(exportableData, fileName, format);
   };
 
   const updateCell = (rowIdx, colIdx, value) => {
@@ -125,8 +118,6 @@ export default function QboToCsvTool() {
 
   return (
     <div className="converter-card" style={{ maxWidth: '850px', margin: '0 auto' }}>
-      
-      {upsellFeature && <UpsellModal isOpen={!!upsellFeature} onClose={() => setUpsellFeature(null)} featureName={upsellFeature} />}
 
       {/* DROPZONE */}
       {!csvData && !isProcessing && (

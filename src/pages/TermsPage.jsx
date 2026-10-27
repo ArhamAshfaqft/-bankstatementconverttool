@@ -2,7 +2,7 @@ import React from 'react';
 import SeoHead from '../components/SeoHead';
 
 export default function TermsPage() {
-  const lastUpdated = "April 18, 2026";
+  const lastUpdated = "October 27, 2026";
   const domain = "bankstatementconverttool.com";
 
   return (
@@ -34,17 +34,14 @@ export default function TermsPage() {
         <section style={{ marginBottom: '2.5rem' }}>
           <h2 style={{ fontSize: '1.5rem', marginBottom: '1rem', color: 'var(--brand-600)' }}>3. Financial Data & Security</h2>
           <p style={{ lineHeight: '1.7', color: 'var(--slate-700)' }}>
-            <strong>Local Processing:</strong> All PDF parsing and data extraction is performed locally on your device. We do not transmit or store your financial transaction data.
-            <strong>User Responsibility:</strong> You are responsible for maintaining the confidentiality of your account login and for all activities that occur under your account.
+            <strong>Local Processing:</strong> PDF parsing and data extraction are performed locally on your device. We do not transmit or store the files you select or the extracted financial transaction data.
           </p>
         </section>
 
         <section style={{ marginBottom: '2.5rem' }}>
-          <h2 style={{ fontSize: '1.5rem', marginBottom: '1rem', color: 'var(--brand-600)' }}>4. Subscriptions and Payments</h2>
+          <h2 style={{ fontSize: '1.5rem', marginBottom: '1rem', color: 'var(--brand-600)' }}>4. Free Access</h2>
           <p style={{ lineHeight: '1.7', color: 'var(--slate-700)' }}>
-            <strong>Billing:</strong> Payments are processed via Freemius. By subscribing to a Pro plan, you agree to the recurring billing cycle selected.
-            <strong>Cancellations:</strong> You may cancel your subscription at any time via your account dashboard.
-            <strong>Refunds:</strong> Refund requests are governed by our refund policy as stated on the checkout page.
+            The tools on this website are available without creating an account or purchasing a subscription.
           </p>
         </section>
 

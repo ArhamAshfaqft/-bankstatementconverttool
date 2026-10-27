@@ -22,11 +22,11 @@ export default function HomePage() {
     },
     {
       q: "Which banks are supported?",
-      a: "Our converter works with PDF statements from all major banks including Chase, Bank of America, Wells Fargo, Citi, Capital One, HSBC, Barclays, and thousands more. Any text-based PDF bank statement can be converted."
+      a: "The converter works with many text-based bank statement layouts. Review the extracted table before using it for accounting. Scanned image PDFs are not supported by the PDF converter."
     },
     {
       q: "Can I export to QuickBooks (.QBO) format?",
-      a: "Yes! Our Pro plan includes native QuickBooks Web Connect (.QBO) file generation. This means you can import transactions directly into QuickBooks without the hassle of CSV column mapping errors."
+      a: "Yes. QuickBooks Web Connect (.QBO) export is free. Check the transaction preview before importing it into accounting software."
     },
     {
       q: "What if my PDF is a scanned image or receipt?",
@@ -34,7 +34,7 @@ export default function HomePage() {
     },
     {
       q: "Is this tool really free?",
-      a: "The core PDF to CSV converter is 100% free with no hidden limits. Pro features like bulk processing, QBO exports, and advanced tools are available with a Pro license."
+      a: "Yes. Single-file and bulk conversion, Excel exports, and QBO/OFX exports are free. No account is required."
     }
   ];
 
@@ -103,7 +103,7 @@ export default function HomePage() {
                 "name": "Which banks are supported?",
                 "acceptedAnswer": {
                   "@type": "Answer",
-                  "text": "Our converter works with PDF statements from all major banks including Chase, Bank of America, Wells Fargo, Citi, Capital One, HSBC, Barclays, and thousands more. Any text-based PDF bank statement can be converted."
+                  "text": "The converter works with many text-based bank statement layouts. Review the extracted table before using it for accounting. Scanned image PDFs are not supported by the PDF converter."
                 }
               },
               {
@@ -111,7 +111,7 @@ export default function HomePage() {
                 "name": "Can I export to QuickBooks (.QBO) format?",
                 "acceptedAnswer": {
                   "@type": "Answer",
-                  "text": "Yes! Our Pro plan includes native QuickBooks Web Connect (.QBO) file generation. This means you can import transactions directly into QuickBooks without the hassle of CSV column mapping errors."
+                  "text": "Yes. QuickBooks Web Connect (.QBO) export is free. Check the transaction preview before importing it into accounting software."
                 }
               },
               {
@@ -127,7 +127,7 @@ export default function HomePage() {
                 "name": "Is this tool really free?",
                 "acceptedAnswer": {
                   "@type": "Answer",
-                  "text": "The core PDF to CSV converter is 100% free with no hidden limits. Pro features like bulk processing, QBO exports, and advanced tools are available with a Pro license."
+                  "text": "Yes. Single-file and bulk conversion, Excel exports, and QBO/OFX exports are free. No account is required."
                 }
               }
             ]
@@ -172,7 +172,7 @@ export default function HomePage() {
               <div className="avatar" style={{ background: '#E0E7FF', color: '#3730A3' }}>AS</div>
               <div className="avatar" style={{ background: '#F0FDF4', color: '#166534' }}>BK</div>
               <div className="avatar" style={{ background: '#FFF7ED', color: '#9A3412' }}>TR</div>
-              <span className="trust-text">Trusted by <strong>Accounting & Bookkeeping Professionals</strong></span>
+              <span className="trust-text">Built for <strong>Accounting & Bookkeeping Workflows</strong></span>
             </div>
           </div>
           
@@ -405,7 +405,7 @@ export default function HomePage() {
             <div className="feature-card">
               <div className="feature-icon blue"><Globe size={20} /></div>
               <h3>1,000+ Banks Supported</h3>
-              <p>Deep compatibility with Chase, BofA, Wells Fargo, Citi, Capital One, HSBC, Barclays, TD Bank, and thousands more.</p>
+              <p>Designed for many text-based statement layouts. Always review the extracted rows before exporting.</p>
             </div>
             <div className="feature-card">
               <div className="feature-icon emerald"><ShieldCheck size={20} /></div>
@@ -427,44 +427,28 @@ export default function HomePage() {
       </section>
 
 
-      {/* ===== COMPARISON (FREE VS PRO) ===== */}
-      <section className="section" id="pro">
+      {/* ===== FREE FEATURES ===== */}
+      <section className="section" id="free-tools">
         <div className="container">
           <div className="section-header">
-            <span className="section-label">Flexible Plans</span>
-            <h2>Start Free. Scale When You're Ready.</h2>
-            <p>From one-off conversions to firm-wide bulk processing.</p>
+            <span className="section-label">Free Tools</span>
+            <h2>Everything you need, free to use.</h2>
+            <p>Convert statements and export your results without creating an account.</p>
           </div>
 
           <div className="pricing-grid">
             <div className="pricing-card free">
-              <h3>Basic</h3>
+              <h3>Free Converter</h3>
               <p className="price">$0</p>
-              <p className="desc">Perfect for individuals and one-off personal tasks.</p>
+              <p className="desc">For individuals, bookkeepers, and businesses.</p>
               <ul className="pricing-features">
-                <li><ShieldCheck size={16} /> <span><strong>Unlimited</strong> single-file conversions</span></li>
+                <li><ShieldCheck size={16} /> <span><strong>Unlimited</strong> conversions</span></li>
                 <li><ShieldCheck size={16} /> PDF to CSV Conversion</li>
-                <li><ShieldCheck size={16} /> 100% Local Privacy</li>
-                <li className="missing"><span className="cross">×</span> No QuickBooks export</li>
-                <li className="missing"><span className="cross">×</span> No Bulk processing</li>
+                <li><ShieldCheck size={16} /> Excel, OFX, and QBO export</li>
+                <li><ShieldCheck size={16} /> Bulk processing</li>
+                <li><ShieldCheck size={16} /> Files processed locally</li>
               </ul>
-              <button className="btn btn-outline" style={{width: '100%'}} onClick={scrollToConverter}>Start Free</button>
-            </div>
-
-            <div className="pricing-card pro active">
-              <div className="most-popular">Most Popular</div>
-              <h3>Pro Accountant</h3>
-              <p className="price">$19 <span>/ month</span></p>
-              <p className="desc">For bookkeepers and accounting professionals.</p>
-              <ul className="pricing-features">
-                <li><ShieldCheck size={16} /> <span><strong>Everything in Basic</strong></span></li>
-                <li><ShieldCheck size={16} /> <span><strong>Bulk Multi-file</strong> processing</span></li>
-                <li><ShieldCheck size={16} /> <span><strong>QuickBooks (.QBO)</strong> export</span></li>
-                <li><ShieldCheck size={16} /> <span><strong>Excel (.xlsx)</strong> export</span></li>
-                <li><ShieldCheck size={16} /> <span><strong>Merged annual reports</strong></span></li>
-                <li><ShieldCheck size={16} /> <span>Priority email support</span></li>
-              </ul>
-              <Link to="/pricing" className="btn btn-primary" style={{width: '100%'}}>Upgrade to Pro</Link>
+              <button className="btn btn-primary" style={{width: '100%'}} onClick={scrollToConverter}>Start Converting</button>
             </div>
           </div>
         </div>
@@ -476,8 +460,8 @@ export default function HomePage() {
         <div className="container">
           <div className="section-header">
             <span className="section-label">Compatibility</span>
-            <h2>Works With Every Major Bank</h2>
-            <p>Our algorithm handles the unique table formats from all major financial institutions.</p>
+            <h2>Works With Many Bank Layouts</h2>
+            <p>Text-based statement layouts vary. Review the extracted rows before exporting.</p>
           </div>
           <div className="banks-logos">
             <Link to="/chase" className="bank-name">Chase</Link>
@@ -521,14 +505,11 @@ export default function HomePage() {
       <section className="cta-section">
         <div className="container">
           <h2>Stop Wasting Hours on Manual Data Entry</h2>
-          <p>Join thousands of accountants and bookkeepers who trust our private, instant financial document suite.</p>
+          <p>Convert and review your statements locally, without creating an account.</p>
           <div className="hero-ctas" style={{ display: 'flex', justifyContent: 'center', marginTop: '2rem' }}>
             <button className="btn btn-primary" onClick={scrollToConverter}>
               Convert Your Statement Free <ArrowRight size={16} />
             </button>
-            <Link to="/pricing" className="btn btn-outline" style={{ background: 'white' }}>
-              View Pro Suite
-            </Link>
           </div>
         </div>
       </section>

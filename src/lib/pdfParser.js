@@ -970,7 +970,7 @@ function validateBalances(header, transactions) {
 // ═══════════════════════════════════════════════════════════════════════════════
 export async function extractTableFromPdf(file) {
   const typedarray = await fileToTypedArray(file);
-  const pdf = await pdfjsLib.getDocument(typedarray).promise;
+  const pdf = await pdfjsLib.getDocument({ data: typedarray }).promise;
   const numPages = pdf.numPages;
 
   // ── Phase 1: Collect all text items with full metadata ──

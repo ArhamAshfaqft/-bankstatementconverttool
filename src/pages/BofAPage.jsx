@@ -136,7 +136,7 @@ export default function BofAPage() {
       <section className="cta-section">
         <div className="container">
           <h2>Trust Your Forensic Accounting to Experts</h2>
-          <p>Join thousands of auditors who trust our private Bank of America conversion engine.</p>
+          <p>Review and export your Bank of America statement data in your browser.</p>
           <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2rem' }}>
             <button className="btn btn-primary" onClick={() => document.getElementById('converter').scrollIntoView({ behavior: 'smooth' })}>
               Start BofA Extraction <Zap size={16} />

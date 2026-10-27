@@ -3,8 +3,6 @@ import { UploadCloud, FileText, CheckCircle, Unlock, X, Shield, ArrowRight, Load
 import { PDFDocument } from 'pdf-lib';
 import { decryptPDF } from '@pdfsmaller/pdf-decrypt';
 import JSZip from 'jszip';
-import { useAuth } from '../contexts/AuthContext';
-import UpsellModal from './UpsellModal';
 
 export default function DecryptorTool() {
   const [files, setFiles] = useState([]);
@@ -17,11 +15,6 @@ export default function DecryptorTool() {
   const [stats, setStats] = useState({ success: 0, failed: 0 });
   const [needsPassword, setNeedsPassword] = useState(false);
   
-  // Custom Gate Implementation
-  const { isPro: realIsPro } = useAuth();
-  const [devPro] = useState(sessionStorage.getItem('devPro') === 'true');
-  const isPro = realIsPro || devPro;
-  const [upsellFeature, setUpsellFeature] = useState(null);
   
   const fileInputRef = useRef(null);
 
@@ -35,11 +28,6 @@ export default function DecryptorTool() {
       return;
     }
     
-    // Bulk Auth Gate
-    if (droppedFiles.length > 1 && !isPro) {
-      setUpsellFeature('Bulk PDF Decryption');
-      return;
-    }
 
     setFiles(droppedFiles);
     setError(null);
@@ -162,8 +150,6 @@ export default function DecryptorTool() {
 
   return (
     <div className="converter-card" style={{ maxWidth: '780px', margin: '0 auto' }}>
-      
-      {upsellFeature && <UpsellModal featureName={upsellFeature} onClose={() => setUpsellFeature(null)} />}
 
       <div className="tool-main">
         {files.length === 0 && (
@@ -180,7 +166,7 @@ export default function DecryptorTool() {
             <div className="file-types">
               <span className="file-type-tag">.pdf</span>
               <span className="file-type-tag">Privacy Guaranteed</span>
-              <span className="file-type-tag" style={{ border: '1px solid var(--accent-blue)', color: 'var(--brand-600)', background: '#EFF6FF' }}>Bulk Support (Pro)</span>
+              <span className="file-type-tag" style={{ border: '1px solid var(--accent-blue)', color: 'var(--brand-600)', background: '#EFF6FF' }}>Bulk Support</span>
             </div>
             <input 
               type="file" 

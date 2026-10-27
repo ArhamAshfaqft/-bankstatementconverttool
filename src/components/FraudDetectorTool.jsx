@@ -4,8 +4,6 @@ import { extractTableFromPdf } from '../lib/pdfParser';
 import { auditStatement } from '../lib/fraudForensics';
 import Papa from 'papaparse';
 import { saveAs } from 'file-saver';
-import { useAuth } from '../contexts/AuthContext';
-import UpsellModal from './UpsellModal';
 
 export default function FraudDetectorTool() {
   const [files, setFiles] = useState([]);
@@ -15,11 +13,6 @@ export default function FraudDetectorTool() {
   const [processedCount, setProcessedCount] = useState(0);
   const fileInputRef = useRef(null);
 
-  // Custom Gate Implementation
-  const { isPro: realIsPro } = useAuth();
-  const [devPro] = useState(sessionStorage.getItem('devPro') === 'true');
-  const isPro = realIsPro || devPro;
-  const [upsellFeature, setUpsellFeature] = useState(null);
 
   const onDrop = async (e) => {
     e.preventDefault();
@@ -31,11 +24,6 @@ export default function FraudDetectorTool() {
       return;
     }
 
-    // Bulk Auth Gate
-    if (droppedFiles.length > 1 && !isPro) {
-      setUpsellFeature('Batch Forensic Auditing');
-      return;
-    }
 
     setFiles(droppedFiles);
     setError(null);
@@ -82,9 +70,9 @@ export default function FraudDetectorTool() {
       }
       return {
         Filename: res.filename,
-        Status: res.mathAudit.passed ? 'Math OK' : 'MATH MISMATCH',
+        Status: !res.mathAudit.checked ? 'Not checked' : res.mathAudit.passed ? 'Math OK' : 'MATH MISMATCH',
         'Risk Rating': res.riskRating,
-        Score: `${Math.max(0, 100 - res.riskScore)}% Confidence`,
+        Score: `${res.riskScore} risk points`,
         Anomalies: res.anomalies.map(a => `[${a.severity}] ${a.type}`).join(' | ') || 'None'
       };
     });
@@ -145,8 +133,8 @@ export default function FraudDetectorTool() {
                 </div>
                 <div>
                   <h4 style={{ margin: 0, fontSize: '0.9rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Audit Risk Rating</h4>
-                  <h3 style={{ margin: '0.25rem 0', fontSize: '1.5rem' }}>{res.riskRating === 'Low' ? 'Clean Document' : res.riskRating === 'Medium' ? 'Suspicious' : 'High Risk Flags'}</h3>
-                  <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--text-body)' }}>Verified against 12 tampering heuristics.</p>
+                  <h3 style={{ margin: '0.25rem 0', fontSize: '1.5rem' }}>{res.riskRating === 'Low' ? 'No flags found' : res.riskRating === 'Medium' ? 'Review suggested' : 'High risk flags'}</h3>
+                  <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--text-body)' }}>Heuristic checks only; verify statements with the issuing bank.</p>
                 </div>
               </div>
 
@@ -162,13 +150,13 @@ export default function FraudDetectorTool() {
                 justifyContent: 'center'
               }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
-                  <span style={{ fontSize: '0.85rem', fontWeight: '600' }}>Confidence Score</span>
-                  <span style={{ fontSize: '0.85rem', color: 'var(--brand-600)', fontWeight: '700' }}>{Math.max(0, 100 - res.riskScore)}%</span>
+                  <span style={{ fontSize: '0.85rem', fontWeight: '600' }}>Risk points</span>
+                  <span style={{ fontSize: '0.85rem', color: 'var(--brand-600)', fontWeight: '700' }}>{res.riskScore}</span>
                 </div>
                 <div style={{ height: '8px', background: '#f1f5f9', borderRadius: '4px', overflow: 'hidden' }}>
                   <div style={{ 
                     height: '100%', 
-                    width: `${Math.max(0, 100 - res.riskScore)}%`, 
+                    width: `${Math.min(100, res.riskScore)}%`,
                     background: getRiskColor(res.riskRating),
                     transition: 'width 1s ease-out'
                   }}></div>
@@ -236,8 +224,8 @@ export default function FraudDetectorTool() {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', fontSize: '0.85rem' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                     <span style={{ color: 'var(--text-muted)' }}>Audit Status:</span>
-                    <span style={{ fontWeight: '700', color: res.mathAudit.passed ? '#10b981' : '#ef4444' }}>
-                      {res.mathAudit.passed ? 'PERFECT ACCURACY' : 'MISMATCH DETECTED'}
+                    <span style={{ fontWeight: '700', color: !res.mathAudit.checked ? '#64748b' : res.mathAudit.passed ? '#10b981' : '#ef4444' }}>
+                      {!res.mathAudit.checked ? 'NOT CHECKED' : res.mathAudit.passed ? 'NO MISMATCH FOUND' : 'MISMATCH DETECTED'}
                     </span>
                   </div>
                   <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -276,7 +264,7 @@ export default function FraudDetectorTool() {
                         <th style={{ padding: '1rem 1.5rem', fontWeight: '600', color: 'var(--slate-700)' }}>Filename</th>
                         <th style={{ padding: '1rem 1.5rem', fontWeight: '600', color: 'var(--slate-700)' }}>Risk Rating</th>
                         <th style={{ padding: '1rem 1.5rem', fontWeight: '600', color: 'var(--slate-700)' }}>Math Integrity</th>
-                        <th style={{ padding: '1rem 1.5rem', fontWeight: '600', color: 'var(--slate-700)' }}>Confidence</th>
+                        <th style={{ padding: '1rem 1.5rem', fontWeight: '600', color: 'var(--slate-700)' }}>Risk points</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -297,11 +285,11 @@ export default function FraudDetectorTool() {
                                           {res.riskRating}
                                       </span>
                                   </td>
-                                  <td style={{ padding: '1rem 1.5rem', fontWeight: '600', color: res.mathAudit.passed ? '#059669' : '#ef4444' }}>
-                                      {res.mathAudit.passed ? 'Verified' : 'Mismatch'}
+                                  <td style={{ padding: '1rem 1.5rem', fontWeight: '600', color: !res.mathAudit.checked ? '#64748b' : res.mathAudit.passed ? '#059669' : '#ef4444' }}>
+                                      {!res.mathAudit.checked ? 'Not checked' : res.mathAudit.passed ? 'No mismatch' : 'Mismatch'}
                                   </td>
                                   <td style={{ padding: '1rem 1.5rem', color: 'var(--slate-600)' }}>
-                                      {Math.max(0, 100 - res.riskScore)}%
+                                      {res.riskScore}
                                   </td>
                                 </>
                             )}
@@ -323,8 +311,6 @@ export default function FraudDetectorTool() {
 
   return (
     <div className="converter-card" style={{ maxWidth: '900px', margin: '0 auto' }}>
-      
-      {upsellFeature && <UpsellModal featureName={upsellFeature} onClose={() => setUpsellFeature(null)} />}
 
       <div className="tool-main">
         {files.length === 0 && (
@@ -341,7 +327,7 @@ export default function FraudDetectorTool() {
             <div className="file-types">
               <span className="file-type-tag">Forensic Audit</span>
               <span className="file-type-tag">100% Client-Side</span>
-              <span className="file-type-tag" style={{ border: '1px solid var(--accent-blue)', color: 'var(--brand-600)', background: '#EFF6FF' }}>Bulk Support (Pro)</span>
+              <span className="file-type-tag" style={{ border: '1px solid var(--accent-blue)', color: 'var(--brand-600)', background: '#EFF6FF' }}>Bulk Support</span>
             </div>
             <input 
               type="file" 

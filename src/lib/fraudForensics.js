@@ -13,6 +13,7 @@ export async function auditStatement(fileData, transactions) {
     metadata: {},
     mathAudit: {
       passed: true,
+      checked: false,
       failedRows: []
     }
   };
@@ -93,46 +94,31 @@ export async function auditStatement(fileData, transactions) {
  */
 function validateRunningBalance(rows) {
   const failedRows = [];
-  
-  // Heuristic to find Balance and Amount columns
-  // Assuming the parser has already cleaned the rows.
-  // We look for col indices that reliably contain numbers.
-  
-  if (rows.length < 2) return { passed: true, failedRows: [] };
+  if (!rows || rows.length < 3) return { passed: true, checked: false, failedRows };
 
-  const sampleRow = rows[0];
-  let amountCol = -1;
-  let balanceCol = -1;
+  const headers = rows[0].map(cell => String(cell || '').toLowerCase());
+  const balanceCol = headers.findIndex(h => /balance|running bal/.test(h));
+  const amountCol = headers.findIndex(h => /amount|transaction amt/.test(h));
+  const debitCol = headers.findIndex(h => /debit|withdrawal/.test(h));
+  const creditCol = headers.findIndex(h => /credit|deposit/.test(h));
+  if (balanceCol < 0 || (amountCol < 0 && debitCol < 0 && creditCol < 0)) {
+    return { passed: true, checked: false, failedRows };
+  }
 
-  // Find columns that are strictly numeric (amounts)
-  const numericColIndices = [];
-  sampleRow.forEach((cell, i) => {
-    if (isNumeric(cell)) numericColIndices.push(i);
-  });
-
-  if (numericColIndices.length < 1) return { passed: true, failedRows: [] };
-
-  // Heuristic: Balance is usually the LAST numerical column.
-  // Amount is usually the first or second numerical column.
-  balanceCol = numericColIndices[numericColIndices.length - 1];
-  amountCol = numericColIndices[0];
-
-  // If there's only one numeric column, we can't check running balance 
-  // unless we have specific info, so we skip.
-  if (amountCol === balanceCol) return { passed: true, failedRows: [] };
-
-  for (let i = 1; i < rows.length; i++) {
-    const prevBalance = cleanNum(rows[i-1][balanceCol]);
-    const currentAmount = cleanNum(rows[i][amountCol]);
+  let comparisons = 0;
+  for (let i = 2; i < rows.length; i++) {
+    const prevBalance = cleanNum(rows[i - 1][balanceCol]);
     const currentBalance = cleanNum(rows[i][balanceCol]);
+    const hasSeparateAmount = (debitCol >= 0 && String(rows[i][debitCol] || '').trim()) ||
+      (creditCol >= 0 && String(rows[i][creditCol] || '').trim());
+    const amount = amountCol >= 0
+      ? cleanNum(rows[i][amountCol])
+      : hasSeparateAmount ? (cleanNum(rows[i][creditCol]) || 0) - Math.abs(cleanNum(rows[i][debitCol]) || 0) : null;
+    if (prevBalance === null || currentBalance === null || amount === null) continue;
 
-    if (prevBalance === null || currentAmount === null || currentBalance === null) continue;
-
-    // Check: PrevBal + Amount = CurrBal
-    // We use a small epsilon for floating point math
-    const expectedBalance = prevBalance + currentAmount;
+    comparisons++;
+    const expectedBalance = prevBalance + amount;
     const diff = Math.abs(expectedBalance - currentBalance);
-
     if (diff > 0.01) {
       failedRows.push({
         index: i,
@@ -144,21 +130,15 @@ function validateRunningBalance(rows) {
     }
   }
 
-  return {
-    passed: failedRows.length === 0,
-    failedRows
-  };
+  return { passed: failedRows.length === 0, checked: comparisons > 0, failedRows };
 }
 
-function isNumeric(val) {
-  if (!val) return false;
-  const clean = val.replace(/[$,\s]/g, '');
-  return !isNaN(parseFloat(clean)) && isFinite(clean);
-}
-
-function cleanNum(val) {
-  if (!val) return null;
-  const clean = val.replace(/[$,\s]/g, '');
-  const num = parseFloat(clean);
-  return isNaN(num) ? null : num;
+function cleanNum(value) {
+  if (value === null || value === undefined || String(value).trim() === '') return null;
+  const text = String(value).trim();
+  const negative = /^\(.+\)$/.test(text) || /\bDR\b/i.test(text);
+  const clean = text.replace(/[^\d.,-]/g, '').replace(/,/g, '');
+  if (!/^-?\d+(?:\.\d+)?$/.test(clean)) return null;
+  const number = Number(clean);
+  return negative ? -Math.abs(number) : number;
 }

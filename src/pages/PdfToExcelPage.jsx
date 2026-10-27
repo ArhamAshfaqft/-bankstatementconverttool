@@ -109,7 +109,7 @@ export default function PdfToExcelPage() {
               <CheckCircle size={20} /> Multi-Sheet Workbooks
             </h3>
             <p style={{ color: '#475569', fontSize: '0.95rem', lineHeight: '1.6', margin: 0 }}>
-              With our Pro plan, you can merge multiple PDF statements at once. Instead of downloading multiple individual files, you can export a single Excel workbook containing separate sheets for checking, savings, and credit card accounts.
+              You can merge multiple PDF statements at once for free, or download each converted file separately.
             </p>
           </div>
         </div>

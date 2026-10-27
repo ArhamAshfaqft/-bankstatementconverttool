@@ -104,7 +104,7 @@ function resolveDebitCreditSigns(header, transactions) {
 async function testFile(filename) {
   console.log(`\n🔍 TESTING: ${filename}`);
   const data = new Uint8Array(fs.readFileSync(filename));
-  const pdf = await pdfjsLib.getDocument(data).promise;
+  const pdf = await pdfjsLib.getDocument({ data }).promise;
   
   let allItems = [];
   for (let p = 1; p <= pdf.numPages; p++) {

@@ -2,8 +2,6 @@ import React, { useState, useRef } from 'react';
 import { UploadCloud, FileText, CheckCircle, Scissors, X, Shield, ArrowRight, Loader2, Download } from 'lucide-react';
 import { PDFDocument } from 'pdf-lib';
 import JSZip from 'jszip';
-import { useAuth } from '../contexts/AuthContext';
-import UpsellModal from './UpsellModal';
 
 export default function SplitterTool() {
   const [files, setFiles] = useState([]);
@@ -16,11 +14,6 @@ export default function SplitterTool() {
   const [stats, setStats] = useState({ success: 0, failed: 0 });
   const fileInputRef = useRef(null);
 
-  // Custom Gate Implementation
-  const { isPro: realIsPro } = useAuth();
-  const [devPro] = useState(sessionStorage.getItem('devPro') === 'true');
-  const isPro = realIsPro || devPro;
-  const [upsellFeature, setUpsellFeature] = useState(null);
 
   const onDrop = (e) => {
     e.preventDefault();
@@ -32,11 +25,6 @@ export default function SplitterTool() {
       return;
     }
     
-    // Bulk Auth Gate
-    if (droppedFiles.length > 1 && !isPro) {
-      setUpsellFeature('Bulk PDF Splitting');
-      return;
-    }
 
     setFiles(droppedFiles);
     setError(null);
@@ -164,8 +152,6 @@ export default function SplitterTool() {
 
   return (
     <div className="converter-card" style={{ maxWidth: '780px', margin: '0 auto' }}>
-      
-      {upsellFeature && <UpsellModal featureName={upsellFeature} onClose={() => setUpsellFeature(null)} />}
 
       <div className="tool-main">
         {files.length === 0 && !success && (
@@ -181,7 +167,7 @@ export default function SplitterTool() {
             <p>Extract specific pages from your bank statement</p>
             <div className="file-types">
               <span className="file-type-tag">.pdf</span>
-              <span className="file-type-tag" style={{ border: '1px solid var(--accent-blue)', color: 'var(--brand-600)', background: '#EFF6FF' }}>Bulk Support (Pro)</span>
+              <span className="file-type-tag" style={{ border: '1px solid var(--accent-blue)', color: 'var(--brand-600)', background: '#EFF6FF' }}>Bulk Support</span>
             </div>
             <input 
               type="file" 

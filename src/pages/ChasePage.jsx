@@ -154,7 +154,7 @@ export default function ChasePage() {
       <section className="cta-section">
         <div className="container">
           <h2>Ready to Parse Your Chase Statements?</h2>
-          <p>Join thousands of bookkeepers who have ditched manual data entry for Chase accounts.</p>
+          <p>Review and export your Chase statement data in your browser.</p>
           <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2rem' }}>
             <button className="btn btn-primary" onClick={() => document.getElementById('converter').scrollIntoView({ behavior: 'smooth' })}>
               Start Fast Extraction <Zap size={16} />

@@ -61,7 +61,7 @@ export default function AmexPage() {
       <header className="layout-standard-hero" style={{ background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)' }}>
         <div className="container">
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', padding: '0.5rem 1rem', borderRadius: '100px', fontWeight: '600', fontSize: '0.85rem', marginBottom: '2rem', color: '#ffffff' }}>
-            <ShieldCheck size={16} /> Premium AMEX Statement Parsing Logic
+            <ShieldCheck size={16} /> AMEX Statement Parsing Logic
           </div>
           <h1>Convert <span>AMEX Statements</span> to CSV</h1>
           <p>Extract transactions from American Express Platinum, Gold, Blue Cash, and Business cards. Safe, offline, and instant.</p>

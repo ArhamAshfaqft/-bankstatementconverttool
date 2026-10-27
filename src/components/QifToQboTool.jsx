@@ -1,9 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { UploadCloud, FileText, Download, Shield, RefreshCw, CheckCircle, Zap } from 'lucide-react';
 import { parseQifToRows } from '../lib/qifParser';
-import { generateOfxFile } from '../lib/exportData';
-import { useAuth } from '../contexts/AuthContext';
-import UpsellModal from './UpsellModal';
+import { generateOfxFile, requestOfxDetails } from '../lib/exportData';
 
 export default function QifToQboTool() {
   const [isProcessing, setIsProcessing] = useState(false);
@@ -13,10 +11,6 @@ export default function QifToQboTool() {
   const [success, setSuccess] = useState(false);
   const [showAllRows, setShowAllRows] = useState(false);
 
-  const { isPro: realIsPro } = useAuth();
-  const [devPro] = useState(sessionStorage.getItem('devPro') === 'true');
-  const isPro = realIsPro || devPro;
-  const [upsellFeature, setUpsellFeature] = useState(null);
 
   const fileInputRef = useRef(null);
 
@@ -53,10 +47,6 @@ export default function QifToQboTool() {
   };
 
   const handleConvert = () => {
-    if (!isPro) {
-      setUpsellFeature('QBO Exports');
-      return;
-    }
 
     try {
       // Map parsed QIF rows to standard structure needed by generateOfxFile
@@ -90,7 +80,9 @@ export default function QifToQboTool() {
         ]);
       }
 
-      const qboContent = generateOfxFile(mappedRows);
+      const options = requestOfxDetails();
+      if (!options) return;
+      const qboContent = generateOfxFile(mappedRows, options);
       const blob = new Blob([qboContent], { type: 'application/vnd.intu.qbo;charset=utf-8' });
       
       const link = document.createElement('a');
@@ -118,8 +110,6 @@ export default function QifToQboTool() {
 
   return (
     <div className="converter-card" style={{ maxWidth: '800px', margin: '0 auto' }}>
-      
-      {upsellFeature && <UpsellModal isOpen={!!upsellFeature} onClose={() => setUpsellFeature(null)} featureName={upsellFeature} />}
 
       {/* DROPZONE */}
       {!parsedRows && !isProcessing && (
@@ -214,6 +204,7 @@ export default function QifToQboTool() {
             )}
           </div>
 
+          <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Export will ask for your bank and account identifiers. QuickBooks import support varies by institution.</p>
           <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem', borderTop: '1px solid var(--border)', paddingTop: '1.5rem' }}>
             <button className="btn btn-outline" onClick={handleReset}>Cancel</button>
             <button className="btn btn-primary" onClick={handleConvert}>
@@ -228,7 +219,7 @@ export default function QifToQboTool() {
         <div className="success-state" style={{ padding: '3rem 2rem' }}>
           <CheckCircle size={54} color="var(--brand-500)" style={{ marginBottom: '1.5rem' }} />
           <h2>QIF Converted Successfully!</h2>
-          <p style={{ color: 'var(--text-muted)', marginBottom: '2rem' }}>Your QuickBooks Web Connect (.QBO) file is ready. Import it into QuickBooks directly to reconcile your transactions.</p>
+          <p style={{ color: 'var(--text-muted)', marginBottom: '2rem' }}>Your QBO file is ready. Review it and confirm that your QuickBooks version accepts your bank's identifiers.</p>
           <div className="success-actions" style={{ justifyContent: 'center' }}>
             <button className="btn btn-primary" onClick={handleConvert}>
               <Download size={16} /> Re-download QBO

@@ -101,7 +101,7 @@ export const blogPosts = [
           ['Privacy & Uploads', 'Uploads PDF to cloud servers (High Risk)', 'Processes locally (100% Secure)', 'Processes locally in browser RAM (100% Secure)'],
           ['Scanned / Image PDFs', 'Supported via cloud OCR services', 'Not supported (returns errors)', 'Supported via browser-local Tesseract OCR'],
           ['Complex Layout Stitching', 'Supported but requires manual templates', 'Fails on multi-column or split tables', 'Auto-stitches Wells Fargo, Chase, BofA, and PNC layouts'],
-          ['Multi-Month Merging', 'Supported with paid subscriptions', 'Requires complex manual queries', 'Supported natively via Pro browser compiler'],
+          ['Multi-Month Merging', 'Supported with paid subscriptions', 'Requires complex manual queries', 'Available in the free browser tool'],
           ['Pricing', 'Freemium (per-page limits)', 'Free with Office license', '100% Free core engine (Unlimited conversions)']
         ]
       },

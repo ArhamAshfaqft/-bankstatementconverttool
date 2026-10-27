@@ -143,7 +143,7 @@ export default function CapitalOnePage() {
       <section className="cta-section">
         <div className="container">
           <h2>Ready to Parse Your Capital One Statements?</h2>
-          <p>Join thousands of users who trust our private, instant Capital One conversion engine.</p>
+          <p>Review and export your Capital One statement data in your browser.</p>
           <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2rem' }}>
             <button className="btn btn-primary" onClick={() => document.getElementById('converter').scrollIntoView({ behavior: 'smooth' })}>
               Start Fast Extraction <Zap size={16} />

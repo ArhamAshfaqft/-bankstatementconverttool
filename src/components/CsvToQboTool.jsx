@@ -1,9 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { UploadCloud, FileText, Download, Shield, RefreshCw, CheckCircle, Table } from 'lucide-react';
 import Papa from 'papaparse';
-import { generateOfxFile } from '../lib/exportData';
-import { useAuth } from '../contexts/AuthContext';
-import UpsellModal from './UpsellModal';
+import { generateOfxFile, requestOfxDetails } from '../lib/exportData';
 
 export default function CsvToQboTool() {
   const [isProcessing, setIsProcessing] = useState(false);
@@ -17,12 +15,10 @@ export default function CsvToQboTool() {
   const [dateCol, setDateCol] = useState(-1);
   const [descCol, setDescCol] = useState(-1);
   const [amtCol, setAmtCol] = useState(-1);
+  const [debitCol, setDebitCol] = useState(-1);
+  const [creditCol, setCreditCol] = useState(-1);
   const [checkCol, setCheckCol] = useState(-1);
 
-  const { isPro: realIsPro } = useAuth();
-  const [devPro] = useState(sessionStorage.getItem('devPro') === 'true');
-  const isPro = realIsPro || devPro;
-  const [upsellFeature, setUpsellFeature] = useState(null);
 
   const fileInputRef = useRef(null);
 
@@ -57,19 +53,23 @@ export default function CsvToQboTool() {
         setHeaders(firstRow);
 
         // Auto-detect columns
-        let dIdx = -1, deIdx = -1, aIdx = -1, cIdx = -1;
+        let dIdx = -1, deIdx = -1, aIdx = -1, cIdx = -1, dbIdx = -1, crIdx = -1;
         firstRow.forEach((h, idx) => {
           const val = h.toLowerCase().trim();
           if (val.includes('date')) dIdx = idx;
           else if (val.includes('desc') || val.includes('payee') || val.includes('narration') || val.includes('particulars')) deIdx = idx;
-          else if (val.includes('amount') || val.includes('debit') || val.includes('credit') || val.includes('value')) aIdx = idx;
+          else if (val.includes('amount') || val === 'value') aIdx = idx;
+          else if (val.includes('debit') || val.includes('withdrawal')) dbIdx = idx;
+          else if (val.includes('credit') || val.includes('deposit')) crIdx = idx;
           else if (val.includes('check') || val.includes('chk') || val.includes('ref')) cIdx = idx;
         });
 
         // Fallbacks
         setDateCol(dIdx !== -1 ? dIdx : 0);
         setDescCol(deIdx !== -1 ? deIdx : (firstRow.length > 1 ? 1 : 0));
-        setAmtCol(aIdx !== -1 ? aIdx : (firstRow.length > 2 ? 2 : 0));
+        setAmtCol(aIdx !== -1 ? aIdx : (dbIdx < 0 && crIdx < 0 && firstRow.length > 2 ? 2 : -1));
+        setDebitCol(dbIdx);
+        setCreditCol(crIdx);
         setCheckCol(cIdx !== -1 ? cIdx : -1);
       },
       error: (err) => {
@@ -80,20 +80,16 @@ export default function CsvToQboTool() {
   };
 
   const handleConvert = () => {
-    if (!isPro) {
-      setUpsellFeature('QBO Exports');
-      return;
-    }
 
-    if (dateCol === -1 || descCol === -1 || amtCol === -1) {
-      setError("Please map the Date, Description, and Amount columns.");
+    if (dateCol === -1 || descCol === -1 || (amtCol === -1 && debitCol === -1 && creditCol === -1)) {
+      setError("Please map Date, Description, and Amount or Debit/Credit columns.");
       return;
     }
 
     try {
       // Map CSV to standard structure: [Date, Description, Amount]
       // We skip the first row (headers)
-      const mappedRows = [['Date', 'Description', 'Amount']];
+      const mappedRows = amtCol >= 0 ? [['Date', 'Description', 'Amount']] : [['Date', 'Description', 'Debit', 'Credit']];
       
       for (let i = 1; i < csvRows.length; i++) {
         const row = csvRows[i];
@@ -101,20 +97,20 @@ export default function CsvToQboTool() {
 
         const dateVal = row[dateCol] || '';
         const descVal = row[descCol] || '';
-        const amtVal = row[amtCol] || '';
+        const amtVal = amtCol >= 0 ? row[amtCol] || '' : '';
         const checkVal = checkCol !== -1 ? row[checkCol] || '' : '';
 
         // If check is present, let's append it or format it
         const finalDesc = checkVal ? `${descVal} (Chk #${checkVal})` : descVal;
 
-        mappedRows.push([
-          dateVal,
-          finalDesc,
-          amtVal
-        ]);
+        mappedRows.push(amtCol >= 0
+          ? [dateVal, finalDesc, amtVal]
+          : [dateVal, finalDesc, debitCol >= 0 ? row[debitCol] || '' : '', creditCol >= 0 ? row[creditCol] || '' : '']);
       }
 
-      const qboContent = generateOfxFile(mappedRows);
+      const options = requestOfxDetails();
+      if (!options) return;
+      const qboContent = generateOfxFile(mappedRows, options);
       const blob = new Blob([qboContent], { type: 'application/vnd.intu.qbo;charset=utf-8' });
       
       const link = document.createElement('a');
@@ -137,6 +133,8 @@ export default function CsvToQboTool() {
     setDateCol(-1);
     setDescCol(-1);
     setAmtCol(-1);
+    setDebitCol(-1);
+    setCreditCol(-1);
     setCheckCol(-1);
     setError(null);
     setSuccess(false);
@@ -144,8 +142,6 @@ export default function CsvToQboTool() {
 
   return (
     <div className="converter-card" style={{ maxWidth: '800px', margin: '0 auto' }}>
-      
-      {upsellFeature && <UpsellModal isOpen={!!upsellFeature} onClose={() => setUpsellFeature(null)} featureName={upsellFeature} />}
 
       {/* DROPZONE */}
       {!csvRows && !isProcessing && (
@@ -222,12 +218,28 @@ export default function CsvToQboTool() {
 
             {/* Amount Map */}
             <div>
-              <label style={{ display: 'block', fontWeight: '600', fontSize: '0.85rem', marginBottom: '0.5rem' }}>Amount Column <span style={{ color: 'red' }}>*</span></label>
+              <label style={{ display: 'block', fontWeight: '600', fontSize: '0.85rem', marginBottom: '0.5rem' }}>Amount Column (or use Debit/Credit)</label>
               <select className="export-select" style={{ width: '100%' }} value={amtCol} onChange={(e) => setAmtCol(parseInt(e.target.value))}>
                 <option value={-1}>-- Select Column --</option>
                 {headers.map((h, idx) => (
                   <option key={idx} value={idx}>{h || `Column ${idx + 1}`}</option>
                 ))}
+              </select>
+            </div>
+
+            <div>
+              <label style={{ display: 'block', fontWeight: '600', fontSize: '0.85rem', marginBottom: '0.5rem' }}>Debit Column (Optional)</label>
+              <select className="export-select" style={{ width: '100%' }} value={debitCol} onChange={(e) => setDebitCol(parseInt(e.target.value))}>
+                <option value={-1}>-- None --</option>
+                {headers.map((h, idx) => <option key={idx} value={idx}>{h || `Column ${idx + 1}`}</option>)}
+              </select>
+            </div>
+
+            <div>
+              <label style={{ display: 'block', fontWeight: '600', fontSize: '0.85rem', marginBottom: '0.5rem' }}>Credit Column (Optional)</label>
+              <select className="export-select" style={{ width: '100%' }} value={creditCol} onChange={(e) => setCreditCol(parseInt(e.target.value))}>
+                <option value={-1}>-- None --</option>
+                {headers.map((h, idx) => <option key={idx} value={idx}>{h || `Column ${idx + 1}`}</option>)}
               </select>
             </div>
 
@@ -263,8 +275,8 @@ export default function CsvToQboTool() {
                         {row[descCol] || '-'}
                         {checkCol !== -1 && row[checkCol] ? ` (Chk #${row[checkCol]})` : ''}
                       </td>
-                      <td style={{ fontWeight: '500', color: parseFloat(row[amtCol]) < 0 ? 'var(--slate-800)' : 'var(--brand-600)' }}>
-                        {row[amtCol] || '-'}
+                      <td style={{ fontWeight: '500', color: 'var(--slate-800)' }}>
+                        {amtCol >= 0 ? row[amtCol] || '-' : `Debit: ${debitCol >= 0 ? row[debitCol] || '-' : '-'} / Credit: ${creditCol >= 0 ? row[creditCol] || '-' : '-'}`}
                       </td>
                     </tr>
                   ))}
@@ -273,12 +285,13 @@ export default function CsvToQboTool() {
             </div>
           </div>
 
+          <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Use YYYY-MM-DD dates. Export will ask for your bank and account identifiers; QuickBooks import support varies by institution.</p>
           <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem', borderTop: '1px solid var(--border)', paddingTop: '1.5rem' }}>
             <button className="btn btn-outline" onClick={handleReset}>Cancel</button>
             <button 
               className="btn btn-primary" 
               onClick={handleConvert}
-              disabled={dateCol === -1 || descCol === -1 || amtCol === -1}
+              disabled={dateCol === -1 || descCol === -1 || (amtCol === -1 && debitCol === -1 && creditCol === -1)}
             >
               <Download size={16} /> Convert & Download QBO
             </button>
@@ -291,7 +304,7 @@ export default function CsvToQboTool() {
         <div className="success-state" style={{ padding: '3rem 2rem' }}>
           <CheckCircle size={54} color="var(--brand-500)" style={{ marginBottom: '1.5rem' }} />
           <h2>CSV Converted Successfully!</h2>
-          <p style={{ color: 'var(--text-muted)', marginBottom: '2rem' }}>Your QuickBooks Web Connect (.QBO) file is downloaded. You can now import it directly into QuickBooks without errors.</p>
+          <p style={{ color: 'var(--text-muted)', marginBottom: '2rem' }}>Your QBO file is downloaded. Review it and confirm that your QuickBooks version accepts your bank's identifiers.</p>
           <div className="success-actions" style={{ justifyContent: 'center' }}>
             <button className="btn btn-primary" onClick={handleConvert}>
               <Download size={16} /> Re-download QBO

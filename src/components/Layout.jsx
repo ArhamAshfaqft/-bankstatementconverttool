@@ -3,12 +3,10 @@ import { Outlet, Link, useLocation } from 'react-router-dom';
 import { 
   FileSpreadsheet, ChevronDown, FileText, FileUp, Scissors, 
   GitMerge, Table, BookOpen, Building2, CreditCard, Landmark,
-  Shield, Zap, Users, ArrowRight, X, Menu, Camera, User, LogOut, ShieldAlert
+  Shield, Zap, Users, ArrowRight, X, Menu, Camera, ShieldAlert
 } from 'lucide-react';
-import { useAuth } from '../contexts/AuthContext';
 
 export default function Layout() {
-  const { user, isPro, signOut } = useAuth();
   const location = useLocation();
   const [activeMega, setActiveMega] = useState(null);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -205,34 +203,11 @@ export default function Layout() {
               </div>
             </li>
 
-            <li><Link to="/pricing" onClick={closeMega} className="nav-link-standard">Pricing</Link></li>
             <li><Link to="/blog" onClick={closeMega} className="nav-link-standard">Blog</Link></li>
           </ul>
 
-          <div className="nav-actions" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-            {user ? (
-              <>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', fontSize: '0.85rem', color: 'var(--slate-600)' }}>
-                  <User size={16} />
-                  <span>{user.email}</span>
-                  {isPro && (
-                    <span style={{ background: 'var(--brand-100)', color: 'var(--brand-700)', padding: '0.15rem 0.5rem', borderRadius: '100px', fontWeight: 'bold', fontSize: '0.7rem' }}>
-                      PRO
-                    </span>
-                  )}
-                </div>
-                <button onClick={signOut} className="btn btn-outline btn-sm hide-mobile" style={{ padding: '0.4rem 0.75rem' }}>
-                  <LogOut size={14} />
-                </button>
-              </>
-            ) : (
-              <>
-                <Link to="/login" className="btn btn-outline btn-sm hide-mobile" onClick={closeMega}>Log In</Link>
-                <Link to="/pricing" className="btn btn-primary btn-sm" onClick={closeMega}>
-                  Upgrade to Pro
-                </Link>
-              </>
-            )}
+          <div className="nav-actions">
+            <Link to="/" className="btn btn-primary btn-sm" onClick={closeMega}>Use Free Converter</Link>
           </div>
         </div>
       </nav>
@@ -271,7 +246,6 @@ export default function Layout() {
                 <Link to="/csv-to-qbo-converter">CSV to QBO Converter</Link>
                 <Link to="/qif-to-qbo-converter">QIF to QBO Converter</Link>
                 <Link to="/visualizer">Statement Visualizer</Link>
-                <Link to="/pricing">Pricing Plans</Link>
                 <Link to="/merge">Merge Tool</Link>
                 <Link to="/split">Split Tool</Link>
                 <Link to="/audit-statement">Fraud Detector</Link>
@@ -289,7 +263,6 @@ export default function Layout() {
               </div>
               <div className="footer-col">
                 <h6>Company</h6>
-                <Link to="/pricing">About Us</Link>
                 <Link to="/blog">Blog & Guides</Link>
                 <Link to="/privacy">Privacy Policy</Link>
                 <Link to="/terms">Terms of Service</Link>

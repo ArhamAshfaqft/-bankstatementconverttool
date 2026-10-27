@@ -7,13 +7,6 @@
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
-  <url>
-    <loc>https://bankstatementconverttool.com/pricing</loc>
-    <lastmod>2026-04-18</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
   <!-- Bank Landing Pages (SEO) -->
   <url>
     <loc>https://bankstatementconverttool.com/chase</loc>

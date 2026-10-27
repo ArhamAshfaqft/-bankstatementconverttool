@@ -8,8 +8,6 @@ import {
   Wallet, Shield, Loader2, FileX, ArrowRight, Table, Layers
 } from 'lucide-react';
 import { extractTableFromPdf } from '../lib/pdfParser';
-import { useAuth } from '../contexts/AuthContext';
-import UpsellModal from './UpsellModal';
 
 // ── CATEGORIZATION ENGINE (Client-Side) ──
 const CATEGORIES = {
@@ -40,11 +38,6 @@ export default function VisualizerTool() {
   const [transactions, setTransactions] = useState([]); // [{date, desc, amount, category}]
   const [processedCount, setProcessedCount] = useState(0);
 
-  // Custom Gate Implementation
-  const { isPro: realIsPro } = useAuth();
-  const [devPro] = useState(sessionStorage.getItem('devPro') === 'true');
-  const isPro = realIsPro || devPro;
-  const [upsellFeature, setUpsellFeature] = useState(null);
 
   const categorize = (description) => {
     if (!description) return 'Other';
@@ -60,10 +53,6 @@ export default function VisualizerTool() {
     
     if (droppedFiles.length === 0) return;
 
-    if (droppedFiles.length > 1 && !isPro) {
-      setUpsellFeature('Batch Analytics Visualizer');
-      return;
-    }
 
     setFiles(droppedFiles);
     setIsProcessing(true);
@@ -131,7 +120,7 @@ export default function VisualizerTool() {
     } finally {
       setIsProcessing(false);
     }
-  }, [isPro]);
+  }, []);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
@@ -171,8 +160,6 @@ export default function VisualizerTool() {
 
   return (
     <div className="visualizer-container" style={{ maxWidth: '1000px', margin: '0 auto' }}>
-      
-      {upsellFeature && <UpsellModal featureName={upsellFeature} onClose={() => setUpsellFeature(null)} />}
 
       {error && (
         <div style={{ background: '#fef2f2', border: '1px solid #fecaca', color: '#dc2626', padding: '1rem', borderRadius: '100px', marginBottom: '2rem', fontSize: '0.9rem', textAlign: 'center' }}>
@@ -194,7 +181,7 @@ export default function VisualizerTool() {
             <div className="file-types">
               <span className="file-type-tag">.pdf only</span>
               <span className="file-type-tag">Category Breakdowns</span>
-              <span className="file-type-tag" style={{ border: '1px solid var(--accent-blue)', color: 'var(--brand-600)', background: '#EFF6FF' }}>Bulk Analytics (Pro)</span>
+              <span className="file-type-tag" style={{ border: '1px solid var(--accent-blue)', color: 'var(--brand-600)', background: '#EFF6FF' }}>Bulk Analytics</span>
             </div>
           </div>
 
@@ -315,12 +302,6 @@ export default function VisualizerTool() {
                 }
              </div>
              
-             <div style={{ marginTop: '1.5rem', background: '#f8fafc', padding: '1rem', borderRadius: '16px', textAlign: 'center' }}>
-                <p style={{ fontSize: '0.8rem', color: '#64748b', marginBottom: '0.75rem' }}>Want a professional PDF Analytics Report?</p>
-                <button className="btn btn-outline btn-xs" onClick={() => window.location.href='/pricing'}>
-                    Upgrade to Pro <ArrowRight size={12} />
-                </button>
-             </div>
           </div>
 
           {/* SECURITY FOOTER */}

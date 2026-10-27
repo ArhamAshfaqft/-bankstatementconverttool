@@ -1,10 +1,9 @@
 import React, { useState, useCallback, useRef } from 'react';
 import { UploadCloud, FileText, Download, ChevronDown, RefreshCw, Pencil, X, EyeOff, Eye, Check, Layers, Archive, GitMerge, Shield } from 'lucide-react';
 import { extractTableFromPdf } from '../lib/pdfParser';
-import { downloadFile, generateFileBlob } from '../lib/exportData';
-import UpsellModal from './UpsellModal';
+import { downloadFile, generateFileBlob, requestOfxDetails } from '../lib/exportData';
+import { mergeTables } from '../lib/tableMerge';
 import JSZip from 'jszip';
-import { useAuth } from '../contexts/AuthContext';
 
 const COLUMN_PRESETS = ['Date', 'Post Date', 'Description', 'Details', 'Reference', 'Check No.', 'Amount', 'Debit', 'Credit', 'Balance', 'Type', 'Category'];
 const FORMAT_EXT = { csv: '.csv', excel: '.xlsx', qbo: '.qbo', ofx: '.ofx' };
@@ -29,11 +28,6 @@ export default function ConverterTool() {
   const [bulkMode, setBulkMode] = useState('merge');           // 'merge' | 'separate'
   const [activeFileIndex, setActiveFileIndex] = useState(0);
 
-  // ── SaaS State ──
-  const { isPro: realIsPro } = useAuth();
-  const [devPro, setDevPro] = useState(sessionStorage.getItem('devPro') === 'true');
-  const isPro = realIsPro || devPro;
-  const [upsellFeature, setUpsellFeature] = useState(null);
 
   React.useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -61,22 +55,19 @@ export default function ConverterTool() {
       return;
     }
 
-    // Gate: Bulk requires Pro
-    if (pdfFiles.length > 1 && !isPro) {
-      setUpsellFeature('Bulk Processing');
-      return;
-    }
 
     if (pdfFiles.length === 1) {
       await processSingleFile(pdfFiles[0]);
     } else {
       await processBulkFiles(pdfFiles);
     }
-  }, [isPro, bulkMode]);
+  }, [bulkMode]);
 
   const processSingleFile = async (file) => {
     setIsProcessing(true);
     setError(null);
+    setRawData(null);
+    setWorkingData(null);
     setFileName(file.name);
     setShowAllRows(false);
     setEditMode(false);
@@ -104,14 +95,15 @@ export default function ConverterTool() {
   const processBulkFiles = async (files) => {
     setIsProcessing(true);
     setError(null);
+    setRawData(null);
+    setWorkingData(null);
     setShowAllRows(false);
     setEditMode(false);
     setEditingCell(null);
     setExcludedRows(new Set());
 
     const fileResults = [];
-    let combinedHeader = null;
-    let combinedRows = [];
+    const successfulTables = [];
     let failCount = 0;
 
     for (let i = 0; i < files.length; i++) {
@@ -120,10 +112,8 @@ export default function ConverterTool() {
       try {
         const tableData = await extractTableFromPdf(files[i]);
         if (tableData && tableData.length > 1) {
-          const header = tableData[0];
           const rows = tableData.slice(1);
-          if (!combinedHeader) combinedHeader = header;
-          combinedRows.push(...rows);
+          successfulTables.push(tableData);
           fileResults.push({ 
             name: files[i].name, 
             rows: rows.length, 
@@ -148,13 +138,15 @@ export default function ConverterTool() {
 
     if (bulkMode === 'merge') {
       // ── MERGE: Combine everything into one table ──
-      if (combinedHeader && combinedRows.length > 0) {
-        const merged = [combinedHeader, ...combinedRows];
-        setFileName(`${files.length}_statements_merged`);
-        setRawData(merged);
-        setWorkingData(JSON.parse(JSON.stringify(merged)));
-        if (failCount > 0) {
-          setError(`${failCount} of ${files.length} file(s) could not be parsed. Merged ${combinedRows.length} transactions from the rest.`);
+      if (successfulTables.length > 0) {
+        try {
+          const merged = mergeTables(successfulTables);
+          setFileName(`${files.length}_statements_merged`);
+          setRawData(merged);
+          setWorkingData(JSON.parse(JSON.stringify(merged)));
+          if (failCount > 0) setError(`${failCount} of ${files.length} file(s) could not be parsed. Merged the remaining transactions.`);
+        } catch (mergeError) {
+          setError(mergeError.message);
         }
       } else {
         setError("Could not extract data from any of the uploaded files.");
@@ -185,20 +177,17 @@ export default function ConverterTool() {
   // ══════════════════════════════════════════════════
 
   const handleDownload = async () => {
-    // Gate: Excel/QBO requires Pro
-    if (format !== 'csv' && !isPro) {
-      setUpsellFeature('Premium Exports (Excel & QBO)');
-      return;
+    try {
+      const ofxOptions = format === 'qbo' || format === 'ofx' ? requestOfxDetails() : undefined;
+      if ((format === 'qbo' || format === 'ofx') && !ofxOptions) return;
+      if (bulkMode === 'separate' && processedFiles.length > 1) {
+        await downloadAsZip(ofxOptions);
+        return;
+      }
+      await downloadFile(getExportData(), fileName, format, ofxOptions);
+    } catch (exportError) {
+      setError(exportError.message || 'Could not export this table.');
     }
-
-    // Separate mode with multiple files → ZIP
-    if (bulkMode === 'separate' && processedFiles.length > 1) {
-      await downloadAsZip();
-      return;
-    }
-
-    // Standard single/merge download
-    downloadFile(getExportData(), fileName, format);
   };
 
   const switchActiveFile = (idx) => {
@@ -224,7 +213,7 @@ export default function ConverterTool() {
     setShowAllRows(false);
   };
 
-  const downloadAsZip = async () => {
+  const downloadAsZip = async (ofxOptions) => {
     // Sync active view right before downloading
     let finalFiles = [...processedFiles];
     if (activeFileIndex >= 0 && finalFiles[activeFileIndex]) {
@@ -240,7 +229,7 @@ export default function ConverterTool() {
     for (const file of goodFiles) {
       const cleanName = file.name.replace(/\.pdf$/i, '') + ext;
       const exportableData = file.workingData.filter((_, i) => i === 0 || !file.excludedRows.has(i));
-      const blob = generateFileBlob(exportableData, actualFormat);
+      const blob = await generateFileBlob(exportableData, actualFormat, ofxOptions);
       if (blob) {
         zip.file(cleanName, blob);
       }
@@ -336,12 +325,6 @@ export default function ConverterTool() {
 
   return (
     <div className="converter-card" id="converter">
-      
-      <UpsellModal 
-        isOpen={!!upsellFeature} 
-        onClose={() => setUpsellFeature(null)} 
-        featureName={upsellFeature} 
-      />
 
       {/* ── DROPZONE ── */}
       {!csvData && !isProcessing && (
@@ -354,15 +337,14 @@ export default function ConverterTool() {
         >
           <UploadCloud size={48} className="drop-icon" />
           <h3>Drag & drop your bank statement PDF(s)</h3>
-          <p>One file free, or upload multiple with Pro.</p>
+          <p>Convert one or multiple files for free. Files stay in your browser.</p>
           <div className="file-types">
             <span className="file-type-tag">.pdf</span>
             <span className="file-type-tag">Text-based PDFs</span>
             <span className="file-type-tag">No size limit</span>
           </div>
 
-          {/* Bulk Mode Selector (Pro only) */}
-          {isPro && (
+          {/* Bulk Mode Selector */}
             <div className="bulk-mode-selector" onClick={(e) => e.stopPropagation()}>
               <button 
                 className={`mode-btn ${bulkMode === 'merge' ? 'active' : ''}`}
@@ -377,7 +359,6 @@ export default function ConverterTool() {
                 <Archive size={14} /> Keep separate (ZIP)
               </button>
             </div>
-          )}
 
           <input 
             type="file" 
@@ -471,6 +452,11 @@ export default function ConverterTool() {
                   )}
                 </button>
               </div>
+              {(format === 'qbo' || format === 'ofx') && (
+                <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '0.5rem' }}>
+                  Export requires your bank's institution ID, routing ID, and account ID. Use YYYY-MM-DD dates. Import support depends on your accounting software and bank.
+                </p>
+              )}
             </div>
           </div>
 
@@ -620,25 +606,6 @@ export default function ConverterTool() {
           <span>100% Client-side processing. Your financial data never leaves this browser.</span>
         </div>
         
-        {/* Dev Toggle for Testing */}
-        {import.meta.env.DEV && (
-          <div className="dev-tools" style={{ position: 'absolute', right: 0, display: 'flex', alignItems: 'center', gap: '8px', fontSize: '11px', color: '#94a3b8', background: '#f8fafc', padding: '4px 8px', borderRadius: '6px', border: '1px solid #e2e8f0' }}>
-            <span>Dev Toggle:</span>
-            <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
-              <input 
-                type="checkbox" 
-                checked={devPro} 
-                onChange={(e) => {
-                  const val = e.target.checked;
-                  setDevPro(val);
-                  sessionStorage.setItem('devPro', val);
-                }}
-                style={{ marginRight: '4px' }}
-              />
-              Force Pro
-            </label>
-          </div>
-        )}
       </div>
     </div>
   );

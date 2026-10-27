@@ -63,7 +63,6 @@ const pageRoutes = {
   'OfxPage.jsx': 'ofx-converter',
   'PdfToExcelPage.jsx': 'pdf-to-excel-converter',
   'PncPage.jsx': 'pnc',
-  'PricingPage.jsx': 'pricing',
   'PrivacyPage.jsx': 'privacy',
   'ProtectPage.jsx': 'protect-pdf',
   'QboPage.jsx': 'quickbooks-qbo-converter',
@@ -77,10 +76,9 @@ const pageRoutes = {
   'TermsPage.jsx': 'terms',
   'VisualizerPage.jsx': 'visualizer',
   'WellsFargoPage.jsx': 'wells-fargo',
-  'LoginPage.jsx': 'login'
 };
 
-const noindexRoutes = new Set(['login']);
+const noindexRoutes = new Set();
 
 async function run() {
   if (!fs.existsSync(templatePath)) {

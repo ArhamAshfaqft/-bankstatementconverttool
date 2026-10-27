@@ -3,8 +3,6 @@ import { UploadCloud, FileText, CheckCircle, Camera, X, Shield, ArrowRight, Load
 import Papa from 'papaparse';
 import { saveAs } from 'file-saver';
 import { createWorker } from 'tesseract.js';
-import { useAuth } from '../contexts/AuthContext';
-import UpsellModal from './UpsellModal';
 
 export default function ReceiptScannerTool() {
   const [files, setFiles] = useState([]);
@@ -15,11 +13,6 @@ export default function ReceiptScannerTool() {
   const [processedCount, setProcessedCount] = useState(0);
   const fileInputRef = useRef(null);
   
-  // Custom Gate Implementation
-  const { isPro: realIsPro } = useAuth();
-  const [devPro] = useState(sessionStorage.getItem('devPro') === 'true');
-  const isPro = realIsPro || devPro;
-  const [upsellFeature, setUpsellFeature] = useState(null);
 
   const onDrop = (e) => {
     e.preventDefault();
@@ -31,10 +24,6 @@ export default function ReceiptScannerTool() {
       return;
     }
 
-    if (droppedFiles.length > 1 && !isPro) {
-      setUpsellFeature('Bulk Receipt Scanning');
-      return;
-    }
 
     setFiles(droppedFiles);
     
@@ -177,8 +166,6 @@ export default function ReceiptScannerTool() {
 
   return (
     <div className="converter-card" style={{ maxWidth: '780px', margin: '0 auto' }}>
-      
-      {upsellFeature && <UpsellModal featureName={upsellFeature} onClose={() => setUpsellFeature(null)} />}
 
       <div className="tool-main">
         {files.length === 0 && (
@@ -195,7 +182,7 @@ export default function ReceiptScannerTool() {
             <div className="file-types">
               <span className="file-type-tag">.jpg, .png</span>
               <span className="file-type-tag">Device OCR Engine</span>
-              <span className="file-type-tag" style={{ border: '1px solid var(--accent-blue)', color: 'var(--brand-600)', background: '#EFF6FF' }}>Bulk Support (Pro)</span>
+              <span className="file-type-tag" style={{ border: '1px solid var(--accent-blue)', color: 'var(--brand-600)', background: '#EFF6FF' }}>Bulk Support</span>
             </div>
             <input 
               type="file" 

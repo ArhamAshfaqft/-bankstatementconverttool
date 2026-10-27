@@ -25,7 +25,7 @@ export default function CsvToQboPage() {
     },
     {
       question: "Which QuickBooks versions support Web Connect (.QBO) import?",
-      answer: "All active desktop and cloud platforms, including QuickBooks Online, Desktop Pro/Premier, and Enterprise editions. As long as bank feeds are supported, .qbo imports will work."
+      answer: "Import support depends on your QuickBooks version and the financial institution identifiers in the file. Check your bank's Web Connect details before exporting."
     },
     {
       question: "How does the column mapper work in this tool?",

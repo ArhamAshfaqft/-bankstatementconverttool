@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import Layout from './components/Layout';
 import HomePage from './pages/HomePage';
 import ChasePage from './pages/ChasePage';
@@ -13,7 +13,6 @@ import AmexPage from './pages/AmexPage';
 import PdfToExcelPage from './pages/PdfToExcelPage';
 import BlogIndexPage from './pages/BlogIndexPage';
 import BlogPostPage from './pages/BlogPostPage';
-import PricingPage from './pages/PricingPage';
 import MergePage from './pages/MergePage';
 import SplitPage from './pages/SplitPage';
 import RedactPage from './pages/RedactPage';
@@ -25,8 +24,6 @@ import QboPage from './pages/QboPage';
 import OfxPage from './pages/OfxPage';
 import VisualizerPage from './pages/VisualizerPage';
 import CreditCardPage from './pages/CreditCardPage';
-import LoginPage from './pages/LoginPage';
-import SuccessPage from './pages/SuccessPage';
 import PrivacyPage from './pages/PrivacyPage';
 import TermsPage from './pages/TermsPage';
 import QboToCsvPage from './pages/QboToCsvPage';
@@ -60,8 +57,8 @@ export default function App() {
         <Route path="csv-to-qbo-converter" element={<CsvToQboPage />} />
         <Route path="qif-to-qbo-converter" element={<QifToQboPage />} />
         <Route path="qfx-to-csv-converter" element={<QfxToCsvPage />} />
-        <Route path="pricing" element={<PricingPage />} />
-        <Route path="login" element={<LoginPage />} />
+        <Route path="pricing" element={<Navigate to="/" replace />} />
+        <Route path="login" element={<Navigate to="/" replace />} />
         <Route path="merge" element={<MergePage />} />
         <Route path="split" element={<SplitPage />} />
         <Route path="redact" element={<RedactPage />} />
@@ -69,7 +66,7 @@ export default function App() {
         <Route path="unlock-pdf" element={<DecryptPage />} />
         <Route path="protect-pdf" element={<ProtectPage />} />
         <Route path="audit-statement" element={<AuditPage />} />
-        <Route path="success" element={<SuccessPage />} />
+        <Route path="success" element={<Navigate to="/" replace />} />
         <Route path="privacy" element={<PrivacyPage />} />
         <Route path="terms" element={<TermsPage />} />
         <Route path="*" element={<NotFoundPage />} />
