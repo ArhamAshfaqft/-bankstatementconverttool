@@ -7,19 +7,20 @@ export default function RedactPage() {
   return (
     <>
       <SeoHead 
-        title="Anonymize PDF Bank Statements | Redact PII Locally"
-        description="Securely strip metadata and anonymize your financial PDFs. 100% private, local processing ensures sensitive info stays off the cloud."
+        title="Create a Local Copy of a PDF | StatementToCSV"
+        description="Recreate a PDF copy locally in your browser. This does not hide visible text or guarantee removal of embedded information."
         canonical="https://bankstatementconverttool.com/redact"
+        noindex
       />
       
       {/* HERO SECTION */}
       <header className="layout-standard-hero" style={{ background: 'linear-gradient(135deg, #450a0a 0%, #7f1d1d 100%)' }}>
         <div className="container">
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', padding: '0.5rem 1rem', borderRadius: '100px', fontWeight: '600', fontSize: '0.85rem', marginBottom: '2rem', color: '#ffffff' }}>
-            <FileLock size={16} /> Privacy-First Forensic Anonymization
+            <FileLock size={16} /> Local PDF Copy
           </div>
-          <h1>Anonymize Your <span>Bank Statements</span></h1>
-          <p>Need to share a statement but want to hide your PII? Our anonymizer strips hidden metadata and tracking data locally in your browser.</p>
+          <h1>Create a Local <span>PDF Copy</span></h1>
+          <p>This tool recreates a PDF from its pages in your browser. It does not remove visible names, account numbers, or other sensitive content.</p>
         </div>
       </header>
 
@@ -34,15 +35,15 @@ export default function RedactPage() {
         <div className="container">
           <div className="section-header">
             <span className="section-label">Safe & Secure</span>
-            <h2>Why Anonymize Your Statements</h2>
-            <p>Perfect for providing proof of funds while maintaining your personal privacy.</p>
+            <h2>Know what a copied PDF contains</h2>
+            <p>Inspect the result before sharing it. Use a dedicated redaction tool if you need to permanently remove visible information.</p>
           </div>
 
           <div className="features-grid" style={{ marginTop: '4rem' }}>
             <div className="feature-card">
               <div className="feature-icon red"><Lock size={20} /></div>
-              <h3>Metadata Stripping</h3>
-              <p>Standard PDF viewers often save hidden edit history. Our tool flattens and recreates the file to permanently erase it.</p>
+              <h3>New document copy</h3>
+              <p>Pages are copied into a newly saved PDF. Embedded page content may still contain sensitive information.</p>
             </div>
             <div className="feature-card">
               <div className="feature-icon gray"><EyeOff size={20} /></div>
@@ -51,8 +52,8 @@ export default function RedactPage() {
             </div>
             <div className="feature-card">
               <div className="feature-icon amber"><Shield size={20} /></div>
-              <h3>Compliance Ready</h3>
-              <p>Ideal for SEC, GDPR, and HIPAA compliant workflows where sensitive data must be handled with extreme care.</p>
+              <h3>Not a redaction tool</h3>
+              <p>Do not use this feature as proof that personal details or all metadata have been removed.</p>
             </div>
           </div>
         </div>

@@ -1,7 +1,8 @@
 import React, { useState, useRef } from 'react';
 import { UploadCloud, FileText, CheckCircle, Camera, X, Shield, ArrowRight, Loader2, Image as ImageIcon, Scan, Table, Download } from 'lucide-react';
 import Papa from 'papaparse';
-import { saveAs } from 'file-saver';
+import FileSaver from 'file-saver';
+const { saveAs } = FileSaver;
 import { createWorker } from 'tesseract.js';
 
 export default function ReceiptScannerTool() {

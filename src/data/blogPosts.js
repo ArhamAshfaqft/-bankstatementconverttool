@@ -1,4 +1,5 @@
 import { newBlogPosts } from './newBlogPosts.js';
+import { moreBlogPosts } from './moreBlogPosts.js';
 
 const legacyBlogPosts = [
   {
@@ -214,4 +215,4 @@ const legacyBlogPosts = [
   }
 ];
 
-export const blogPosts = [...newBlogPosts, ...legacyBlogPosts];
+export const blogPosts = [...moreBlogPosts, ...newBlogPosts, ...legacyBlogPosts];

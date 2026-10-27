@@ -31,6 +31,8 @@ import CsvToQboPage from './pages/CsvToQboPage';
 import QifToQboPage from './pages/QifToQboPage';
 import QfxToCsvPage from './pages/QfxToCsvPage';
 import NotFoundPage from './pages/NotFoundPage';
+import WorkflowPage from './pages/WorkflowPage';
+import { workflowPages } from './data/workflowPages';
 
 
 export default function App() {
@@ -57,6 +59,7 @@ export default function App() {
         <Route path="csv-to-qbo-converter" element={<CsvToQboPage />} />
         <Route path="qif-to-qbo-converter" element={<QifToQboPage />} />
         <Route path="qfx-to-csv-converter" element={<QfxToCsvPage />} />
+        {workflowPages.map(page => <Route key={page.slug} path={page.slug} element={<WorkflowPage page={page} />} />)}
         <Route path="pricing" element={<Navigate to="/" replace />} />
         <Route path="login" element={<Navigate to="/" replace />} />
         <Route path="merge" element={<MergePage />} />

@@ -2703,3 +2703,26 @@ tr.row-excluded .row-action-cell {
 .static-blog-content table { width: 100%; border-collapse: collapse; overflow-x: auto; display: block; }
 .static-blog-content th, .static-blog-content td { border: 1px solid #cbd5e1; padding: .6rem; text-align: left; }
 .static-blog-content a { color: #087647; }
+
+.workflow-hero { background: linear-gradient(135deg, #0f172a, #065f46); color: #fff; padding: 4rem 0; }
+.workflow-hero-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(320px, .9fr); gap: 3rem; align-items: center; }
+.workflow-hero h1 { font-size: clamp(2.2rem, 4vw, 3.6rem); line-height: 1.12; color: #fff; margin: 1.2rem 0; }
+.workflow-hero p { font-size: 1.1rem; line-height: 1.7; max-width: 650px; color: #e2e8f0; margin-bottom: 1.6rem; }
+.workflow-hero img { width: 100%; height: auto; border-radius: 1rem; box-shadow: 0 22px 55px #02061755; }
+.workflow-breadcrumb { color: #bbf7d0; font-weight: 700; }
+.workflow-tool { max-width: 1000px; }
+.workflow-template-card { max-width: 680px; margin: auto; padding: 2rem; background: white; border: 1px solid #cbd5e1; border-radius: 1rem; text-align: center; }
+.workflow-body { max-width: 850px; line-height: 1.75; color: #334155; }
+.workflow-body h2 { color: #0f172a; font-size: 1.65rem; margin-top: 2.2rem; }
+.workflow-body p, .workflow-body li { font-size: 1.03rem; }
+.workflow-body ol, .workflow-body ul { padding-left: 1.6rem; }
+.workflow-body li { margin-bottom: .65rem; }
+.workflow-body a, .workflow-related a { color: #087647; font-weight: 700; }
+.workflow-warning { border-left: 4px solid #b45309; background: #fffbeb; padding: 1rem 1.3rem; margin: 1.5rem 0; }
+.workflow-table-wrap { overflow-x: auto; margin: 1.5rem 0; }
+.workflow-table-wrap table { border-collapse: collapse; width: 100%; background: white; }
+.workflow-table-wrap th, .workflow-table-wrap td { border: 1px solid #cbd5e1; padding: .8rem; text-align: left; }
+.workflow-related { max-width: 1000px; }
+.workflow-related div { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: .9rem; }
+.workflow-related a { display: block; border: 1px solid #cbd5e1; padding: 1rem; border-radius: .75rem; text-decoration: none; }
+@media (max-width: 760px) { .workflow-hero-grid { grid-template-columns: 1fr; } }

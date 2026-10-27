@@ -142,8 +142,8 @@ export default function Layout() {
                     <Link to="/redact" className="mega-item" onClick={closeMega}>
                       <div className="mega-item-icon document"><Shield size={16} /></div>
                       <div>
-                        <span className="mega-item-title">Anonymize PDF</span>
-                        <span className="mega-item-desc">Black out PII locally</span>
+                        <span className="mega-item-title">Create PDF Copy</span>
+                        <span className="mega-item-desc">Copy pages locally</span>
                       </div>
                     </Link>
                     <Link to="/audit-statement" className="mega-item" onClick={closeMega}>
@@ -249,6 +249,8 @@ export default function Layout() {
                 <Link to="/merge">Merge Tool</Link>
                 <Link to="/split">Split Tool</Link>
                 <Link to="/audit-statement">Fraud Detector</Link>
+                <Link to="/batch-bank-statement-converter">Batch Statement Converter</Link>
+                <Link to="/bank-statement-csv-template">Bank Statement CSV Template</Link>
               </div>
               <div className="footer-col">
                 <h6>Supported Banks</h6>
@@ -264,6 +266,8 @@ export default function Layout() {
               <div className="footer-col">
                 <h6>Company</h6>
                 <Link to="/blog">Blog & Guides</Link>
+                <Link to="/pdf-to-csv-troubleshooting">PDF to CSV Troubleshooting</Link>
+                <Link to="/bank-statement-balance-check">Balance Check Guide</Link>
                 <Link to="/privacy">Privacy Policy</Link>
                 <Link to="/terms">Terms of Service</Link>
                 <a href="mailto:hello@bankstatementconverttool.com">Contact Support</a>

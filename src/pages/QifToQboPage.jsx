@@ -8,7 +8,7 @@ export default function QifToQboPage() {
   const faqs = [
     {
       question: "Why doesn't QuickBooks import my .QIF file directly?",
-      answer: "Intuit designed QuickBooks to use Web Connect (.qbo) for direct imports, locking out the older Quicken Interchange Format (.qif) to avoid reconciliation overlaps. Our converter maps legacy tags into valid .qbo bank feed values."
+      answer: "QuickBooks import options differ by product and version. This tool maps common QIF transaction fields into a QBO Web Connect file, but acceptance still depends on your QuickBooks edition and institution details."
     },
     {
       question: "Are transaction memos and categories preserved?",
@@ -20,7 +20,7 @@ export default function QifToQboPage() {
     },
     {
       question: "Can I convert old Quicken exports for QuickBooks Online?",
-      answer: "Yes. The converter is designed for legacy Quicken QIF exports that need to be reshaped into Web Connect QBO files for QuickBooks import workflows."
+      answer: "The tool can generate a QBO file from a legacy QIF export. Check your QuickBooks Online import options and review the file before assuming it will be accepted."
     },
     {
       question: "What QIF tags are supported?",

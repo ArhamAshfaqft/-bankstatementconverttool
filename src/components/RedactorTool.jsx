@@ -62,7 +62,7 @@ export default function RedactorTool() {
              const copiedPages = await cleanPdf.copyPages(pdf, pdf.getPageIndices());
              copiedPages.forEach((page) => cleanPdf.addPage(page));
              const redactedPdfBytes = await cleanPdf.save();
-             zip.file(file.name.replace('.pdf', '_anonymized.pdf'), redactedPdfBytes);
+             zip.file(file.name.replace(/\.pdf$/i, '_copy.pdf'), redactedPdfBytes);
            } catch(e) {
              console.error(`Error stripping ${file.name}:`, e);
            }
@@ -84,7 +84,7 @@ export default function RedactorTool() {
     if (!processedUrl) return;
     const link = document.createElement('a');
     link.href = processedUrl;
-    link.download = files.length === 1 ? files[0].name.replace('.pdf', '_anonymized.pdf') : 'anonymized_pdfs.zip';
+    link.download = files.length === 1 ? files[0].name.replace(/\.pdf$/i, '_copy.pdf') : 'pdf_copies.zip';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -110,8 +110,8 @@ export default function RedactorTool() {
             onClick={() => fileInputRef.current.click()}
           >
             <Shield size={48} className="drop-icon" style={{ color: 'var(--slate-400)' }} />
-            <h3>Financial Anonymizer</h3>
-            <p>Strip hidden metadata and prepare for safe sharing</p>
+            <h3>Create a PDF copy</h3>
+            <p>Copies pages into a new document locally. Visible information remains.</p>
             <div className="file-types">
               <span className="file-type-tag">.pdf</span>
               <span className="file-type-tag">100% Local</span>
@@ -133,17 +133,17 @@ export default function RedactorTool() {
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '2rem', borderBottom: '1px solid var(--border)', paddingBottom: '1rem' }}>
               <div style={{ textAlign: 'left' }}>
                 <h4 style={{ margin: 0, fontSize: '1.1rem', color: 'var(--text-heading)' }}>{files.length} Document{files.length > 1 ? 's' : ''} Ready</h4>
-                <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--text-muted)' }}>Ready for bulk structural anonymization</p>
+                <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--text-muted)' }}>Ready to create local copies</p>
               </div>
               <button className="btn btn-ghost" onClick={handleReset} style={{ fontSize: '0.85rem' }}>Clear All</button>
             </div>
 
             <div className="info-box" style={{ marginBottom: '2rem', background: 'var(--slate-50)', padding: '1rem', borderRadius: '8px', border: '1px solid var(--slate-200)' }}>
               <h5 style={{ marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <Eraser size={14} /> Structural Anonymization
+                <Eraser size={14} /> Check before sharing
               </h5>
               <p style={{ fontSize: '0.85rem', color: 'var(--slate-600)', lineHeight: '1.4' }}>
-                This tool recreates your PDF document{files.length > 1 ? 's' : ''} from scratch to ensure all hidden metadata, incremental save history, and identifying object IDs are permanently stripped.
+                This tool copies pages into a new PDF. It does not redact visible text, images, or account numbers, and removal of all embedded metadata is not guaranteed.
               </p>
             </div>
 
@@ -154,7 +154,7 @@ export default function RedactorTool() {
               disabled={isProcessing}
             >
               <Shield size={18} />
-              Anonymize Statement Structure
+              Create PDF Copy
             </button>
           </div>
         )}
@@ -162,8 +162,8 @@ export default function RedactorTool() {
         {isProcessing && (
           <div className="loader" style={{ padding: '4rem 2rem' }}>
             <Loader2 className="spinner" size={40} />
-            <h3>Anonymizing Your File{files.length > 1 ? 's' : ''}...</h3>
-            <p>Stripping metadata locally.</p>
+            <h3>Copying Your File{files.length > 1 ? 's' : ''}...</h3>
+            <p>Creating a new PDF locally.</p>
             {files.length > 1 && (
                <p style={{ fontWeight: '600', color: 'var(--brand-600)', marginTop: '0.5rem' }}>
                   Finished {processedCount} of {files.length}
@@ -175,11 +175,11 @@ export default function RedactorTool() {
         {success && (
           <div className="success-state">
             <CheckCircle size={54} color="var(--brand-500)" />
-            <h2>{files.length > 1 ? 'Batch Anonymized!' : 'Document Anonymized!'}</h2>
-            <p>Hidden tracking metadata has been permanently stripped.</p>
+            <h2>{files.length > 1 ? 'Copies Ready' : 'Copy Ready'}</h2>
+            <p>Open the result and check all visible and hidden content before sharing.</p>
             <div className="success-actions" style={{ justifyContent: 'center', marginTop: '1rem' }}>
               <button className="btn btn-primary" onClick={downloadProcessed}>
-                {files.length > 1 ? 'Download Clean ZIP' : 'Download Safe PDF'}
+                {files.length > 1 ? 'Download PDF Copies ZIP' : 'Download PDF Copy'}
               </button>
               <button className="btn btn-outline" onClick={handleReset}>Start New</button>
             </div>

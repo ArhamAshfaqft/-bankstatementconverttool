@@ -3,7 +3,8 @@ import { UploadCloud, ShieldAlert, CheckCircle, AlertTriangle, FileSearch, Info,
 import { extractTableFromPdf } from '../lib/pdfParser';
 import { auditStatement } from '../lib/fraudForensics';
 import Papa from 'papaparse';
-import { saveAs } from 'file-saver';
+import FileSaver from 'file-saver';
+const { saveAs } = FileSaver;
 
 export default function FraudDetectorTool() {
   const [files, setFiles] = useState([]);

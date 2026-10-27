@@ -2,12 +2,17 @@ import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import SeoHead from '../components/SeoHead';
 import ConverterTool from '../components/ConverterTool';
+import QifToQboTool from '../components/QifToQboTool';
+import QboToCsvTool from '../components/QboToCsvTool';
+import QfxToCsvTool from '../components/QfxToCsvTool';
+import SplitterTool from '../components/SplitterTool';
 import { ChevronRight, Calendar, User, Clock, ArrowLeft, ShieldAlert, CheckCircle, FileSpreadsheet, Lock } from 'lucide-react';
 import { blogPosts } from '../data/blogPosts';
 
 export default function BlogPostPage() {
   const { slug } = useParams();
   const post = blogPosts.find(p => p.slug === slug);
+  const tool = post?.tool || (slug === 'best-qfx-to-csv-converter' ? 'qfx' : 'converter');
 
   if (!post) {
     return (
@@ -200,15 +205,20 @@ export default function BlogPostPage() {
                   <Lock size={16} /> Browser-Local Converter
                 </div>
                 <h3 style={{ fontSize: '1.25rem', fontWeight: '800', color: '#0F172A', margin: '0 0 0.5rem', lineHeight: '1.3' }}>
-                  Try the Free PDF Converter
+                  {tool === 'qif' ? 'Convert QIF to QBO' : tool === 'qbo' ? 'Open QBO in Excel' : tool === 'qfx' ? 'Convert QFX to CSV' : tool === 'split' ? 'Split a PDF' : tool === 'none' ? 'Choose the Right Tool' : 'Try the Free PDF Converter'}
                 </h3>
                 <p style={{ fontSize: '0.85rem', color: '#64748B', lineHeight: '1.5', margin: '0 0 1.5rem' }}>
-                  Drop your PDF bank statement below to extract your transaction tables locally in your browser.
+                  {tool === 'none' ? 'Use a tool that matches your file type and verify the result against the original statement.' : 'Process the file locally in your browser and review the result before downloading.'}
                 </p>
                 
                 {/* Embed ConverterTool */}
                 <div className="sidebar-converter-embed">
-                  <ConverterTool />
+                  {tool === 'converter' && <ConverterTool />}
+                  {tool === 'qif' && <QifToQboTool />}
+                  {tool === 'qbo' && <QboToCsvTool />}
+                  {tool === 'qfx' && <QfxToCsvTool />}
+                  {tool === 'split' && <SplitterTool />}
+                  {tool === 'none' && <div style={{ display: 'grid', gap: '0.75rem' }}><Link to="/" className="btn btn-primary">PDF to CSV</Link><Link to="/qbo-to-csv-converter" className="btn btn-outline">QBO to CSV</Link><Link to="/pdf-to-csv-troubleshooting" className="btn btn-outline">PDF Troubleshooting</Link></div>}
                 </div>
               </div>
 

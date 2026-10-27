@@ -1,6 +1,11 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import React from 'react';
+import { renderToString } from 'react-dom/server';
+import { MemoryRouter } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
+import { createServer } from 'vite';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -28,6 +33,11 @@ function renderBlogBlock(block) {
 
 function renderStaticBlog(post) {
   return `<main class="static-blog-content"><nav><a href="/">Home</a> / <a href="/blog">Blog</a></nav><article><h1>${escapeHtml(post.title)}</h1><p>${escapeHtml(post.date)} · ${escapeHtml(post.author)}</p>${post.featuredImage ? `<img src="${escapeHtml(post.featuredImage)}" alt="${escapeHtml(post.imageAlt || post.title)}" width="1600" height="900">` : ''}${post.content.map(renderBlogBlock).join('')}</article></main>`;
+}
+
+function renderStaticWorkflow(page) {
+  const toolLink = page.tool === 'template' ? '/assets/bank-statement-csv-template.csv' : '#workflow-tool';
+  return `<main class="static-blog-content"><nav><a href="/">Home</a> / Guides</nav><article><h1>${escapeHtml(page.title)}</h1><p>${escapeHtml(page.description)}</p><img src="${escapeHtml(page.image)}" alt="${escapeHtml(page.imageAlt)}" width="1600" height="900"><p><a href="${toolLink}">${page.tool === 'template' ? 'Download the CSV template' : 'Open the tool on this page'}</a></p>${page.content.map(renderBlogBlock).join('')}</article></main>`;
 }
 
 // Helper to balance braces/brackets robustly
@@ -99,7 +109,7 @@ const pageRoutes = {
   'WellsFargoPage.jsx': 'wells-fargo',
 };
 
-const noindexRoutes = new Set();
+const noindexRoutes = new Set(['redact']);
 
 async function run() {
   if (!fs.existsSync(templatePath)) {
@@ -109,6 +119,13 @@ async function run() {
 
   const templateHtml = fs.readFileSync(templatePath, 'utf8');
   const { blogPosts } = await import('./src/data/blogPosts.js');
+  const { workflowPages } = await import('./src/data/workflowPages.js');
+  const vite = await createServer({ server: { middlewareMode: true }, appType: 'custom', logLevel: 'error' });
+  const { default: App } = await vite.ssrLoadModule('/src/App.jsx');
+  const renderAppRoute = route => renderToString(
+    React.createElement(HelmetProvider, null,
+      React.createElement(MemoryRouter, { initialEntries: [route] }, React.createElement(App)))
+  );
 
   // Process standard routes
   const standardPages = [];
@@ -218,6 +235,17 @@ async function run() {
     }
   }
 
+  for (const workflow of workflowPages) {
+    standardPages.push({
+      route: workflow.slug,
+      title: workflow.metaTitle,
+      description: workflow.description,
+      canonical: `https://bankstatementconverttool.com/${workflow.slug}`,
+      jsonLd: [],
+      workflow,
+    });
+  }
+
   // Pre-render standard pages and write to dist
   standardPages.forEach(page => {
     let html = templateHtml;
@@ -260,8 +288,13 @@ async function run() {
       if (page.post.featuredImage) {
         html = html.replace('</head>', `    <meta property="og:image" content="https://bankstatementconverttool.com${escapeHtml(page.post.featuredImage)}" />\n    <meta name="twitter:card" content="summary_large_image" />\n  </head>`);
       }
+    } else if (page.workflow) {
+      html = html.replace('<div id="root"></div>', `<div id="root">${renderStaticWorkflow(page.workflow)}</div>`);
+      html = html.replace('</head>', `    <meta property="og:image" content="https://bankstatementconverttool.com${escapeHtml(page.workflow.image)}" />\n    <meta property="og:url" content="${escapeHtml(page.canonical)}" />\n  </head>`);
     } else if (page.route === 'blog') {
       html = html.replace('<div id="root"></div>', `<div id="root"><main class="static-blog-content"><h1>Bank Statement How-To Guides</h1>${blogPosts.map(post => `<article><h2><a href="/blog/${escapeHtml(post.slug)}">${escapeHtml(post.title)}</a></h2><p>${escapeHtml(post.description)}</p></article>`).join('')}</main></div>`);
+    } else {
+      html = html.replace('<div id="root"></div>', `<div id="root">${renderAppRoute(`/${page.route}`)}</div>`);
     }
 
     if (page.noindex && !html.includes('name="robots"')) {
@@ -299,6 +332,8 @@ async function run() {
     console.log(`Pre-rendered: /${page.route}`);
   });
 
+  fs.writeFileSync(templatePath, templateHtml.replace('<div id="root"></div>', `<div id="root">${renderAppRoute('/')}</div>`), 'utf8');
+  await vite.close();
   console.log('Pre-rendering completed successfully!');
 }
 
